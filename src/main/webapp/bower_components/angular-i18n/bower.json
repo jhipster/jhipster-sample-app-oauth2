@@ -1,0 +1,10 @@
+{
+  "name": "angular-i18n",
+  "version": "1.4.3",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components",
+    "precommit.sh"
+  ]
+}
