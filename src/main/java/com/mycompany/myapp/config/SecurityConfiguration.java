@@ -51,7 +51,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/bower_components/**")
             .antMatchers("/i18n/**")
             .antMatchers("/assets/**")
-            .antMatchers("/swagger-ui.html")
+            .antMatchers("/swagger-ui/index.html")
             .antMatchers("/api/register")
             .antMatchers("/api/activate")
             .antMatchers("/api/account/reset_password/init")
