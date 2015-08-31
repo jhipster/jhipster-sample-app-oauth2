@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('jhipsterApp')
+angular.module('sampleoauth2App')
     .factory('ConfigurationService', function ($rootScope, $filter, $http) {
         return {
             get: function() {

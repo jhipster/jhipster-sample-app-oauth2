@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('jhipsterApp')
+angular.module('sampleoauth2App')
     .controller('MetricsController', function ($scope, MonitoringService, $modal) {
         $scope.metrics = {};
         $scope.updatingMetrics = true;

@@ -21,18 +21,18 @@ mail:
     protocol: smtp
     tls: false
     auth: false
-    from: jhipster@localhost
+    from: sampleOAuth2@localhost
 
 authentication:
     oauth:
-        clientid: jhipsterapp
+        clientid: sampleOAuth2app
         secret: mySecretOAuthSecret
         # Token is valid 30 minutes
         tokenValidityInSeconds: 1800
 
 swagger:
-    title: jhipster API
-    description: jhipster applications and beyond!
+    title: sampleOAuth2 API
+    description: sampleOAuth2 applications and beyond!
     version: 0.0.1
     termsOfServiceUrl: http://jhipster.github.io/
     contact:

@@ -2,7 +2,7 @@
 
 describe('Services Tests ', function () {
 
-    beforeEach(module('jhipsterApp'));
+    beforeEach(module('sampleoauth2App'));
 
     describe('Auth', function () {
         var $httpBackend, spiedLocalStorageService, authService, spiedAuthServerProvider;

@@ -1,6 +1,6 @@
 {
   "generator-jhipster": {
-    "baseName": "jhipster",
+    "baseName": "sampleOAuth2",
     "packageName": "com.mycompany.myapp",
     "packageFolder": "com/mycompany/myapp",
     "authenticationType": "oauth2",

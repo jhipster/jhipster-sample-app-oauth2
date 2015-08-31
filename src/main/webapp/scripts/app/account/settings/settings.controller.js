@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('jhipsterApp')
+angular.module('sampleoauth2App')
     .controller('SettingsController', function ($scope, Principal, Auth, Language, $translate) {
         $scope.success = null;
         $scope.error = null;

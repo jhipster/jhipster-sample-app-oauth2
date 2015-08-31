@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('jhipsterApp')
+angular.module('sampleoauth2App')
     .config(function ($stateProvider) {
         $stateProvider
             .state('account', {
