@@ -1,4 +1,4 @@
-# Developping sampleOAuth2
+# Developing sampleOAuth2
 
 sampleOAuth2 was generated using JHipster, you can find documentation and help at [JHipster][].
 
