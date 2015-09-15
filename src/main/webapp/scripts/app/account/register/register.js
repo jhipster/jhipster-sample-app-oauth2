@@ -7,7 +7,7 @@ angular.module('sampleoauth2App')
                 parent: 'account',
                 url: '/register',
                 data: {
-                    roles: [],
+                    authorities: [],
                     pageTitle: 'register.title'
                 },
                 views: {

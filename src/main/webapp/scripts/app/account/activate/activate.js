@@ -7,7 +7,7 @@ angular.module('sampleoauth2App')
                 parent: 'account',
                 url: '/activate?key',
                 data: {
-                    roles: [],
+                    authorities: [],
                     pageTitle: 'activate.title'
                 },
                 views: {
@@ -24,4 +24,3 @@ angular.module('sampleoauth2App')
                 }
             });
     });
-

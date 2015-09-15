@@ -10,6 +10,7 @@ angular.module('sampleoauth2App')
                         data = angular.fromJson(data);
                         return data;
                     }
-                }
+                },
+                'update': { method:'PUT' }
             });
         });

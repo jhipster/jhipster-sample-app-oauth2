@@ -30,6 +30,11 @@ authentication:
         # Token is valid 30 minutes
         tokenValidityInSeconds: 1800
 
+spring:
+    mvc:
+        favicon:
+            enabled: false
+
 swagger:
     title: sampleOAuth2 API
     description: sampleOAuth2 applications and beyond!

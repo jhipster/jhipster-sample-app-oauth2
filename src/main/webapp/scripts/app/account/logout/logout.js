@@ -7,7 +7,7 @@ angular.module('sampleoauth2App')
                 parent: 'account',
                 url: '/logout',
                 data: {
-                    roles: []
+                    authorities: []
                 },
                 views: {
                     'content@': {

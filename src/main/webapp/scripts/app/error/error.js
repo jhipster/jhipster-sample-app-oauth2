@@ -7,7 +7,7 @@ angular.module('sampleoauth2App')
                 parent: 'site',
                 url: '/error',
                 data: {
-                    roles: [],
+                    authorities: [],
                     pageTitle: 'error.title'
                 },
                 views: {
@@ -26,7 +26,7 @@ angular.module('sampleoauth2App')
                 parent: 'site',
                 url: '/accessdenied',
                 data: {
-                    roles: []
+                    authorities: []
                 },
                 views: {
                     'content@': {
