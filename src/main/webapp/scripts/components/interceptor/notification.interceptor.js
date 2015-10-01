@@ -9,6 +9,6 @@ angular.module('sampleoauth2App')
                     AlertService.success(alertKey, { param : response.headers('X-sampleoauth2App-params')});
                 }
                 return response;
-            },
+            }
         };
     });
