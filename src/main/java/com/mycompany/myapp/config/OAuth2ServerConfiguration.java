@@ -4,7 +4,6 @@ import com.mycompany.myapp.security.AjaxLogoutSuccessHandler;
 import com.mycompany.myapp.security.AuthoritiesConstants;
 import com.mycompany.myapp.security.Http401UnauthorizedEntryPoint;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.bind.RelaxedPropertyResolver;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -81,17 +80,13 @@ public class OAuth2ServerConfiguration {
 
     @Configuration
     @EnableAuthorizationServer
-    protected static class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter implements EnvironmentAware {
-
-        private static final String ENV_OAUTH = "jhipster.security.authentication.oauth.";
-        private static final String PROP_CLIENTID = "clientid";
-        private static final String PROP_SECRET = "secret";
-        private static final String PROP_TOKEN_VALIDITY_SECONDS = "tokenValidityInSeconds";
-
-        private RelaxedPropertyResolver propertyResolver;
+    protected static class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
 
         @Inject
         private DataSource dataSource;
+
+        @Inject
+        private JHipsterProperties jHipsterProperties;
 
         @Bean
         public TokenStore tokenStore() {
@@ -115,17 +110,12 @@ public class OAuth2ServerConfiguration {
         public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
             clients
                 .inMemory()
-                .withClient(propertyResolver.getProperty(PROP_CLIENTID))
+                .withClient(jHipsterProperties.getSecurity().getOauth().getClientid())
                 .scopes("read", "write")
                 .authorities(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER)
                 .authorizedGrantTypes("password", "refresh_token")
-                .secret(propertyResolver.getProperty(PROP_SECRET))
-                .accessTokenValiditySeconds(propertyResolver.getProperty(PROP_TOKEN_VALIDITY_SECONDS, Integer.class, 1800));
-        }
-
-        @Override
-        public void setEnvironment(Environment environment) {
-            this.propertyResolver = new RelaxedPropertyResolver(environment, ENV_OAUTH);
+                .secret(jHipsterProperties.getSecurity().getOauth().getSecret())
+                .accessTokenValiditySeconds(jHipsterProperties.getSecurity().getOauth().getTokenValidityInSeconds());
         }
     }
 }

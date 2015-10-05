@@ -290,8 +290,14 @@ public class JHipsterProperties {
 
         private final Rememberme rememberme = new Rememberme();
 
+        private final Oauth oauth = new Oauth();
+
         public Rememberme getRememberme() {
             return rememberme;
+        }
+
+        public Oauth getOauth() {
+            return oauth;
         }
 
         public static class Rememberme {
@@ -305,6 +311,39 @@ public class JHipsterProperties {
 
             public void setKey(String key) {
                 this.key = key;
+            }
+        }
+
+        public static class Oauth {
+
+            private String clientid;
+
+            private String secret;
+
+            private int tokenValidityInSeconds = 1800;
+
+            public String getClientid() {
+                return clientid;
+            }
+
+            public void setClientid(String clientid) {
+                this.clientid = clientid;
+            }
+
+            public String getSecret() {
+                return secret;
+            }
+
+            public void setSecret(String secret) {
+                this.secret = secret;
+            }
+
+            public int getTokenValidityInSeconds() {
+                return tokenValidityInSeconds;
+            }
+
+            public void setTokenValidityInSeconds(int tokenValidityInSeconds) {
+                this.tokenValidityInSeconds = tokenValidityInSeconds;
             }
         }
     }
