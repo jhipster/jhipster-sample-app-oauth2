@@ -114,7 +114,7 @@ public class OAuth2ServerConfiguration {
                 .scopes("read", "write")
                 .authorities(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER)
                 .authorizedGrantTypes("password", "refresh_token")
-                .secret(jHipsterProperties.getSecurity().getOauth().getSecret())
+                .secret(jHipsterProperties.getSecurity().getAuthentication().getOauth().getSecret())
                 .accessTokenValiditySeconds(jHipsterProperties.getSecurity().getAuthentication().getOauth().getTokenValidityInSeconds());
         }
     }
