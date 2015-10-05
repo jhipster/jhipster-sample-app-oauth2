@@ -110,12 +110,12 @@ public class OAuth2ServerConfiguration {
         public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
             clients
                 .inMemory()
-                .withClient(jHipsterProperties.getSecurity().getOauth().getClientid())
+                .withClient(jHipsterProperties.getSecurity().getAuthentication().getOauth().getClientid())
                 .scopes("read", "write")
                 .authorities(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER)
                 .authorizedGrantTypes("password", "refresh_token")
                 .secret(jHipsterProperties.getSecurity().getOauth().getSecret())
-                .accessTokenValiditySeconds(jHipsterProperties.getSecurity().getOauth().getTokenValidityInSeconds());
+                .accessTokenValiditySeconds(jHipsterProperties.getSecurity().getAuthentication().getOauth().getTokenValidityInSeconds());
         }
     }
 }
