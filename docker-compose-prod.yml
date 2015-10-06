@@ -1,6 +1,6 @@
 jhipster-prod-mysql:
   container_name: sampleOAuth2-prod-mysql
-  image : mysql
+  image: mysql
   # volumes:
   # - ~/volumes/jhipster/sampleOAuth2/prod-mysql/:/var/lib/mysql/
   environment:
