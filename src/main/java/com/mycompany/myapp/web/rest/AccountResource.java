@@ -23,7 +23,6 @@ import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * REST controller for managing the current user's account.
@@ -148,7 +147,6 @@ public class AccountResource {
         produces = MediaType.TEXT_PLAIN_VALUE)
     @Timed
     public ResponseEntity<?> requestPasswordReset(@RequestBody String mail, HttpServletRequest request) {
-
         return userService.requestPasswordReset(mail)
             .map(user -> {
                 String baseUrl = request.getScheme() +
@@ -159,7 +157,6 @@ public class AccountResource {
             mailService.sendPasswordResetMail(user, baseUrl);
             return new ResponseEntity<>("e-mail was sent", HttpStatus.OK);
             }).orElse(new ResponseEntity<>("e-mail address not registered", HttpStatus.BAD_REQUEST));
-
     }
 
     @RequestMapping(value = "/account/reset_password/finish",
@@ -179,5 +176,4 @@ public class AccountResource {
             password.length() >= UserDTO.PASSWORD_MIN_LENGTH &&
             password.length() <= UserDTO.PASSWORD_MAX_LENGTH);
     }
-
 }
