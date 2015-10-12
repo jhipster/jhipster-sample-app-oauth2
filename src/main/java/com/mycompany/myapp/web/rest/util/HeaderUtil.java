@@ -7,14 +7,14 @@ import org.springframework.http.HttpHeaders;
  *
  */
 public class HeaderUtil {
- 
+
     public static HttpHeaders createAlert(String message, String param) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-sampleoauth2App-alert", message);
         headers.add("X-sampleoauth2App-params", param);
         return headers;
     }
-    
+
     public static HttpHeaders createEntityCreationAlert(String entityName, String param) {
         return createAlert("sampleoauth2App." + entityName + ".created", param);
     }
@@ -26,5 +26,4 @@ public class HeaderUtil {
     public static HttpHeaders createEntityDeletionAlert(String entityName, String param) {
         return createAlert("sampleoauth2App." + entityName + ".deleted", param);
     }
-
 }
