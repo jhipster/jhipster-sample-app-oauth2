@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('sampleoauth2App')
+angular.module('sampleOAuth2App')
     .controller('RequestResetController', function ($rootScope, $scope, $state, $timeout, Auth) {
 
         $scope.success = null;

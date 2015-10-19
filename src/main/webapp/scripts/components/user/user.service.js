@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('sampleoauth2App')
+angular.module('sampleOAuth2App')
     .factory('User', function ($resource) {
         return $resource('api/users/:login', {}, {
                 'query': {method: 'GET', isArray: true},

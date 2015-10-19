@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('sampleoauth2App')
+angular.module('sampleOAuth2App')
     .factory('AlertService', function ($timeout, $sce,$translate) {
         var exports = {
             factory: factory,

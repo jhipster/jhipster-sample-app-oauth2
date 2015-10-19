@@ -1,8 +1,8 @@
 /* globals $ */
 'use strict';
 
-angular.module('sampleoauth2App')
-    .directive('sampleoauth2AppPagination', function() {
+angular.module('sampleOAuth2App')
+    .directive('sampleOAuth2AppPagination', function() {
         return {
             templateUrl: 'scripts/components/form/pagination.html'
         };

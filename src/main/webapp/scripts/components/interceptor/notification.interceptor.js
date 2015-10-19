@@ -1,12 +1,12 @@
  'use strict';
 
-angular.module('sampleoauth2App')
+angular.module('sampleOAuth2App')
     .factory('notificationInterceptor', function ($q, AlertService) {
         return {
             response: function(response) {
-                var alertKey = response.headers('X-sampleoauth2App-alert');
+                var alertKey = response.headers('X-sampleOAuth2App-alert');
                 if (angular.isString(alertKey)) {
-                    AlertService.success(alertKey, { param : response.headers('X-sampleoauth2App-params')});
+                    AlertService.success(alertKey, { param : response.headers('X-sampleOAuth2App-params')});
                 }
                 return response;
             }

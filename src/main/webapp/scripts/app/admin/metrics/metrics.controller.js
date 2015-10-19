@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('sampleoauth2App')
+angular.module('sampleOAuth2App')
     .controller('MetricsController', function ($scope, MonitoringService, $modal) {
         $scope.metrics = {};
         $scope.updatingMetrics = true;

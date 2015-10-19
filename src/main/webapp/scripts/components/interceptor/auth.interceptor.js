@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('sampleoauth2App')
+angular.module('sampleOAuth2App')
     .factory('authInterceptor', function ($rootScope, $q, $location, localStorageService) {
         return {
             // Add authorization token to headers

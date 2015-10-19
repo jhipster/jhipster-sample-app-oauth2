@@ -2,7 +2,7 @@
 
 describe('Controllers Tests ', function () {
 
-    beforeEach(module('sampleoauth2App'));
+    beforeEach(module('sampleOAuth2App'));
 
     describe('LoginController', function () {
         var $scope;

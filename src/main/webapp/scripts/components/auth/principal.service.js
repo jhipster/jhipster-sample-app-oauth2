@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('sampleoauth2App')
+angular.module('sampleOAuth2App')
     .factory('Principal', function Principal($q, Account) {
         var _identity,
             _authenticated = false;

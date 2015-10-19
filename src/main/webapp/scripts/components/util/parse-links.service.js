@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('sampleoauth2App')
+angular.module('sampleOAuth2App')
     .service('ParseLinks', function () {
         this.parse = function (header) {
             if (header.length == 0) {

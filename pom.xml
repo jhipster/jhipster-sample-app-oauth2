@@ -10,7 +10,7 @@
     </parent>
 
     <groupId>com.mycompany.myapp</groupId>
-    <artifactId>sampleoauth2</artifactId>
+    <artifactId>sample-o-auth2</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>sampleOAuth2</name>
