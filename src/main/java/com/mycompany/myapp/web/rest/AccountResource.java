@@ -118,8 +118,7 @@ public class AccountResource {
     @Timed
     public ResponseEntity<String> saveAccount(@RequestBody UserDTO userDTO) {
         return userRepository
-            .findOneByLogin(userDTO.getLogin())
-            .filter(u -> u.getLogin().equals(SecurityUtils.getCurrentUserLogin()))
+            .findOneById(SecurityUtils.getCurrentUserId())
             .map(u -> {
                 userService.updateUserInformation(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
                     userDTO.getLangKey());
