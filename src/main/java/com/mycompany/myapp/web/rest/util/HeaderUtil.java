@@ -26,4 +26,11 @@ public class HeaderUtil {
     public static HttpHeaders createEntityDeletionAlert(String entityName, String param) {
         return createAlert("sampleOAuth2App." + entityName + ".deleted", param);
     }
+
+    public static HttpHeaders createFailureAlert(String entityName, String errorKey, String defaultMessage) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-sampleOAuth2App-error", "error." + errorKey);
+        headers.add("X-sampleOAuth2App-params", entityName);
+        return headers;
+    }
 }

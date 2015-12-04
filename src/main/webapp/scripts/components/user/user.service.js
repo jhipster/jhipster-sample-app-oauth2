@@ -11,6 +11,8 @@ angular.module('sampleOAuth2App')
                         return data;
                     }
                 },
-                'update': { method:'PUT' }
+                'save': { method:'POST' },
+                'update': { method:'PUT' },
+                'delete':{ method:'DELETE'}
             });
         });
