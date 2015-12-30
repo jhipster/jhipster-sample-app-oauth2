@@ -1,13 +1,12 @@
-jhipster-prod-mysql:
-  container_name: sampleOAuth2-prod-mysql
+sampleoauth2-mysql:
+  container_name: sampleoauth2-mysql
   image: mysql:5.7.9
   # volumes:
-  # - ~/volumes/jhipster/sampleOAuth2/prod-mysql/:/var/lib/mysql/
+  #   - ~/volumes/jhipster/sampleOAuth2/mysql/:/var/lib/mysql/
   environment:
-  - MYSQL_USER=root
-  - MYSQL_ALLOW_EMPTY_PASSWORD=yes
-  - MYSQL_DATABASE=sampleoauth2
+    - MYSQL_USER=root
+    - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    - MYSQL_DATABASE=sampleoauth2
   ports:
-  - "3306:3306"
+    - "3306:3306"
   command: mysqld --lower_case_table_names=1
-
