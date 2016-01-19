@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('sampleOAuth2App', ['LocalStorageModule', 'tmh.dynamicLocale', 'pascalprecht.translate', 
+angular.module('sampleoauth2App', ['LocalStorageModule', 'tmh.dynamicLocale', 'pascalprecht.translate', 
     'ngResource', 'ngCookies', 'ngAria', 'ngCacheBuster', 'ngFileUpload',
-    // jhipster-needle-angularjs-add-module JHipster will add new module
+    // jhipster-needle-angularjs-add-module JHipster will add new module here
     'ui.bootstrap', 'ui.router',  'infinite-scroll', 'angular-loading-bar'])
 
     .run(function ($rootScope, $location, $window, $http, $state, $translate, Language, Auth, Principal, ENV, VERSION) {
@@ -29,6 +29,7 @@ angular.module('sampleOAuth2App', ['LocalStorageModule', 'tmh.dynamicLocale', 'p
             if (Principal.isIdentityResolved()) {
                 Auth.authorize();
             }
+			
             
             // Update the language
             Language.getCurrent().then(function (language) {
@@ -101,6 +102,7 @@ angular.module('sampleOAuth2App', ['LocalStorageModule', 'tmh.dynamicLocale', 'p
         $httpProvider.interceptors.push('authExpiredInterceptor');
         $httpProvider.interceptors.push('authInterceptor');
         $httpProvider.interceptors.push('notificationInterceptor');
+        // jhipster-needle-angularjs-add-interceptor JHipster will add new application interceptor here
         
         // Initialize angular-translate
         $translateProvider.useLoader('$translatePartialLoader', {
@@ -117,7 +119,7 @@ angular.module('sampleOAuth2App', ['LocalStorageModule', 'tmh.dynamicLocale', 'p
         tmhDynamicLocaleProvider.storageKey('NG_TRANSLATE_LANG_KEY');
         
     })
-    // jhipster-needle-angularjs-add-config JHipster will add new application configuration
+    // jhipster-needle-angularjs-add-config JHipster will add new application configuration here
     .config(['$urlMatcherFactoryProvider', function($urlMatcherFactory) {
         $urlMatcherFactory.type('boolean', {
             name : 'boolean',

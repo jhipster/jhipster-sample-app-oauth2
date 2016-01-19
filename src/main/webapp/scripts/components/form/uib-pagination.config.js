@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('sampleOAuth2App')
+angular.module('sampleoauth2App')
     .config(function (uibPaginationConfig) {
         uibPaginationConfig.itemsPerPage = 20;
         uibPaginationConfig.maxSize = 5;

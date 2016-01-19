@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('sampleOAuth2App')
+angular.module('sampleoauth2App')
     .filter('capitalize', function () {
         return function (input, scope) {
             if (input != null)

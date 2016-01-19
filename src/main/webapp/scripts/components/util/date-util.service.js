@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('sampleOAuth2App')
+angular.module('sampleoauth2App')
     .service('DateUtils', function ($filter) {
 
     this.convertLocaleDateToServer = function(date) {

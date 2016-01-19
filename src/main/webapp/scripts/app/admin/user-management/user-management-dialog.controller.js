@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('sampleOAuth2App').controller('UserManagementDialogController',
+angular.module('sampleoauth2App').controller('UserManagementDialogController',
     ['$scope', '$stateParams', '$uibModalInstance', 'entity', 'User', 'Language',
         function($scope, $stateParams, $uibModalInstance, entity, User, Language) {
 

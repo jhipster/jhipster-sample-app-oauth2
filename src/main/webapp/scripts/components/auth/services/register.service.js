@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('sampleOAuth2App')
+angular.module('sampleoauth2App')
     .factory('Register', function ($resource) {
         return $resource('api/register', {}, {
         });

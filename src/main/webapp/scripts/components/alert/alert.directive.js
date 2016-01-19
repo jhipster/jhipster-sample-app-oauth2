@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('sampleOAuth2App')
+angular.module('sampleoauth2App')
     .directive('jhAlert', function(AlertService) {
         return {
             restrict: 'E',
@@ -32,7 +32,7 @@ angular.module('sampleOAuth2App')
 
                     $scope.alerts = [];
 
-                    var cleanHttpErrorListener = $rootScope.$on('sampleOAuth2App.httpError', function (event, httpResponse) {
+                    var cleanHttpErrorListener = $rootScope.$on('sampleoauth2App.httpError', function (event, httpResponse) {
                         var i;
                         event.stopPropagation();
                         switch (httpResponse.status) {
@@ -42,8 +42,8 @@ angular.module('sampleOAuth2App')
                                 break;
 
                             case 400:
-                                var errorHeader = httpResponse.headers('X-sampleOAuth2App-error');
-                                var entityKey = httpResponse.headers('X-sampleOAuth2App-params');
+                                var errorHeader = httpResponse.headers('X-sampleoauth2App-error');
+                                var entityKey = httpResponse.headers('X-sampleoauth2App-params');
                                 if (errorHeader) {
                                     var entityName = $translate.instant('global.menu.entities.' + entityKey);
                                     addErrorAlert(errorHeader, errorHeader, {entityName: entityName});
@@ -52,7 +52,7 @@ angular.module('sampleOAuth2App')
                                         var fieldError = httpResponse.data.fieldErrors[i];
                                         // convert 'something[14].other[4].id' to 'something[].other[].id' so translations can be written to it
                                         var convertedField = fieldError.field.replace(/\[\d*\]/g, "[]");
-                                        var fieldName = $translate.instant('sampleOAuth2App.' + fieldError.objectName + '.' + convertedField);
+                                        var fieldName = $translate.instant('sampleoauth2App.' + fieldError.objectName + '.' + convertedField);
                                         addErrorAlert('Field ' + fieldName + ' cannot be empty', 'error.' + fieldError.message, {fieldName: fieldName});
                                     }
                                 } else if (httpResponse.data && httpResponse.data.message) {
