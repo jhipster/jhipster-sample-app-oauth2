@@ -1,9 +1,9 @@
 package com.mycompany.myapp.config;
 
-import javax.validation.constraints.NotNull;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.web.cors.CorsConfiguration;
+
 
 /**
  * Properties specific to JHipster.
@@ -19,8 +19,6 @@ public class JHipsterProperties {
 
     private final Http http = new Http();
 
-    private final Datasource datasource = new Datasource();
-
     private final Cache cache = new Cache();
 
     private final Mail mail = new Mail();
@@ -33,18 +31,12 @@ public class JHipsterProperties {
 
     private final CorsConfiguration cors = new CorsConfiguration();
 
-
-
     public Async getAsync() {
         return async;
     }
 
     public Http getHttp() {
         return http;
-    }
-
-    public Datasource getDatasource() {
-        return datasource;
     }
 
     public Cache getCache() {
@@ -70,7 +62,6 @@ public class JHipsterProperties {
     public CorsConfiguration getCors() {
         return cors;
     }
-
 
     public static class Async {
 
@@ -115,7 +106,7 @@ public class JHipsterProperties {
 
         public static class Cache {
 
-            private int timeToLiveInDays = 31;
+            private int timeToLiveInDays = 1461;
 
             public int getTimeToLiveInDays() {
                 return timeToLiveInDays;
@@ -124,49 +115,6 @@ public class JHipsterProperties {
             public void setTimeToLiveInDays(int timeToLiveInDays) {
                 this.timeToLiveInDays = timeToLiveInDays;
             }
-        }
-    }
-
-    public static class Datasource {
-
-        private boolean cachePrepStmts = true;
-
-        private int prepStmtCacheSize = 250;
-
-        private int prepStmtCacheSqlLimit = 2048;
-
-        private boolean useServerPrepStmts = true;
-
-        public boolean isCachePrepStmts() {
-            return cachePrepStmts;
-        }
-
-        public void setCachePrepStmts(boolean cachePrepStmts) {
-            this.cachePrepStmts = cachePrepStmts;
-        }
-
-        public int getPrepStmtCacheSize() {
-            return prepStmtCacheSize;
-        }
-
-        public void setPrepStmtCacheSize(int prepStmtCacheSize) {
-            this.prepStmtCacheSize = prepStmtCacheSize;
-        }
-
-        public int getPrepStmtCacheSqlLimit() {
-            return prepStmtCacheSqlLimit;
-        }
-
-        public void setPrepStmtCacheSqlLimit(int prepStmtCacheSqlLimit) {
-            this.prepStmtCacheSqlLimit = prepStmtCacheSqlLimit;
-        }
-
-        public boolean isUseServerPrepStmts() {
-            return useServerPrepStmts;
-        }
-
-        public void setUseServerPrepStmts(boolean useServerPrepStmts) {
-            this.useServerPrepStmts = useServerPrepStmts;
         }
     }
 
@@ -217,13 +165,7 @@ public class JHipsterProperties {
 
     public static class Security {
 
-        private final Rememberme rememberme = new Rememberme();
-
         private final Authentication authentication = new Authentication();
-
-        public Rememberme getRememberme() {
-            return rememberme;
-        }
 
         public Authentication getAuthentication() {
             return authentication;
@@ -270,19 +212,6 @@ public class JHipsterProperties {
                 }
             }
         }
-        public static class Rememberme {
-
-            @NotNull
-            private String key;
-
-            public String getKey() {
-                return key;
-            }
-
-            public void setKey(String key) {
-                this.key = key;
-            }
-        }
     }
 
     public static class Swagger {
@@ -295,11 +224,17 @@ public class JHipsterProperties {
 
         private String termsOfServiceUrl;
 
-        private String contact;
+        private String contactName;
+
+        private String contactUrl;
+
+        private String contactEmail;
 
         private String license;
 
         private String licenseUrl;
+
+        private Boolean enabled;
 
         public String getTitle() {
             return title;
@@ -333,12 +268,28 @@ public class JHipsterProperties {
             this.termsOfServiceUrl = termsOfServiceUrl;
         }
 
-        public String getContact() {
-            return contact;
+        public String getContactName() {
+            return contactName;
         }
 
-        public void setContact(String contact) {
-            this.contact = contact;
+        public void setContactName(String contactName) {
+            this.contactName = contactName;
+        }
+
+        public String getContactUrl() {
+            return contactUrl;
+        }
+
+        public void setContactUrl(String contactUrl) {
+            this.contactUrl = contactUrl;
+        }
+
+        public String getContactEmail() {
+            return contactEmail;
+        }
+
+        public void setContactEmail(String contactEmail) {
+            this.contactEmail = contactEmail;
         }
 
         public String getLicense() {
@@ -356,6 +307,14 @@ public class JHipsterProperties {
         public void setLicenseUrl(String licenseUrl) {
             this.licenseUrl = licenseUrl;
         }
+
+        public Boolean isEnabled() {
+            return enabled;
+        }
+
+        public void setEnabled(Boolean enabled) {
+            this.enabled = enabled;
+        }
     }
 
     public static class Metrics {
@@ -365,6 +324,8 @@ public class JHipsterProperties {
         private final Spark spark = new Spark();
 
         private final Graphite graphite = new Graphite();
+
+        private final Logs logs = new Logs();
 
         public Jmx getJmx() {
             return jmx;
@@ -377,6 +338,11 @@ public class JHipsterProperties {
         public Graphite getGraphite() {
             return graphite;
         }
+
+        public Logs getLogs() {
+            return logs;
+        }
+
 
         public static class Jmx {
 
@@ -466,5 +432,67 @@ public class JHipsterProperties {
                 this.prefix = prefix;
             }
         }
+
+        public static  class Logs {
+
+            private boolean enabled = false;
+
+            private long reportFrequency = 60;
+
+            public long getReportFrequency() {
+                return reportFrequency;
+            }
+
+            public void setReportFrequency(int reportFrequency) {
+                this.reportFrequency = reportFrequency;
+            }
+
+            public boolean isEnabled() {
+                return enabled;
+            }
+
+            public void setEnabled(boolean enabled) {
+                this.enabled = enabled;
+            }
+        }
     }
+
+    private final Logging logging = new Logging();
+
+    public Logging getLogging() { return logging; }
+
+    public static class Logging {
+
+        private final Logstash logstash = new Logstash();
+
+        public Logstash getLogstash() { return logstash; }
+
+        public static class Logstash {
+
+            private boolean enabled = false;
+
+            private String host = "localhost";
+
+            private int port = 5000;
+
+            private int queueSize = 512;
+
+            public boolean isEnabled() { return enabled; }
+
+            public void setEnabled(boolean enabled) { this.enabled = enabled; }
+
+            public String getHost() { return host; }
+
+            public void setHost(String host) { this.host = host; }
+
+            public int getPort() { return port; }
+
+            public void setPort(int port) { this.port = port; }
+
+            public int getQueueSize() { return queueSize; }
+
+            public void setQueueSize(int queueSize) { this.queueSize = queueSize; }
+        }
+    }
+
 }

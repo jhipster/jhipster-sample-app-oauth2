@@ -11,8 +11,9 @@
 # ===================================================================
 
 spring:
+    application:
+        name: sampleOAuth2
     datasource:
-        driver-class-name: org.h2.jdbcx.JdbcDataSource
         url: jdbc:h2:mem:sampleOAuth2;DB_CLOSE_DELAY=-1
         name:
         username:
@@ -65,9 +66,6 @@ jhipster:
                 secret: mySecretOAuthSecret
                 # Token is valid 30 minutes
                 tokenValidityInSeconds: 1800
-        rememberme:
-            # security key (this key should be unique for your application, and kept secret)
-            key: ff67f159ae854e615896ddd1daf46897afdb59ec
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx.enabled: true
     swagger:
@@ -75,6 +73,9 @@ jhipster:
         description: sampleOAuth2 API documentation
         version: 0.0.1
         termsOfServiceUrl:
-        contact:
+        contactName:
+        contactUrl:
+        contactEmail:
         license:
         licenseUrl:
+        enabled: false

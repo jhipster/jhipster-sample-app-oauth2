@@ -1,0 +1,15 @@
+version: '2'
+services:
+    sampleoauth2-app:
+        image: sampleoauth2
+        external_links:
+            - sampleoauth2-mysql:mysql
+        environment:
+            - SPRING_PROFILES_ACTIVE=prod
+            - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/sampleoauth2?useUnicode=true&characterEncoding=utf8&useSSL=false
+        ports:
+            - 8080:8080
+    sampleoauth2-mysql:
+        extends:
+            file: mysql.yml
+            service: sampleoauth2-mysql

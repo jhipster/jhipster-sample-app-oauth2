@@ -13,14 +13,19 @@
     "searchEngine": "no",
     "useCompass": false,
     "buildTool": "maven",
-    "frontendBuilder": "grunt",
-    "javaVersion": "8",
     "enableTranslation": true,
-    "rememberMeKey": "ff67f159ae854e615896ddd1daf46897afdb59ec",
-    "useSass": false,
+    "applicationType": "monolith",
     "testFrameworks": [
-      "gatling"
+      "gatling",
+      "protractor"
     ],
-    "enableSocialSignIn": false
+    "languages": [
+      "en"
+    ],
+    "serverPort": 8080,
+    "jhipsterVersion": "3.1.0",
+    "enableSocialSignIn": false,
+    "useSass": false,
+    "jhiPrefix": "jhi"
   }
 }

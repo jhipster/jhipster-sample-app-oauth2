@@ -1,4 +1,4 @@
-beforeEach(module('sampleoauth2App'));
+beforeEach(module('sampleOAuth2App'));
 /**
  * returns a function whose angular will be replaced
  * with whatever mock was supplied.

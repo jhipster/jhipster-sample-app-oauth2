@@ -1,6 +1,6 @@
 package com.mycompany.myapp.service;
 
-import com.mycompany.myapp.Application;
+import com.mycompany.myapp.SampleOAuth2App;
 import com.mycompany.myapp.domain.User;
 import com.mycompany.myapp.repository.UserRepository;
 import java.time.ZonedDateTime;
@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.*;
  * @see UserService
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = SampleOAuth2App.class)
 @WebAppConfiguration
 @IntegrationTest
 @Transactional
