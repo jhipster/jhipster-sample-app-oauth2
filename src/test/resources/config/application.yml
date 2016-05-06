@@ -63,7 +63,7 @@ jhipster:
         authentication:
             oauth:
                 clientid: sampleOAuth2app
-                secret: mySecretOAuthSecret
+                secret: my-secret-token-to-change-in-production
                 # Token is valid 30 minutes
                 tokenValidityInSeconds: 1800
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration

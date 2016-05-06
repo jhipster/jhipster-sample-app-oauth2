@@ -53,6 +53,7 @@ server:
     compression:
         enabled: true
         mime-types: text/html,text/xml,text/plain,text/css, application/javascript, application/json
+        min-response-size: 1024
 
 # ===================================================================
 # JHipster specific properties
@@ -66,6 +67,13 @@ jhipster:
         timeToLiveSeconds: 3600
         ehcache:
             maxBytesLocalHeap: 256M
+    security:
+        authentication:
+            oauth:
+                clientid: sampleOAuth2app
+                secret: my-secret-token-to-change-in-production
+                # Token is valid 30 minutes
+                tokenValidityInSeconds: 1800
     mail: # specific JHipster mail property, for standard properties see MailProperties
         from: sampleOAuth2@localhost
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
@@ -79,7 +87,7 @@ jhipster:
             host: localhost
             port: 2003
             prefix: sampleOAuth2
-        logs: # report metrics in the logs
+        logs: # Reports Dropwizard metrics in the logs
             enabled: false
             reportFrequency: 60 # in seconds
     logging:
