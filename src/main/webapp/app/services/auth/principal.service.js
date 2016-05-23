@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('sampleOAuth2App')
+        .module('jhipsterOauth2SampleApplicationApp')
         .factory('Principal', Principal);
 
     Principal.$inject = ['$q', 'Account'];

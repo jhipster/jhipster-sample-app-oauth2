@@ -3,7 +3,7 @@
     'use strict';
 
     angular
-        .module('sampleOAuth2App')
+        .module('jhipsterOauth2SampleApplicationApp')
         .factory('Base64', Base64);
 
     function Base64 () {

@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('sampleOAuth2App')
+        .module('jhipsterOauth2SampleApplicationApp')
         .factory('stateHandler', stateHandler);
 
     stateHandler.$inject = ['$rootScope', '$state', '$sessionStorage', '$translate', 'JhiLanguageService', 'translationHandler', '$window',

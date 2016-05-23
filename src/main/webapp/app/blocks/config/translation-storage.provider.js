@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('sampleOAuth2App')
+        .module('jhipsterOauth2SampleApplicationApp')
         .factory('translationStorageProvider', translationStorageProvider);
 
     translationStorageProvider.$inject = ['$cookies', '$log', 'LANGUAGES'];

@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('sampleOAuth2App')
+        .module('jhipsterOauth2SampleApplicationApp')
         .controller('JhiHealthCheckController', JhiHealthCheckController);
 
     JhiHealthCheckController.$inject = ['JhiHealthService', '$uibModal'];

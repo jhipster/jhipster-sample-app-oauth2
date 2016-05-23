@@ -12,14 +12,14 @@
 
 spring:
     application:
-        name: sampleOAuth2
+        name: jhipsterOauth2SampleApplication
     datasource:
-        url: jdbc:h2:mem:sampleOAuth2;DB_CLOSE_DELAY=-1
+        url: jdbc:h2:mem:jhipsterOauth2SampleApplication;DB_CLOSE_DELAY=-1
         name:
         username:
         password:
     jpa:
-        database-platform: com.mycompany.myapp.domain.util.FixedH2Dialect
+        database-platform: io.github.jhipster.sample.domain.util.FixedH2Dialect
         database: H2
         open-in-view: false
         show_sql: true
@@ -62,15 +62,15 @@ jhipster:
     security:
         authentication:
             oauth:
-                clientid: sampleOAuth2app
+                clientid: jhipsterOauth2SampleApplicationapp
                 secret: my-secret-token-to-change-in-production
                 # Token is valid 30 minutes
                 tokenValidityInSeconds: 1800
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx.enabled: true
     swagger:
-        title: sampleOAuth2 API
-        description: sampleOAuth2 API documentation
+        title: jhipsterOauth2SampleApplication API
+        description: jhipsterOauth2SampleApplication API documentation
         version: 0.0.1
         termsOfServiceUrl:
         contactName:

@@ -3,7 +3,7 @@
     'use strict';
 
     angular
-        .module('sampleOAuth2App')
+        .module('jhipsterOauth2SampleApplicationApp')
         .factory('AuthServerProvider', AuthServerProvider);
 
     AuthServerProvider.$inject = ['$http', '$localStorage', 'Base64'];
@@ -30,13 +30,13 @@
         function login (credentials) {
             var data = 'username=' +  encodeURIComponent(credentials.username) + '&password=' +
                 encodeURIComponent(credentials.password) + '&grant_type=password&scope=read%20write&' +
-                'client_secret=my-secret-token-to-change-in-production&client_id=sampleOAuth2app';
+                'client_secret=my-secret-token-to-change-in-production&client_id=jhipsterOauth2SampleApplicationapp';
 
             return $http.post('oauth/token', data, {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                     'Accept': 'application/json',
-                    'Authorization': 'Basic ' + Base64.encode('sampleOAuth2app' + ':' + 'my-secret-token-to-change-in-production')
+                    'Authorization': 'Basic ' + Base64.encode('jhipsterOauth2SampleApplicationapp' + ':' + 'my-secret-token-to-change-in-production')
                 }
             }).success(authSucess);
 

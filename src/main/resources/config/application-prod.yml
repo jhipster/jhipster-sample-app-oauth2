@@ -18,7 +18,7 @@ spring:
         livereload:
             enabled: false
     datasource:
-        url: jdbc:mysql://localhost:3306/sampleOAuth2?useUnicode=true&characterEncoding=utf8&useSSL=false
+        url: jdbc:mysql://localhost:3306/jhipsterOauth2SampleApplication?useUnicode=true&characterEncoding=utf8&useSSL=false
         name:
         username: root
         password:
@@ -29,7 +29,7 @@ spring:
                 prepStmtCacheSqlLimit: 2048
                 useServerPrepStmts: true
     jpa:
-        database-platform: org.hibernate.dialect.MySQLInnoDBDialect
+        database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
         database: MYSQL
         show_sql: false
         properties:
@@ -70,12 +70,12 @@ jhipster:
     security:
         authentication:
             oauth:
-                clientid: sampleOAuth2app
+                clientid: jhipsterOauth2SampleApplicationapp
                 secret: my-secret-token-to-change-in-production
                 # Token is valid 30 minutes
                 tokenValidityInSeconds: 1800
     mail: # specific JHipster mail property, for standard properties see MailProperties
-        from: sampleOAuth2@localhost
+        from: jhipsterOauth2SampleApplication@localhost
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx.enabled: true
         spark:
@@ -86,7 +86,7 @@ jhipster:
             enabled: false
             host: localhost
             port: 2003
-            prefix: sampleOAuth2
+            prefix: jhipsterOauth2SampleApplication
         logs: # Reports Dropwizard metrics in the logs
             enabled: false
             reportFrequency: 60 # in seconds

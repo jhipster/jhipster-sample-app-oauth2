@@ -1,7 +1,7 @@
 {
-  "name": "sample-o-auth-2",
+  "name": "jhipster-oauth-2-sample-application",
   "version": "0.0.0",
-  "description": "Description for sampleOAuth2",
+  "description": "Description for jhipsterOauth2SampleApplication",
   "private": true,
   "cacheDirectories": [
     "node_modules",

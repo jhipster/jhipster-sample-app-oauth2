@@ -18,15 +18,15 @@ spring:
         livereload:
             enabled: false # we use gulp + BrowserSync for livereload
     datasource:
-        url: jdbc:h2:mem:sampleoauth2;DB_CLOSE_DELAY=-1
+        url: jdbc:h2:mem:jhipsteroauth2sampleapplication;DB_CLOSE_DELAY=-1
         name:
-        username: sampleOAuth2
+        username: jhipsterOauth2SampleApplication
         password:
     h2:
         console:
             enabled: false
     jpa:
-        database-platform: com.mycompany.myapp.domain.util.FixedH2Dialect
+        database-platform: io.github.jhipster.sample.domain.util.FixedH2Dialect
         database: H2
         show_sql: true
         properties:
@@ -36,6 +36,9 @@ spring:
             hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
     mail:
         host: localhost
+        port: 25
+        username:
+        password:
     messages:
         cache-seconds: 1
     thymeleaf:
@@ -59,12 +62,12 @@ jhipster:
     security:
         authentication:
             oauth:
-                clientid: sampleOAuth2app
+                clientid: jhipsterOauth2SampleApplicationapp
                 secret: my-secret-token-to-change-in-production
                 # Token is valid 30 minutes
                 tokenValidityInSeconds: 1800
     mail: # specific JHipster mail property, for standard properties see MailProperties
-        from: sampleOAuth2@localhost
+        from: jhipsterOauth2SampleApplication@localhost
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx.enabled: true
         spark:
@@ -75,7 +78,7 @@ jhipster:
             enabled: false
             host: localhost
             port: 2003
-            prefix: sampleOAuth2
+            prefix: jhipsterOauth2SampleApplication
         logs: # Reports Dropwizard metrics in the logs
             enabled: false
             reportFrequency: 60 # in seconds

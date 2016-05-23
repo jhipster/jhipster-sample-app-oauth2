@@ -1,6 +1,6 @@
 {
   "version": "0.0.0",
-  "name": "sample-o-auth-2",
+  "name": "jhipster-oauth-2-sample-application",
   "appPath": "src/main/webapp/",
   "testPath": "src/test/javascript/spec",
   "dependencies": {
