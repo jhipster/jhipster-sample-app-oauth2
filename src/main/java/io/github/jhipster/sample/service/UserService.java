@@ -12,11 +12,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import javax.inject.Inject;
 import java.util.*;
@@ -30,9 +29,11 @@ public class UserService {
 
     private final Logger log = LoggerFactory.getLogger(UserService.class);
 
-
     @Inject
     private PasswordEncoder passwordEncoder;
+
+    @Inject
+    public JdbcTokenStore jdbcTokenStore;
 
     @Inject
     private UserRepository userRepository;
@@ -146,6 +147,8 @@ public class UserService {
     }
 
     public void deleteUserInformation(String login) {
+        jdbcTokenStore.findTokensByUserName(login).stream().forEach(token ->
+            jdbcTokenStore.removeAccessToken(token));
         userRepository.findOneByLogin(login).ifPresent(u -> {
             userRepository.delete(u);
             log.debug("Deleted User: {}", u);
