@@ -19,6 +19,11 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 
 import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.approval.ApprovalStore;
+import org.springframework.security.oauth2.provider.approval.JdbcApprovalStore;
+import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
+import org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 
 import javax.inject.Inject;
@@ -27,9 +32,20 @@ import javax.sql.DataSource;
 @Configuration
 public class OAuth2ServerConfiguration {
 
+    @Inject
+    private DataSource dataSource;
+
+    @Bean
+    public TokenStore tokenStore() {
+        return new JdbcTokenStore(dataSource);
+    }
+
     @Configuration
     @EnableResourceServer
     protected static class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
+
+        @Inject
+        private TokenStore tokenStore;
 
         @Inject
         private Http401UnauthorizedEntryPoint authenticationEntryPoint;
@@ -65,6 +81,11 @@ public class OAuth2ServerConfiguration {
                 .antMatchers("/swagger-resources/configuration/ui").permitAll()
                 .antMatchers("/swagger-ui/index.html").hasAuthority(AuthoritiesConstants.ADMIN);
         }
+
+        @Override
+        public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
+            resources.resourceId("res_jhipsterOauth2SampleApplication").tokenStore(tokenStore);
+        }
     }
 
     @Configuration
@@ -75,11 +96,16 @@ public class OAuth2ServerConfiguration {
         private DataSource dataSource;
 
         @Inject
-        private JHipsterProperties jHipsterProperties;
+        private TokenStore tokenStore;
 
         @Bean
-        public TokenStore tokenStore() {
-            return new JdbcTokenStore(dataSource);
+        protected AuthorizationCodeServices authorizationCodeServices() {
+            return new JdbcAuthorizationCodeServices(dataSource);
+        }
+
+        @Bean
+        public ApprovalStore approvalStore() {
+            return new JdbcApprovalStore(dataSource);
         }
 
         @Inject
@@ -89,10 +115,11 @@ public class OAuth2ServerConfiguration {
         @Override
         public void configure(AuthorizationServerEndpointsConfigurer endpoints)
                 throws Exception {
-
             endpoints
-                    .tokenStore(tokenStore())
-                    .authenticationManager(authenticationManager);
+                .authorizationCodeServices(authorizationCodeServices())
+                .approvalStore(approvalStore())
+                .tokenStore(tokenStore)
+                .authenticationManager(authenticationManager);
         }
 
         @Override
@@ -102,14 +129,7 @@ public class OAuth2ServerConfiguration {
 
         @Override
         public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-            clients
-                .inMemory()
-                .withClient(jHipsterProperties.getSecurity().getAuthentication().getOauth().getClientid())
-                .scopes("read", "write")
-                .authorities(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER)
-                .authorizedGrantTypes("password", "refresh_token", "authorization_code", "implicit")
-                .secret(jHipsterProperties.getSecurity().getAuthentication().getOauth().getSecret())
-                .accessTokenValiditySeconds(jHipsterProperties.getSecurity().getAuthentication().getOauth().getTokenValidityInSeconds());
+            clients.jdbc(dataSource);
         }
     }
 }

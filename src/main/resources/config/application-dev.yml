@@ -20,6 +20,7 @@ spring:
     jackson:
         serialization.indent_output: true
     datasource:
+        type: com.zaxxer.hikari.HikariDataSource
         url: jdbc:h2:mem:jhipsteroauth2sampleapplication;DB_CLOSE_DELAY=-1
         name:
         username: jhipsterOauth2SampleApplication
@@ -63,13 +64,6 @@ jhipster:
         timeToLiveSeconds: 3600
         ehcache:
             maxBytesLocalHeap: 16M
-    security:
-        authentication:
-            oauth:
-                clientid: jhipsterOauth2SampleApplicationapp
-                secret: my-secret-token-to-change-in-production
-                # Token is valid 30 minutes
-                tokenValidityInSeconds: 1800
     mail: # specific JHipster mail property, for standard properties see MailProperties
         from: jhipsterOauth2SampleApplication@localhost
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration

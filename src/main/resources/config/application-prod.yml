@@ -18,6 +18,7 @@ spring:
         livereload:
             enabled: false
     datasource:
+        type: com.zaxxer.hikari.HikariDataSource
         url: jdbc:mysql://localhost:3306/jhipsterOauth2SampleApplication?useUnicode=true&characterEncoding=utf8&useSSL=false
         name:
         username: root
@@ -67,13 +68,6 @@ jhipster:
         timeToLiveSeconds: 3600
         ehcache:
             maxBytesLocalHeap: 256M
-    security:
-        authentication:
-            oauth:
-                clientid: jhipsterOauth2SampleApplicationapp
-                secret: my-secret-token-to-change-in-production
-                # Token is valid 30 minutes
-                tokenValidityInSeconds: 1800
     mail: # specific JHipster mail property, for standard properties see MailProperties
         from: jhipsterOauth2SampleApplication@localhost
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
