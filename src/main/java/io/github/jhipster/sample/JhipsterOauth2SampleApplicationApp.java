@@ -72,5 +72,4 @@ public class JhipsterOauth2SampleApplicationApp {
             env.getProperty("server.port"));
 
     }
-
 }

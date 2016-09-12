@@ -486,9 +486,7 @@ public class JHipsterProperties {
 
             public void setQueueSize(int queueSize) { this.queueSize = queueSize; }
         }
-
     }
-
 
     public static class Ribbon {
 
