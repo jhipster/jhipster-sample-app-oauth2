@@ -5,7 +5,6 @@
         .module('jhipsterOauth2SampleApplicationApp')
         .factory('authExpiredInterceptor', authExpiredInterceptor);
 
-    
     authExpiredInterceptor.$inject = ['$rootScope', '$q', '$injector', '$localStorage', '$sessionStorage'];
 
     function authExpiredInterceptor($rootScope, $q, $injector, $localStorage, $sessionStorage) {

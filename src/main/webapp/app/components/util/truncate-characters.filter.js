@@ -4,7 +4,7 @@
     angular
         .module('jhipsterOauth2SampleApplicationApp')
         .filter('characters', characters);
-        
+
     function characters () {
         return charactersFilter;
 

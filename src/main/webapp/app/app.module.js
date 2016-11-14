@@ -3,9 +3,9 @@
 
     angular
         .module('jhipsterOauth2SampleApplicationApp', [
-            'ngStorage', 
+            'ngStorage',
             'tmh.dynamicLocale',
-            'pascalprecht.translate', 
+            'pascalprecht.translate',
             'ngResource',
             'ngCookies',
             'ngAria',

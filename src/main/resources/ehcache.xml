@@ -36,6 +36,6 @@
     <cache name="io.github.jhipster.sample.domain.User.persistentTokens"
            timeToLiveSeconds="3600">
     </cache>
-    
+
     <!-- jhipster-needle-ehcache-add-entry -->
 </ehcache>
