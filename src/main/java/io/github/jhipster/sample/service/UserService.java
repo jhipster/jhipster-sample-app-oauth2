@@ -164,7 +164,7 @@ public class UserService {
     }
 
     public void deleteUser(String login) {
-        jdbcTokenStore.findTokensByUserName(login).stream().forEach(token ->
+        jdbcTokenStore.findTokensByUserName(login).forEach(token ->
             jdbcTokenStore.removeAccessToken(token));
         userRepository.findOneByLogin(login).ifPresent(user -> {
             userRepository.delete(user);

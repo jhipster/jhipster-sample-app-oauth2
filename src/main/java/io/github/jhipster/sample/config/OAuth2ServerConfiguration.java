@@ -35,7 +35,7 @@ public class OAuth2ServerConfiguration {
     private DataSource dataSource;
 
     @Bean
-    public TokenStore tokenStore() {
+    public JdbcTokenStore tokenStore() {
         return new JdbcTokenStore(dataSource);
     }
 
