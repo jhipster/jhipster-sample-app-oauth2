@@ -2,7 +2,7 @@ version: '2'
 services:
     jhipsteroauth2sampleapplication-sonar:
         container_name: jhipsteroauth2sampleapplication-sonar
-        image: sonarqube:6.1-alpine
+        image: sonarqube:6.2-alpine
         ports:
             - 9000:9000
             - 9092:9092

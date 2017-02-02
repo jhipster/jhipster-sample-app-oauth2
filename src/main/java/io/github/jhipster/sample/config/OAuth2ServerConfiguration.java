@@ -1,8 +1,10 @@
 package io.github.jhipster.sample.config;
 
-import io.github.jhipster.sample.security.AjaxLogoutSuccessHandler;
 import io.github.jhipster.sample.security.AuthoritiesConstants;
-import io.github.jhipster.sample.security.Http401UnauthorizedEntryPoint;
+
+import io.github.jhipster.security.Http401UnauthorizedEntryPoint;
+import io.github.jhipster.security.AjaxLogoutSuccessHandler;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,15 +26,19 @@ import org.springframework.security.oauth2.provider.code.AuthorizationCodeServic
 import org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.filter.CorsFilter;
 
-import javax.inject.Inject;
 import javax.sql.DataSource;
 
 @Configuration
 public class OAuth2ServerConfiguration {
 
-    @Inject
-    private DataSource dataSource;
+    private final DataSource dataSource;
+
+    public OAuth2ServerConfiguration(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     @Bean
     public JdbcTokenStore tokenStore() {
@@ -43,20 +49,28 @@ public class OAuth2ServerConfiguration {
     @EnableResourceServer
     protected static class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
 
-        @Inject
-        private TokenStore tokenStore;
+        private final TokenStore tokenStore;
 
-        @Inject
-        private Http401UnauthorizedEntryPoint authenticationEntryPoint;
+        private final Http401UnauthorizedEntryPoint http401UnauthorizedEntryPoint;
 
-        @Inject
-        private AjaxLogoutSuccessHandler ajaxLogoutSuccessHandler;
+        private final AjaxLogoutSuccessHandler ajaxLogoutSuccessHandler;
+
+        private final CorsFilter corsFilter;
+
+        public ResourceServerConfiguration(TokenStore tokenStore, Http401UnauthorizedEntryPoint http401UnauthorizedEntryPoint,
+            AjaxLogoutSuccessHandler ajaxLogoutSuccessHandler, CorsFilter corsFilter) {
+
+            this.tokenStore = tokenStore;
+            this.http401UnauthorizedEntryPoint = http401UnauthorizedEntryPoint;
+            this.ajaxLogoutSuccessHandler = ajaxLogoutSuccessHandler;
+            this.corsFilter = corsFilter;
+        }
 
         @Override
         public void configure(HttpSecurity http) throws Exception {
             http
                 .exceptionHandling()
-                .authenticationEntryPoint(authenticationEntryPoint)
+                .authenticationEntryPoint(http401UnauthorizedEntryPoint)
             .and()
                 .logout()
                 .logoutUrl("/api/logout")
@@ -64,6 +78,7 @@ public class OAuth2ServerConfiguration {
             .and()
                 .csrf()
                 .disable()
+                .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
                 .headers()
                 .frameOptions().disable()
             .and()
@@ -92,11 +107,19 @@ public class OAuth2ServerConfiguration {
     @EnableAuthorizationServer
     protected static class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
 
-        @Inject
-        private DataSource dataSource;
+        private final AuthenticationManager authenticationManager;
 
-        @Inject
-        private TokenStore tokenStore;
+        private final TokenStore tokenStore;
+
+        private final DataSource dataSource;
+
+        public AuthorizationServerConfiguration(@Qualifier("authenticationManagerBean") AuthenticationManager authenticationManager,
+                TokenStore tokenStore, DataSource dataSource) {
+
+            this.authenticationManager = authenticationManager;
+            this.tokenStore = tokenStore;
+            this.dataSource = dataSource;
+        }
 
         @Bean
         protected AuthorizationCodeServices authorizationCodeServices() {
@@ -107,10 +130,6 @@ public class OAuth2ServerConfiguration {
         public ApprovalStore approvalStore() {
             return new JdbcApprovalStore(dataSource);
         }
-
-        @Inject
-        @Qualifier("authenticationManagerBean")
-        private AuthenticationManager authenticationManager;
 
         @Override
         public void configure(AuthorizationServerEndpointsConfigurer endpoints)

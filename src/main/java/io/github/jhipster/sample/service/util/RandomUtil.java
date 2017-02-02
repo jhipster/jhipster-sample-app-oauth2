@@ -13,7 +13,7 @@ public final class RandomUtil {
     }
 
     /**
-     * Generates a password.
+     * Generate a password.
      *
      * @return the generated password
      */
@@ -22,7 +22,7 @@ public final class RandomUtil {
     }
 
     /**
-     * Generates an activation key.
+     * Generate an activation key.
      *
      * @return the generated activation key
      */
@@ -31,7 +31,7 @@ public final class RandomUtil {
     }
 
     /**
-    * Generates a reset key.
+    * Generate a reset key.
     *
     * @return the generated reset key
     */

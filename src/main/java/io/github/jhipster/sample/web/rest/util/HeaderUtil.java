@@ -11,6 +11,8 @@ public final class HeaderUtil {
 
     private static final Logger log = LoggerFactory.getLogger(HeaderUtil.class);
 
+    private static final String APPLICATION_NAME = "jhipsterOauth2SampleApplicationApp";
+
     private HeaderUtil() {
     }
 
@@ -22,15 +24,15 @@ public final class HeaderUtil {
     }
 
     public static HttpHeaders createEntityCreationAlert(String entityName, String param) {
-        return createAlert("jhipsterOauth2SampleApplicationApp." + entityName + ".created", param);
+        return createAlert(APPLICATION_NAME + "." + entityName + ".created", param);
     }
 
     public static HttpHeaders createEntityUpdateAlert(String entityName, String param) {
-        return createAlert("jhipsterOauth2SampleApplicationApp." + entityName + ".updated", param);
+        return createAlert(APPLICATION_NAME + "." + entityName + ".updated", param);
     }
 
     public static HttpHeaders createEntityDeletionAlert(String entityName, String param) {
-        return createAlert("jhipsterOauth2SampleApplicationApp." + entityName + ".deleted", param);
+        return createAlert(APPLICATION_NAME + "." + entityName + ".deleted", param);
     }
 
     public static HttpHeaders createFailureAlert(String entityName, String errorKey, String defaultMessage) {
