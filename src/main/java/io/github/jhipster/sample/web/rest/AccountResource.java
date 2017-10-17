@@ -1,30 +1,30 @@
 package io.github.jhipster.sample.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
-
 import io.github.jhipster.sample.domain.User;
+import io.github.jhipster.sample.domain.Authority;
 import io.github.jhipster.sample.repository.UserRepository;
-import io.github.jhipster.sample.security.SecurityUtils;
-import io.github.jhipster.sample.service.MailService;
 import io.github.jhipster.sample.service.UserService;
 import io.github.jhipster.sample.service.dto.UserDTO;
-import io.github.jhipster.sample.web.rest.vm.KeyAndPasswordVM;
-import io.github.jhipster.sample.web.rest.vm.ManagedUserVM;
-import io.github.jhipster.sample.web.rest.util.HeaderUtil;
+import io.github.jhipster.sample.web.rest.errors.InternalServerErrorException;
 
-import org.apache.commons.lang3.StringUtils;
+import com.codahale.metrics.annotation.Timed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
+import java.security.Principal;
+import java.time.Instant;
 import java.util.*;
-
+import java.util.stream.Collectors;
 /**
  * REST controller for managing the current user's account.
  */
@@ -38,63 +38,9 @@ public class AccountResource {
 
     private final UserService userService;
 
-    private final MailService mailService;
-
-    private static final String CHECK_ERROR_MESSAGE = "Incorrect password";
-
-    public AccountResource(UserRepository userRepository, UserService userService,
-            MailService mailService) {
-
+    public AccountResource(UserRepository userRepository, UserService userService) {
         this.userRepository = userRepository;
         this.userService = userService;
-        this.mailService = mailService;
-    }
-
-    /**
-     * POST  /register : register the user.
-     *
-     * @param managedUserVM the managed user View Model
-     * @return the ResponseEntity with status 201 (Created) if the user is registered or 400 (Bad Request) if the login or email is already in use
-     */
-    @PostMapping(path = "/register",
-        produces={MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_PLAIN_VALUE})
-    @Timed
-    public ResponseEntity registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
-
-        HttpHeaders textPlainHeaders = new HttpHeaders();
-        textPlainHeaders.setContentType(MediaType.TEXT_PLAIN);
-        if (!checkPasswordLength(managedUserVM.getPassword())) {
-            return new ResponseEntity<>(CHECK_ERROR_MESSAGE, HttpStatus.BAD_REQUEST);
-        }
-        return userRepository.findOneByLogin(managedUserVM.getLogin().toLowerCase())
-            .map(user -> new ResponseEntity<>("login already in use", textPlainHeaders, HttpStatus.BAD_REQUEST))
-            .orElseGet(() -> userRepository.findOneByEmailIgnoreCase(managedUserVM.getEmail())
-                .map(user -> new ResponseEntity<>("email address already in use", textPlainHeaders, HttpStatus.BAD_REQUEST))
-                .orElseGet(() -> {
-                    User user = userService
-                        .createUser(managedUserVM.getLogin(), managedUserVM.getPassword(),
-                            managedUserVM.getFirstName(), managedUserVM.getLastName(),
-                            managedUserVM.getEmail().toLowerCase(), managedUserVM.getImageUrl(),
-                            managedUserVM.getLangKey());
-
-                    mailService.sendActivationEmail(user);
-                    return new ResponseEntity<>(HttpStatus.CREATED);
-                })
-        );
-    }
-
-    /**
-     * GET  /activate : activate the registered user.
-     *
-     * @param key the activation key
-     * @return the ResponseEntity with status 200 (OK) and the activated user in body, or status 500 (Internal Server Error) if the user couldn't be activated
-     */
-    @GetMapping("/activate")
-    @Timed
-    public ResponseEntity<String> activateAccount(@RequestParam(value = "key") String key) {
-        return userService.activateRegistration(key)
-            .map(user -> new ResponseEntity<String>(HttpStatus.OK))
-            .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 
     /**
@@ -113,96 +59,126 @@ public class AccountResource {
     /**
      * GET  /account : get the current user.
      *
-     * @return the ResponseEntity with status 200 (OK) and the current user in body, or status 500 (Internal Server Error) if the user couldn't be returned
+     * @param principal the current user; resolves to null if not authenticated
+     * @return the current user
+     * @throws InternalServerErrorException 500 (Internal Server Error) if the user couldn't be returned
      */
     @GetMapping("/account")
     @Timed
-    public ResponseEntity<UserDTO> getAccount() {
-        return Optional.ofNullable(userService.getUserWithAuthorities())
-            .map(user -> new ResponseEntity<>(new UserDTO(user), HttpStatus.OK))
-            .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
-    }
+    @SuppressWarnings("unchecked")
+    public UserDTO getAccount(Principal principal) {
+        if (principal != null) {
+            if (principal instanceof OAuth2Authentication) {
+                OAuth2Authentication authentication = (OAuth2Authentication) principal;
+                Map<String, Object> details = (Map<String, Object>) authentication.getUserAuthentication().getDetails();
+                Set<Authority> userAuthorities;
 
-    /**
-     * POST  /account : update the current user information.
-     *
-     * @param userDTO the current user information
-     * @return the ResponseEntity with status 200 (OK), or status 400 (Bad Request) or 500 (Internal Server Error) if the user couldn't be updated
-     */
-    @PostMapping("/account")
-    @Timed
-    public ResponseEntity saveAccount(@Valid @RequestBody UserDTO userDTO) {
-        final String userLogin = SecurityUtils.getCurrentUserLogin();
-        Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
-        if (existingUser.isPresent() && (!existingUser.get().getLogin().equalsIgnoreCase(userLogin))) {
-            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("user-management", "emailexists", "Email already in use")).body(null);
+                // get roles from details
+                if (details.get("roles") != null) {
+                    List<String> roles = (List) details.get("roles");
+                    userAuthorities = roles.stream()
+                        .filter(role -> role.startsWith("ROLE_"))
+                        .map(role -> {
+                            Authority userAuthority = new Authority();
+                            userAuthority.setName(role);
+                            return userAuthority;
+                        })
+                        .collect(Collectors.toSet());
+                    // if roles don't exist, try groups
+                } else if (details.get("groups") != null) {
+                    List<String> groups = (List) details.get("groups");
+                    userAuthorities = groups.stream()
+                        .filter(group -> group.startsWith("ROLE_"))
+                        .map(group -> {
+                            Authority userAuthority = new Authority();
+                            userAuthority.setName(group);
+                            return userAuthority;
+                        })
+                        .collect(Collectors.toSet());
+                } else {
+                    userAuthorities = authentication.getAuthorities().stream()
+                        .map(role -> {
+                            Authority userAuthority = new Authority();
+                            userAuthority.setName(role.getAuthority());
+                            return userAuthority;
+                        })
+                        .collect(Collectors.toSet());
+                }
+
+                User user = new User();
+                user.setLogin((String) details.get("preferred_username"));
+                if (details.get("given_name") != null) {
+                    user.setFirstName((String) details.get("given_name"));
+                }
+                if (details.get("family_name") != null) {
+                    user.setFirstName((String) details.get("family_name"));
+                }
+                if (details.get("email_verified") != null) {
+                    user.setActivated((Boolean) details.get("email_verified"));
+                }
+                if (details.get("email") != null) {
+                    user.setEmail((String) details.get("email"));
+                }
+                if (details.get("langKey") != null) {
+                    user.setLangKey((String) details.get("langKey"));
+                } else if (details.get("locale") != null) {
+                    String locale = (String) details.get("locale");
+                    String langKey = locale.substring(0, locale.indexOf("-"));
+                    user.setLangKey(langKey);
+                }
+
+                user.setAuthorities(userAuthorities);
+
+                UserDTO userDTO = new UserDTO(user);
+
+                // convert Authorities to GrantedAuthorities
+                Set<GrantedAuthority> grantedAuthorities = new LinkedHashSet<>();
+                userAuthorities.forEach(authority -> {
+                    grantedAuthorities.add(new SimpleGrantedAuthority(authority.getName()));
+                });
+
+                // create UserDetails so #{principal.username} works
+                UserDetails userDetails =
+                    new org.springframework.security.core.userdetails.User(user.getLogin(),
+                    "N/A", grantedAuthorities);
+                // update Spring Security Authorities to match groups claim from IdP
+                UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+                    userDetails, "N/A", grantedAuthorities);
+                token.setDetails(details);
+                authentication = new OAuth2Authentication(authentication.getOAuth2Request(), token);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+
+                // save account in to sync users between IdP and JHipster's local database
+                Optional<User> existingUser = userRepository.findOneByLogin(userDTO.getLogin());
+                if (existingUser.isPresent()) {
+                    // if IdP sends last updated information, use it to determine if an update should happen
+                    if (details.get("updated_at") != null) {
+                        Instant dbModifiedDate = existingUser.get().getLastModifiedDate();
+                        Instant idpModifiedDate = new Date(Long.valueOf((Integer) details.get("updated_at"))).toInstant();
+                        if (idpModifiedDate.isAfter(dbModifiedDate)) {
+                            log.debug("Updating user '{}' in local database...", userDTO.getLogin());
+                            userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
+                                userDTO.getLangKey(), userDTO.getImageUrl());
+                        }
+                        // no last updated info, blindly update
+                    } else {
+                        log.debug("Updating user '{}' in local database...", userDTO.getLogin());
+                        userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
+                            userDTO.getLangKey(), userDTO.getImageUrl());
+                    }
+                } else {
+                    log.debug("Saving user '{}' in local database...", userDTO.getLogin());
+                    userRepository.save(user);
+                }
+                return userDTO;
+            } else {
+                // Allow Spring Security Test to be used to mock users in the database
+                return Optional.ofNullable(userService.getUserWithAuthorities())
+                    .map(UserDTO::new)
+                    .orElseThrow(() -> new InternalServerErrorException("User could not be found"));
+            }
+        } else {
+            throw new InternalServerErrorException("User could not be found");
         }
-        return userRepository
-            .findOneByLogin(userLogin)
-            .map(u -> {
-                userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
-                    userDTO.getLangKey(), userDTO.getImageUrl());
-                return new ResponseEntity(HttpStatus.OK);
-            })
-            .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
-    }
-
-    /**
-     * POST  /account/change-password : changes the current user's password
-     *
-     * @param password the new password
-     * @return the ResponseEntity with status 200 (OK), or status 400 (Bad Request) if the new password is not strong enough
-     */
-    @PostMapping(path = "/account/change-password",
-        produces = MediaType.TEXT_PLAIN_VALUE)
-    @Timed
-    public ResponseEntity changePassword(@RequestBody String password) {
-        if (!checkPasswordLength(password)) {
-            return new ResponseEntity<>(CHECK_ERROR_MESSAGE, HttpStatus.BAD_REQUEST);
-        }
-        userService.changePassword(password);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    /**
-     * POST   /account/reset-password/init : Send an email to reset the password of the user
-     *
-     * @param mail the mail of the user
-     * @return the ResponseEntity with status 200 (OK) if the email was sent, or status 400 (Bad Request) if the email address is not registered
-     */
-    @PostMapping(path = "/account/reset-password/init",
-        produces = MediaType.TEXT_PLAIN_VALUE)
-    @Timed
-    public ResponseEntity requestPasswordReset(@RequestBody String mail) {
-        return userService.requestPasswordReset(mail)
-            .map(user -> {
-                mailService.sendPasswordResetMail(user);
-                return new ResponseEntity<>("email was sent", HttpStatus.OK);
-            }).orElse(new ResponseEntity<>("email address not registered", HttpStatus.BAD_REQUEST));
-    }
-
-    /**
-     * POST   /account/reset-password/finish : Finish to reset the password of the user
-     *
-     * @param keyAndPassword the generated key and the new password
-     * @return the ResponseEntity with status 200 (OK) if the password has been reset,
-     * or status 400 (Bad Request) or 500 (Internal Server Error) if the password could not be reset
-     */
-    @PostMapping(path = "/account/reset-password/finish",
-        produces = MediaType.TEXT_PLAIN_VALUE)
-    @Timed
-    public ResponseEntity<String> finishPasswordReset(@RequestBody KeyAndPasswordVM keyAndPassword) {
-        if (!checkPasswordLength(keyAndPassword.getNewPassword())) {
-            return new ResponseEntity<>(CHECK_ERROR_MESSAGE, HttpStatus.BAD_REQUEST);
-        }
-        return userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey())
-              .map(user -> new ResponseEntity<String>(HttpStatus.OK))
-              .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
-    }
-
-    private boolean checkPasswordLength(String password) {
-        return !StringUtils.isEmpty(password) &&
-            password.length() >= ManagedUserVM.PASSWORD_MIN_LENGTH &&
-            password.length() <= ManagedUserVM.PASSWORD_MAX_LENGTH;
     }
 }

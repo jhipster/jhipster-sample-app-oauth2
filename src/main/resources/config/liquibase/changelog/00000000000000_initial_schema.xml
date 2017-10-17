@@ -20,29 +20,23 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="login" type="varchar(50)">
-                <constraints unique="true" nullable="false"/>
+                <constraints unique="true" nullable="false" uniqueConstraintName="ux_user_login"/>
             </column>
-            <column name="password_hash" type="varchar(60)"/>
             <column name="first_name" type="varchar(50)"/>
             <column name="last_name" type="varchar(50)"/>
             <column name="email" type="varchar(100)">
-                <constraints unique="true" nullable="true"/>
+                <constraints unique="true" nullable="true" uniqueConstraintName="ux_user_email"/>
             </column>
             <column name="image_url" type="varchar(256)"/>
             <column name="activated" type="boolean" valueBoolean="false">
                 <constraints nullable="false" />
             </column>
-            <column name="lang_key" type="varchar(5)"/>
-            <column name="activation_key" type="varchar(20)"/>
-            <column name="reset_key" type="varchar(20)"/>
+            <column name="lang_key" type="varchar(6)"/>
             <column name="created_by" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
             <column name="created_date" type="timestamp" defaultValueDate="${now}">
                 <constraints nullable="false"/>
-            </column>
-            <column name="reset_date" type="timestamp">
-                <constraints nullable="true"/>
             </column>
             <column name="last_modified_by" type="varchar(50)"/>
             <column name="last_modified_date" type="timestamp"/>
@@ -80,12 +74,6 @@
                                  constraintName="fk_authority_name"
                                  referencedColumnNames="name"
                                  referencedTableName="jhi_authority"/>
-
-        <addForeignKeyConstraint baseColumnNames="user_id"
-                                 baseTableName="jhi_user_authority"
-                                 constraintName="fk_user_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="jhi_user"/>
         <loadData encoding="UTF-8"
                   file="config/liquibase/users.csv"
                   separator=";"
@@ -94,7 +82,6 @@
             <column name="created_date" type="timestamp"/>
         </loadData>
         <dropDefaultValue tableName="jhi_user" columnName="created_date" columnDataType="datetime"/>
-
         <loadData encoding="UTF-8"
                   file="config/liquibase/authorities.csv"
                   separator=";"
@@ -144,81 +131,5 @@
                                  constraintName="fk_evt_pers_audit_evt_data"
                                  referencedColumnNames="event_id"
                                  referencedTableName="jhi_persistent_audit_event"/>
-    </changeSet>
-
-    <!-- Manage the OAuth authentication -->
-    <changeSet id="00000000000002" author="jhipster">
-        <createTable tableName="oauth_client_details">
-            <column name="client_id" type="varchar(255)">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="resource_ids" type="varchar(255)"/>
-            <column name="client_secret" type="varchar(255)"/>
-            <column name="scope" type="varchar(255)"/>
-            <column name="authorized_grant_types" type="varchar(255)"/>
-            <column name="web_server_redirect_uri" type="varchar(255)"/>
-            <column name="authorities" type="varchar(255)"/>
-            <column name="access_token_validity" type="INT"/>
-            <column name="refresh_token_validity" type="INT"/>
-            <column name="additional_information" type="VARCHAR(4000)"/>
-            <column name="autoapprove" type="VARCHAR(4000)"/>
-        </createTable>
-
-        <createTable tableName="oauth_client_token">
-            <column name="token_id" type="varchar(255)"/>
-            <column name="token" type="BLOB"/>
-            <column name="authentication_id" type="varchar(255)"/>
-            <column name="user_name" type="varchar(50)"/>
-            <column name="client_id" type="varchar(255)"/>
-        </createTable>
-
-        <addForeignKeyConstraint baseColumnNames="user_name"
-            baseTableName="oauth_client_token"
-            constraintName="fk_oauth_client_token_username"
-            referencedColumnNames="login"
-            referencedTableName="jhi_user"/>
-
-        <createTable tableName="oauth_access_token">
-            <column name="token_id" type="varchar(255)"/>
-            <column name="token" type="BLOB"/>
-            <column name="authentication_id" type="varchar(255)">
-                 <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="user_name" type="varchar(50)"/>
-            <column name="client_id" type="varchar(255)"/>
-            <column name="authentication" type="BLOB"/>
-            <column name="refresh_token" type="varchar(255)"/>
-        </createTable>
-
-        <addForeignKeyConstraint baseColumnNames="user_name"
-            baseTableName="oauth_access_token"
-            constraintName="fk_oauth_access_token_username"
-            referencedColumnNames="login"
-            referencedTableName="jhi_user"/>
-
-        <createTable tableName="oauth_refresh_token">
-            <column name="token_id" type="varchar(255)"/>
-            <column name="token" type="BLOB"/>
-            <column name="authentication" type="BLOB"/>
-        </createTable>
-
-        <createTable tableName="oauth_code">
-            <column name="code" type="varchar(255)"/>
-            <column name="authentication" type="BLOB"/>
-        </createTable>
-
-        <createTable tableName="oauth_approvals">
-            <column name="userId" type="varchar(255)"/>
-            <column name="clientId" type="varchar(255)"/>
-            <column name="scope" type="varchar(255)"/>
-            <column name="status" type="varchar(255)"/>
-            <column name="expiresAt" type="timestamp"/>
-            <column name="lastModifiedAt" type="timestamp"/>
-        </createTable>
-
-        <loadData encoding="UTF-8"
-                  file="config/liquibase/oauth_client_details.csv"
-                  separator=";"
-                  tableName="oauth_client_details"/>
     </changeSet>
 </databaseChangeLog>
