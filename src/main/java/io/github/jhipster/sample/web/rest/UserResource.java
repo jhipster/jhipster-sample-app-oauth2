@@ -2,7 +2,6 @@ package io.github.jhipster.sample.web.rest;
 
 import io.github.jhipster.sample.config.Constants;
 import com.codahale.metrics.annotation.Timed;
-
 import io.github.jhipster.sample.repository.UserRepository;
 import io.github.jhipster.sample.security.AuthoritiesConstants;
 
@@ -55,12 +54,11 @@ public class UserResource {
 
     private final Logger log = LoggerFactory.getLogger(UserResource.class);
 
-    private static final String ENTITY_NAME = "userManagement";
-
     private final UserRepository userRepository;
+
     private final UserService userService;
 
-    public UserResource(UserRepository userRepository,            UserService userService) {
+    public UserResource(UserRepository userRepository, UserService userService) {
 
         this.userRepository = userRepository;
         this.userService = userService;
