@@ -4,13 +4,10 @@ import io.github.jhipster.sample.config.Constants;
 import com.codahale.metrics.annotation.Timed;
 import io.github.jhipster.sample.repository.UserRepository;
 import io.github.jhipster.sample.security.AuthoritiesConstants;
-
 import io.github.jhipster.sample.service.UserService;
 import io.github.jhipster.sample.service.dto.UserDTO;
-
 import io.github.jhipster.sample.web.rest.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
-import io.swagger.annotations.ApiParam;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,14 +62,14 @@ public class UserResource {
     }
 
     /**
-     * GET  /users : get all users.
+     * GET /users : get all users.
      *
      * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and with body all users
      */
     @GetMapping("/users")
     @Timed
-    public ResponseEntity<List<UserDTO>> getAllUsers(@ApiParam Pageable pageable) {
+    public ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable) {
         final Page<UserDTO> page = userService.getAllManagedUsers(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
@@ -89,7 +86,7 @@ public class UserResource {
     }
 
     /**
-     * GET  /users/:login : get the "login" user.
+     * GET /users/:login : get the "login" user.
      *
      * @param login the login of the user to find
      * @return the ResponseEntity with status 200 (OK) and with body the "login" user, or with status 404 (Not Found)
@@ -102,5 +99,4 @@ public class UserResource {
             userService.getUserWithAuthoritiesByLogin(login)
                 .map(UserDTO::new));
     }
-
 }

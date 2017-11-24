@@ -47,10 +47,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = JhipsterOauth2SampleApplicationApp.class)
 public class UserResourceIntTest {
 
-    private static final Long DEFAULT_ID = 1L;
-
     private static final String DEFAULT_LOGIN = "johndoe";
     private static final String UPDATED_LOGIN = "jhipster";
+
+    private static final Long DEFAULT_ID = 1L;
 
     private static final String DEFAULT_PASSWORD = "passjohndoe";
     private static final String UPDATED_PASSWORD = "passjhipster";
@@ -210,20 +210,19 @@ public class UserResourceIntTest {
 
     @Test
     public void testUserDTOtoUser() {
-        UserDTO userDTO = new UserDTO(
-            DEFAULT_ID,
-            DEFAULT_LOGIN,
-            DEFAULT_FIRSTNAME,
-            DEFAULT_LASTNAME,
-            DEFAULT_EMAIL,
-            true,
-            DEFAULT_IMAGEURL,
-            DEFAULT_LANGKEY,
-            DEFAULT_LOGIN,
-            null,
-            DEFAULT_LOGIN,
-            null,
-            Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet()));
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(DEFAULT_ID);
+        userDTO.setLogin(DEFAULT_LOGIN);
+        userDTO.setFirstName(DEFAULT_FIRSTNAME);
+        userDTO.setLastName(DEFAULT_LASTNAME);
+        userDTO.setEmail(DEFAULT_EMAIL);
+        userDTO.setActivated(true);
+        userDTO.setImageUrl(DEFAULT_IMAGEURL);
+        userDTO.setLangKey(DEFAULT_LANGKEY);
+        userDTO.setCreatedBy(DEFAULT_LOGIN);
+        userDTO.setLastModifiedBy(DEFAULT_LOGIN);
+        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+
         User user = userMapper.userDTOToUser(userDTO);
         assertThat(user.getId()).isEqualTo(DEFAULT_ID);
         assertThat(user.getLogin()).isEqualTo(DEFAULT_LOGIN);
@@ -247,7 +246,6 @@ public class UserResourceIntTest {
         user.setCreatedDate(Instant.now());
         user.setLastModifiedBy(DEFAULT_LOGIN);
         user.setLastModifiedDate(Instant.now());
-
         Set<Authority> authorities = new HashSet<>();
         Authority authority = new Authority();
         authority.setName(AuthoritiesConstants.USER);

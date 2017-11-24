@@ -58,7 +58,7 @@ public class AccountResourceIntTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
         AccountResource accountUserMockResource =
-            new AccountResource(userRepository, userService);
+            new AccountResource(userService);
 
         this.restUserMockMvc = MockMvcBuilders.standaloneSetup(accountUserMockResource)
             .setControllerAdvice(exceptionTranslator)
