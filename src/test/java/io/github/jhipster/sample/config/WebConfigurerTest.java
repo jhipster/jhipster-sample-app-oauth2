@@ -346,5 +346,4 @@ public class WebConfigurerTest {
             return null;
         }
     }
-
 }
