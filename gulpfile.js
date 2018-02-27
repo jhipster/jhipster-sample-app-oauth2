@@ -1,4 +1,4 @@
-// Generated on 2018-01-30 using generator-jhipster 4.14.0
+// Generated on 2018-02-27 using generator-jhipster 4.14.1
 'use strict';
 
 var gulp = require('gulp'),
