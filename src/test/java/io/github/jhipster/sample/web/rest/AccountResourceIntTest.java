@@ -8,6 +8,7 @@ import io.github.jhipster.sample.security.AuthoritiesConstants;
 import io.github.jhipster.sample.service.UserService;
 import io.github.jhipster.sample.web.rest.errors.ExceptionTranslator;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -38,7 +39,7 @@ import org.springframework.web.context.WebApplicationContext;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = JhipsterOauth2SampleApplicationApp.class)
-public class AccountResourceIntTest {
+public class AccountResourceIntTest{
 
     @Autowired
     private UserRepository userRepository;
@@ -57,8 +58,7 @@ public class AccountResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        AccountResource accountUserMockResource =
-            new AccountResource(userService);
+        AccountResource accountUserMockResource = new AccountResource(userService);
 
         this.restUserMockMvc = MockMvcBuilders.standaloneSetup(accountUserMockResource)
             .setControllerAdvice(exceptionTranslator)
@@ -94,6 +94,7 @@ public class AccountResourceIntTest {
         authorities.add(authority);
 
         User user = new User();
+        user.setId(RandomStringUtils.randomAlphanumeric(50));
         user.setLogin("test");
         user.setFirstName("john");
         user.setLastName("doe");
