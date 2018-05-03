@@ -52,6 +52,7 @@ public class UserServiceIntTest {
     @Test
     @Transactional
     public void assertThatAnonymousUserIsNotGet() {
+        user.setId(Constants.ANONYMOUS_USER);
         user.setLogin(Constants.ANONYMOUS_USER);
         if (!userRepository.findOneByLogin(Constants.ANONYMOUS_USER).isPresent()) {
             userRepository.saveAndFlush(user);

@@ -2,7 +2,6 @@ package io.github.jhipster.sample.web.rest;
 
 import io.github.jhipster.sample.config.Constants;
 import com.codahale.metrics.annotation.Timed;
-import io.github.jhipster.sample.repository.UserRepository;
 import io.github.jhipster.sample.security.AuthoritiesConstants;
 import io.github.jhipster.sample.service.UserService;
 import io.github.jhipster.sample.service.dto.UserDTO;
@@ -51,13 +50,10 @@ public class UserResource {
 
     private final Logger log = LoggerFactory.getLogger(UserResource.class);
 
-    private final UserRepository userRepository;
-
     private final UserService userService;
 
-    public UserResource(UserRepository userRepository, UserService userService) {
+    public UserResource(UserService userService) {
 
-        this.userRepository = userRepository;
         this.userService = userService;
     }
 

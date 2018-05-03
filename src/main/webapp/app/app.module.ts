@@ -18,49 +18,49 @@ import { PaginationConfig } from './blocks/config/uib-pagination.config';
 import { StateStorageService } from 'app/core/auth/state-storage.service';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 import {
-  JhiMainComponent,
-  NavbarComponent,
-  FooterComponent,
-  ProfileService,
-  PageRibbonComponent,
-  ActiveMenuDirective,
-  ErrorComponent
+    JhiMainComponent,
+    NavbarComponent,
+    FooterComponent,
+    ProfileService,
+    PageRibbonComponent,
+    ActiveMenuDirective,
+    ErrorComponent
 } from './layouts';
 
 @NgModule({
-  imports: [
-    BrowserModule,
-    JhipsterOauth2SampleApplicationAppRoutingModule,
-    Ng2Webstorage.forRoot({ prefix: 'jhi', separator: '-' }),
-    JhipsterOauth2SampleApplicationSharedModule,
-    JhipsterOauth2SampleApplicationCoreModule,
-    JhipsterOauth2SampleApplicationHomeModule,
-    JhipsterOauth2SampleApplicationEntityModule
-    // jhipster-needle-angular-add-module JHipster will add new module here
-  ],
-  declarations: [JhiMainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, ActiveMenuDirective, FooterComponent],
-  providers: [
-    ProfileService,
-    PaginationConfig,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthExpiredInterceptor,
-      multi: true,
-      deps: [StateStorageService, Injector]
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: ErrorHandlerInterceptor,
-      multi: true,
-      deps: [JhiEventManager]
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: NotificationInterceptor,
-      multi: true,
-      deps: [Injector]
-    }
-  ],
-  bootstrap: [JhiMainComponent]
+    imports: [
+        BrowserModule,
+        JhipsterOauth2SampleApplicationAppRoutingModule,
+        Ng2Webstorage.forRoot({ prefix: 'jhi', separator: '-' }),
+        JhipsterOauth2SampleApplicationSharedModule,
+        JhipsterOauth2SampleApplicationCoreModule,
+        JhipsterOauth2SampleApplicationHomeModule,
+        JhipsterOauth2SampleApplicationEntityModule
+        // jhipster-needle-angular-add-module JHipster will add new module here
+    ],
+    declarations: [JhiMainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, ActiveMenuDirective, FooterComponent],
+    providers: [
+        ProfileService,
+        PaginationConfig,
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthExpiredInterceptor,
+            multi: true,
+            deps: [StateStorageService, Injector]
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: ErrorHandlerInterceptor,
+            multi: true,
+            deps: [JhiEventManager]
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: NotificationInterceptor,
+            multi: true,
+            deps: [Injector]
+        }
+    ],
+    bootstrap: [JhiMainComponent]
 })
 export class JhipsterOauth2SampleApplicationAppModule {}

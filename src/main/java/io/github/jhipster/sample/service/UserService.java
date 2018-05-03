@@ -149,6 +149,7 @@ public class UserService {
      */
     @SuppressWarnings("unchecked")
     public UserDTO getUserFromAuthentication(OAuth2Authentication authentication) {
+        Object oauth2AuthenticationDetails = authentication.getDetails(); // should be an OAuth2AuthenticationDetails
         Map<String, Object> details = (Map<String, Object>) authentication.getUserAuthentication().getDetails();
         User user = getUser(details);
         Set<Authority> userAuthorities = extractAuthorities(authentication, details);
@@ -162,12 +163,25 @@ public class UserService {
 
         UsernamePasswordAuthenticationToken token = getToken(details, user, grantedAuthorities);
         authentication = new OAuth2Authentication(authentication.getOAuth2Request(), token);
+        authentication.setDetails(oauth2AuthenticationDetails); // must be present in a gateway for TokenRelayFilter to work
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         return new UserDTO(syncUserWithIdP(details, user));
     }
 
     private User syncUserWithIdP(Map<String, Object> details, User user) {
+        // save authorities in to sync user roles/groups between IdP and JHipster's local database
+        Collection<String> dbAuthorities = getAuthorities();
+        Collection<String> userAuthorities =
+            user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toList());
+        for (String authority : userAuthorities) {
+            if (!dbAuthorities.contains(authority)) {
+                log.debug("Saving authority '{}' in local database", authority);
+                Authority authoritytoSave = new Authority();
+                authoritytoSave.setName(authority);
+                authorityRepository.save(authoritytoSave);
+            }
+        }
         // save account in to sync users between IdP and JHipster's local database
         Optional<User> existingUser = userRepository.findOneByLogin(user.getLogin());
         if (existingUser.isPresent()) {
@@ -176,18 +190,18 @@ public class UserService {
                 Instant dbModifiedDate = existingUser.get().getLastModifiedDate();
                 Instant idpModifiedDate = new Date(Long.valueOf((Integer) details.get("updated_at"))).toInstant();
                 if (idpModifiedDate.isAfter(dbModifiedDate)) {
-                    log.debug("Updating user '{}' in local database...", user.getLogin());
+                    log.debug("Updating user '{}' in local database", user.getLogin());
                     updateUser(user.getFirstName(), user.getLastName(), user.getEmail(),
                         user.getLangKey(), user.getImageUrl());
                 }
                 // no last updated info, blindly update
             } else {
-                log.debug("Updating user '{}' in local database...", user.getLogin());
+                log.debug("Updating user '{}' in local database", user.getLogin());
                 updateUser(user.getFirstName(), user.getLastName(), user.getEmail(),
                     user.getLangKey(), user.getImageUrl());
             }
         } else {
-            log.debug("Saving user '{}' in local database...", user.getLogin());
+            log.debug("Saving user '{}' in local database", user.getLogin());
             userRepository.save(user);
             this.clearUserCaches(user);
         }

@@ -1,7 +1,6 @@
 package io.github.jhipster.sample.web.rest;
 
 import io.github.jhipster.sample.JhipsterOauth2SampleApplicationApp;
-import io.github.jhipster.sample.config.CacheConfiguration;
 import io.github.jhipster.sample.domain.Authority;
 import io.github.jhipster.sample.domain.User;
 import io.github.jhipster.sample.repository.UserRepository;
@@ -11,7 +10,6 @@ import io.github.jhipster.sample.service.UserService;
 import io.github.jhipster.sample.service.dto.UserDTO;
 import io.github.jhipster.sample.service.mapper.UserMapper;
 import io.github.jhipster.sample.web.rest.errors.ExceptionTranslator;
-import io.github.jhipster.sample.web.rest.vm.ManagedUserVM;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,8 +31,8 @@ import java.time.Instant;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -48,27 +46,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserResourceIntTest {
 
     private static final String DEFAULT_LOGIN = "johndoe";
-    private static final String UPDATED_LOGIN = "jhipster";
 
     private static final String DEFAULT_ID = "id1";
 
     private static final String DEFAULT_PASSWORD = "passjohndoe";
-    private static final String UPDATED_PASSWORD = "passjhipster";
 
     private static final String DEFAULT_EMAIL = "johndoe@localhost";
-    private static final String UPDATED_EMAIL = "jhipster@localhost";
 
     private static final String DEFAULT_FIRSTNAME = "john";
-    private static final String UPDATED_FIRSTNAME = "jhipsterFirstName";
 
     private static final String DEFAULT_LASTNAME = "doe";
-    private static final String UPDATED_LASTNAME = "jhipsterLastName";
 
     private static final String DEFAULT_IMAGEURL = "http://placehold.it/50x50";
-    private static final String UPDATED_IMAGEURL = "http://placehold.it/40x40";
 
     private static final String DEFAULT_LANGKEY = "en";
-    private static final String UPDATED_LANGKEY = "fr";
 
     @Autowired
     private UserRepository userRepository;
@@ -103,7 +94,7 @@ public class UserResourceIntTest {
         MockitoAnnotations.initMocks(this);
         cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).clear();
         cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).clear();
-        UserResource userResource = new UserResource(userRepository, userService);
+        UserResource userResource = new UserResource(userService);
         this.restUserMockMvc = MockMvcBuilders.standaloneSetup(userResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

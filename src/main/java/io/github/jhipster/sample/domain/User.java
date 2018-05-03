@@ -18,7 +18,6 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
-import java.time.Instant;
 
 /**
  * A user.

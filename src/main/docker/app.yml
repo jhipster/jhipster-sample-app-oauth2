@@ -3,6 +3,7 @@ services:
     jhipsteroauth2sampleapplication-app:
         image: jhipsteroauth2sampleapplication
         environment:
+            # - _JAVA_OPTIONS=-Xmx512m -Xms256m
             - SPRING_PROFILES_ACTIVE=prod,swagger
             - SPRING_DATASOURCE_URL=jdbc:mysql://jhipsteroauth2sampleapplication-mysql:3306/jhipsteroauth2sampleapplication?useUnicode=true&characterEncoding=utf8&useSSL=false
             # For keycloak to work, you need to add '127.0.0.1 keycloak' to your hosts file

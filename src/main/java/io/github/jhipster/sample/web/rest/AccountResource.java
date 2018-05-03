@@ -2,13 +2,11 @@ package io.github.jhipster.sample.web.rest;
 
 import io.github.jhipster.sample.service.UserService;
 import io.github.jhipster.sample.service.dto.UserDTO;
-import io.github.jhipster.sample.domain.User;
 import io.github.jhipster.sample.web.rest.errors.InternalServerErrorException;
 
 import com.codahale.metrics.annotation.Timed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,8 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
-import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * REST controller for managing the current user's account.
