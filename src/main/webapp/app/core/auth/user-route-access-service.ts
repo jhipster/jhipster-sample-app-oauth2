@@ -5,7 +5,7 @@ import { Principal } from '../';
 import { LoginService } from '../login/login.service';
 import { StateStorageService } from './state-storage.service';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class UserRouteAccessService implements CanActivate {
     constructor(
         private router: Router,

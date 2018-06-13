@@ -7,7 +7,6 @@ import { JhipsterOauth2SampleApplicationSharedModule } from 'app/shared';
 
 import {
     adminState,
-    AuditResolvePagingParams,
     AuditsComponent,
     LogsComponent,
     JhiMetricsMonitoringModalComponent,
@@ -15,12 +14,7 @@ import {
     JhiHealthModalComponent,
     JhiHealthCheckComponent,
     JhiConfigurationComponent,
-    JhiDocsComponent,
-    AuditsService,
-    JhiConfigurationService,
-    JhiHealthService,
-    JhiMetricsService,
-    LogsService
+    JhiDocsComponent
 } from './';
 
 @NgModule({
@@ -40,11 +34,14 @@ import {
         JhiMetricsMonitoringModalComponent
     ],
     entryComponents: [JhiHealthModalComponent, JhiMetricsMonitoringModalComponent],
-    providers: [AuditResolvePagingParams, AuditsService, JhiConfigurationService, JhiHealthService, JhiMetricsService, LogsService],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class JhipsterOauth2SampleApplicationAdminModule {
     constructor(private languageService: JhiLanguageService, private languageHelper: JhiLanguageHelper) {
-        this.languageHelper.language.subscribe((languageKey: string) => this.languageService.changeLanguage(languageKey));
+        this.languageHelper.language.subscribe((languageKey: string) => {
+            if (languageKey !== undefined) {
+                this.languageService.changeLanguage(languageKey);
+            }
+        });
     }
 }

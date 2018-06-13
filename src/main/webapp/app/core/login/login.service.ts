@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Principal } from '../auth/principal.service';
 import { AuthServerProvider } from '../auth/auth-session.service';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class LoginService {
     constructor(private principal: Principal, private authServerProvider: AuthServerProvider) {}
 
