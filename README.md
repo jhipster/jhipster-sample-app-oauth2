@@ -1,5 +1,5 @@
 # jhipsterOauth2SampleApplication
-This application was generated using JHipster 5.0.0-beta.2, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v5.0.0-beta.2](https://www.jhipster.tech/documentation-archive/v5.0.0-beta.2).
+This application was generated using JHipster 5.0.0-beta.3, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v5.0.0-beta.3](https://www.jhipster.tech/documentation-archive/v5.0.0-beta.3).
 
 ## Development
 
@@ -83,7 +83,7 @@ Create an OIDC App in Okta to get a `{clientId}` and `{clientSecret}`. To do thi
 
 Create a `ROLE_ADMIN` and `ROLE_USER` group and add users into them. Create a user (e.g., "admin@jhipster.org" with password "Java is hip in 2017!"). Modify e2e tests to use this account when running integration tests. You'll need to change credentials in `src/test/javascript/e2e/account/account.spec.ts` and `src/test/javascript/e2e/admin/administration.spec.ts`.
 
-Navigate to **API** > **Authorization Servers**, click the **Authorization Servers** tab and edit the default one. Click the **Claims** tab and **Add Claim**. Name it "groups" or "roles", and include it in the ID Token. Set the value type to "Groups" and set the filter to be a Regex of `.*`.
+Navigate to **API** > **Authorization Servers**, click the **Authorization Servers** tab and edit the default one. Click the **Claims** tab and **Add Claim**. Name it "roles", and include it in the ID Token. Set the value type to "Groups" and set the filter to be a Regex of `.*`.
 
 After making these changes, you should be good to go! If you have any issues, please post them to [Stack Overflow](https://stackoverflow.com/questions/tagged/jhipster). Make sure to tag your question with "jhipster" and "okta".
 
@@ -97,13 +97,13 @@ Service workers are commented by default, to enable them please uncomment the fo
 <script>
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker
-        .register('./sw.js')
+        .register('./service-worker.js')
         .then(function() { console.log('Service Worker Registered'); });
     }
 </script>
 ```
 
-Note: workbox creates the respective service worker and dynamically generate the `sw.js`
+Note: workbox creates the respective service worker and dynamically generate the `service-worker.js`
 
 ### Managing dependencies
 
@@ -209,13 +209,13 @@ For more information refer to [Using Docker and Docker-Compose][], this page als
 To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration][] page for more information.
 
 [JHipster Homepage and latest documentation]: https://www.jhipster.tech
-[JHipster 5.0.0-beta.2 archive]: https://www.jhipster.tech/documentation-archive/v5.0.0-beta.2
+[JHipster 5.0.0-beta.3 archive]: https://www.jhipster.tech/documentation-archive/v5.0.0-beta.3
 
-[Using JHipster in development]: https://www.jhipster.tech/documentation-archive/v5.0.0-beta.2/development/
-[Using Docker and Docker-Compose]: https://www.jhipster.tech/documentation-archive/v5.0.0-beta.2/docker-compose
-[Using JHipster in production]: https://www.jhipster.tech/documentation-archive/v5.0.0-beta.2/production/
-[Running tests page]: https://www.jhipster.tech/documentation-archive/v5.0.0-beta.2/running-tests/
-[Setting up Continuous Integration]: https://www.jhipster.tech/documentation-archive/v5.0.0-beta.2/setting-up-ci/
+[Using JHipster in development]: https://www.jhipster.tech/documentation-archive/v5.0.0-beta.3/development/
+[Using Docker and Docker-Compose]: https://www.jhipster.tech/documentation-archive/v5.0.0-beta.3/docker-compose
+[Using JHipster in production]: https://www.jhipster.tech/documentation-archive/v5.0.0-beta.3/production/
+[Running tests page]: https://www.jhipster.tech/documentation-archive/v5.0.0-beta.3/running-tests/
+[Setting up Continuous Integration]: https://www.jhipster.tech/documentation-archive/v5.0.0-beta.3/setting-up-ci/
 
 [Gatling]: http://gatling.io/
 [Node.js]: https://nodejs.org/
