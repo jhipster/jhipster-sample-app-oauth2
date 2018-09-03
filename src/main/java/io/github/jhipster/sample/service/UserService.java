@@ -63,7 +63,7 @@ public class UserService {
             .ifPresent(user -> {
                 user.setFirstName(firstName);
                 user.setLastName(lastName);
-                user.setEmail(email);
+                user.setEmail(email.toLowerCase());
                 user.setLangKey(langKey);
                 user.setImageUrl(imageUrl);
                 this.clearUserCaches(user);
@@ -84,10 +84,10 @@ public class UserService {
             .map(Optional::get)
             .map(user -> {
                 this.clearUserCaches(user);
-                user.setLogin(userDTO.getLogin());
+                user.setLogin(userDTO.getLogin().toLowerCase());
                 user.setFirstName(userDTO.getFirstName());
                 user.setLastName(userDTO.getLastName());
-                user.setEmail(userDTO.getEmail());
+                user.setEmail(userDTO.getEmail().toLowerCase());
                 user.setImageUrl(userDTO.getImageUrl());
                 user.setActivated(userDTO.isActivated());
                 user.setLangKey(userDTO.getLangKey());
@@ -241,7 +241,7 @@ public class UserService {
     private static User getUser(Map<String, Object> details) {
         User user = new User();
         user.setId((String) details.get("sub"));
-        user.setLogin((String) details.get("preferred_username"));
+        user.setLogin(((String) details.get("preferred_username")).toLowerCase());
         if (details.get("given_name") != null) {
             user.setFirstName((String) details.get("given_name"));
         }
@@ -252,7 +252,7 @@ public class UserService {
             user.setActivated((Boolean) details.get("email_verified"));
         }
         if (details.get("email") != null) {
-            user.setEmail((String) details.get("email"));
+            user.setEmail(((String) details.get("email")).toLowerCase());
         }
         if (details.get("langKey") != null) {
             user.setLangKey((String) details.get("langKey"));

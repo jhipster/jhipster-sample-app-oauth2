@@ -64,6 +64,13 @@
                                  constraintName="fk_authority_name"
                                  referencedColumnNames="name"
                                  referencedTableName="jhi_authority"/>
+
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="jhi_user_authority"
+                                 constraintName="fk_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+
         <loadData encoding="UTF-8"
                   file="config/liquibase/users.csv"
                   separator=";"

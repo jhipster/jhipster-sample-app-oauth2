@@ -25,6 +25,8 @@ spring:
         name:
         username:
         password:
+        hikari:
+            auto-commit: false
     jpa:
         database-platform: io.github.jhipster.domain.util.FixedH2Dialect
         database: H2
@@ -37,6 +39,7 @@ spring:
                 implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
         properties:
             hibernate.id.new_generator_mappings: true
+            hibernate.connection.provider_disables_autocommit: true
             hibernate.cache.use_second_level_cache: false
             hibernate.cache.use_query_cache: false
             hibernate.generate_statistics: true
@@ -52,10 +55,10 @@ spring:
             enabled: false
     thymeleaf:
         mode: HTML
-        
+
 security:
     oauth2:
-    # client configuration needed : for condition in Spring Boot 
+    # client configuration needed : for condition in Spring Boot
         client:
             access-token-uri: http://DO_NOT_CALL:9080/auth/realms/jhipster/protocol/openid-connect/token
             user-authorization-uri: http://DO_NOT_CALL:9080/auth/realms/jhipster/protocol/openid-connect/auth
