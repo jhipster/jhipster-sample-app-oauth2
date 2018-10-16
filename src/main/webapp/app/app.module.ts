@@ -28,8 +28,8 @@ import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent
         JhipsterOauth2SampleApplicationSharedModule,
         JhipsterOauth2SampleApplicationCoreModule,
         JhipsterOauth2SampleApplicationHomeModule,
-        JhipsterOauth2SampleApplicationEntityModule
         // jhipster-needle-angular-add-module JHipster will add new module here
+        JhipsterOauth2SampleApplicationEntityModule
     ],
     declarations: [JhiMainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, ActiveMenuDirective, FooterComponent],
     providers: [

@@ -129,9 +129,6 @@ jhipster:
         license:
         license-url:
 
-logging:
-    file: target/jhipsterOauth2SampleApplication.log
-
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class
