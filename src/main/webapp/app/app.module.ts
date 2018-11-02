@@ -1,11 +1,10 @@
 import './vendor.ts';
 
-import { NgModule, Injector } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
 import { Ng2Webstorage } from 'ngx-webstorage';
-import { JhiEventManager } from 'ng-jhipster';
 
 import { AuthExpiredInterceptor } from './blocks/interceptor/auth-expired.interceptor';
 import { ErrorHandlerInterceptor } from './blocks/interceptor/errorhandler.interceptor';
@@ -15,7 +14,6 @@ import { JhipsterOauth2SampleApplicationCoreModule } from 'app/core';
 import { JhipsterOauth2SampleApplicationAppRoutingModule } from './app-routing.module';
 import { JhipsterOauth2SampleApplicationHomeModule } from './home/home.module';
 import { JhipsterOauth2SampleApplicationEntityModule } from './entities/entity.module';
-import { StateStorageService } from 'app/core/auth/state-storage.service';
 import * as moment from 'moment';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent, ActiveMenuDirective, ErrorComponent } from './layouts';
@@ -36,20 +34,17 @@ import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent
         {
             provide: HTTP_INTERCEPTORS,
             useClass: AuthExpiredInterceptor,
-            multi: true,
-            deps: [StateStorageService, Injector]
+            multi: true
         },
         {
             provide: HTTP_INTERCEPTORS,
             useClass: ErrorHandlerInterceptor,
-            multi: true,
-            deps: [JhiEventManager]
+            multi: true
         },
         {
             provide: HTTP_INTERCEPTORS,
             useClass: NotificationInterceptor,
-            multi: true,
-            deps: [Injector]
+            multi: true
         }
     ],
     bootstrap: [JhiMainComponent]

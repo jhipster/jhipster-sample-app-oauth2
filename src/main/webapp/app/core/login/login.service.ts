@@ -12,7 +12,7 @@ export class LoginService {
         if (port === ':9000') {
             port = ':8080';
         }
-        location.href = '//' + location.hostname + port + '/login';
+        location.href = '//' + location.hostname + port + location.pathname + 'login';
     }
 
     logout() {

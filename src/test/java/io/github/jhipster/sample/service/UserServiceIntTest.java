@@ -18,7 +18,6 @@ import org.springframework.data.auditing.DateTimeProvider;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -36,7 +35,6 @@ import java.util.Map;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 /**
@@ -113,14 +111,14 @@ public class UserServiceIntTest {
 
         UserDTO userDTO = userService.getUserFromAuthentication(authentication);
 
-        assertEquals("User langkey is not corretly set.", userDTO.getLangKey(), "en");
+        assertThat(userDTO.getLangKey()).isEqualTo("en");
 
         userDetails.put("locale", "it-IT");
         authentication = createMockOAuth2AuthenticationWithDetails(userDetails);
 
         userDTO = userService.getUserFromAuthentication(authentication);
 
-        assertEquals("User langkey is not corretly set.", userDTO.getLangKey(), "it");
+        assertThat(userDTO.getLangKey()).isEqualTo("it");
     }
 
     private OAuth2Authentication createMockOAuth2AuthenticationWithDetails(Map<String, Object> userDetails) {

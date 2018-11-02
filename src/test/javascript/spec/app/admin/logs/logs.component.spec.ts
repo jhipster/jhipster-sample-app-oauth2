@@ -14,17 +14,15 @@ describe('Component Tests', () => {
         let fixture: ComponentFixture<LogsComponent>;
         let service: LogsService;
 
-        beforeEach(
-            async(() => {
-                TestBed.configureTestingModule({
-                    imports: [JhipsterOauth2SampleApplicationTestModule],
-                    declarations: [LogsComponent],
-                    providers: [LogsService]
-                })
-                    .overrideTemplate(LogsComponent, '')
-                    .compileComponents();
+        beforeEach(async(() => {
+            TestBed.configureTestingModule({
+                imports: [JhipsterOauth2SampleApplicationTestModule],
+                declarations: [LogsComponent],
+                providers: [LogsService]
             })
-        );
+                .overrideTemplate(LogsComponent, '')
+                .compileComponents();
+        }));
 
         beforeEach(() => {
             fixture = TestBed.createComponent(LogsComponent);
