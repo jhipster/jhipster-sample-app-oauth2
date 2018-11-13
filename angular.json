@@ -12,7 +12,7 @@
   },
   "defaultProject": "jhipster-oauth-2-sample-application",
   "cli": {
-    "packageManager": "yarn"
+    "packageManager": "npm"
   },
   "schematics": {
     "@schematics/angular:component": {

@@ -33,6 +33,7 @@ import {
         JhiMetricsMonitoringComponent,
         JhiMetricsMonitoringModalComponent
     ],
+    providers: [{ provide: JhiLanguageService, useClass: JhiLanguageService }],
     entryComponents: [JhiHealthModalComponent, JhiMetricsMonitoringModalComponent],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

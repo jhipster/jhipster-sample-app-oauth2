@@ -15,4 +15,10 @@ import {
     exports: [JhipsterOauth2SampleApplicationSharedCommonModule, HasAnyAuthorityDirective],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class JhipsterOauth2SampleApplicationSharedModule {}
+export class JhipsterOauth2SampleApplicationSharedModule {
+    static forRoot() {
+        return {
+            ngModule: JhipsterOauth2SampleApplicationSharedModule
+        };
+    }
+}
