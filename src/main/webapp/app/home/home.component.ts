@@ -1,28 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 
-import { LoginService, Principal, Account } from 'app/core';
+import { LoginService, AccountService, Account } from 'app/core';
 
 @Component({
-    selector: 'jhi-home',
-    templateUrl: './home.component.html',
-    styleUrls: ['home.css']
+  selector: 'jhi-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['home.css']
 })
 export class HomeComponent implements OnInit {
-    account: Account;
+  account: Account;
 
-    constructor(private principal: Principal, private loginService: LoginService) {}
+  constructor(private accountService: AccountService, private loginService: LoginService) {}
 
-    ngOnInit() {
-        this.principal.identity().then(account => {
-            this.account = account;
-        });
-    }
+  ngOnInit() {
+    this.accountService.identity().then(account => {
+      this.account = account;
+    });
+  }
 
-    isAuthenticated() {
-        return this.principal.isAuthenticated();
-    }
+  isAuthenticated() {
+    return this.accountService.isAuthenticated();
+  }
 
-    login() {
-        this.loginService.login();
-    }
+  login() {
+    this.loginService.login();
+  }
 }
