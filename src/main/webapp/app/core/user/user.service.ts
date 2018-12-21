@@ -8,12 +8,12 @@ import { IUser } from './user.model';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
-  public resourceUrl = SERVER_API_URL + 'api/users';
+    public resourceUrl = SERVER_API_URL + 'api/users';
 
-  constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) {}
 
-  query(req?: any): Observable<HttpResponse<IUser[]>> {
-    const options = createRequestOption(req);
-    return this.http.get<IUser[]>(this.resourceUrl, { params: options, observe: 'response' });
-  }
+    query(req?: any): Observable<HttpResponse<IUser[]>> {
+        const options = createRequestOption(req);
+        return this.http.get<IUser[]>(this.resourceUrl, { params: options, observe: 'response' });
+    }
 }
