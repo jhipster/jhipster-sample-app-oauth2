@@ -9,7 +9,6 @@ import {
     adminState,
     AuditsComponent,
     LogsComponent,
-    JhiMetricsMonitoringModalComponent,
     JhiMetricsMonitoringComponent,
     JhiHealthModalComponent,
     JhiHealthCheckComponent,
@@ -30,11 +29,10 @@ import {
         JhiHealthCheckComponent,
         JhiHealthModalComponent,
         JhiDocsComponent,
-        JhiMetricsMonitoringComponent,
-        JhiMetricsMonitoringModalComponent
+        JhiMetricsMonitoringComponent
     ],
     providers: [{ provide: JhiLanguageService, useClass: JhiLanguageService }],
-    entryComponents: [JhiHealthModalComponent, JhiMetricsMonitoringModalComponent],
+    entryComponents: [JhiHealthModalComponent],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class JhipsterOauth2SampleApplicationAdminModule {

@@ -22,7 +22,6 @@ import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent
 @NgModule({
     imports: [
         BrowserModule,
-        JhipsterOauth2SampleApplicationAppRoutingModule,
         Ng2Webstorage.forRoot({ prefix: 'jhi', separator: '-' }),
         NgJhipsterModule.forRoot({
             // set below to true to make alerts look like toast
@@ -35,7 +34,8 @@ import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent
         JhipsterOauth2SampleApplicationCoreModule,
         JhipsterOauth2SampleApplicationHomeModule,
         // jhipster-needle-angular-add-module JHipster will add new module here
-        JhipsterOauth2SampleApplicationEntityModule
+        JhipsterOauth2SampleApplicationEntityModule,
+        JhipsterOauth2SampleApplicationAppRoutingModule
     ],
     declarations: [JhiMainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, ActiveMenuDirective, FooterComponent],
     providers: [

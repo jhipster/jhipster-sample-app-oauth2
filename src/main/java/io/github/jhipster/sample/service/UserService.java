@@ -241,7 +241,11 @@ public class UserService {
     private static User getUser(Map<String, Object> details) {
         User user = new User();
         user.setId((String) details.get("sub"));
-        user.setLogin(((String) details.get("preferred_username")).toLowerCase());
+        if (details.get("preferred_username") != null) {
+            user.setLogin(((String) details.get("preferred_username")).toLowerCase());
+        } else {
+            user.setLogin(user.getId());
+        }
         if (details.get("given_name") != null) {
             user.setFirstName((String) details.get("given_name"));
         }
@@ -259,10 +263,10 @@ public class UserService {
         } else if (details.get("locale") != null) {
             String locale = (String) details.get("locale");
             if (locale.contains("-")) {
-              String langKey = locale.substring(0, locale.indexOf("-"));
+              String langKey = locale.substring(0, locale.indexOf('-'));
               user.setLangKey(langKey);
             } else if (locale.contains("_")) {
-              String langKey = locale.substring(0, locale.indexOf("_"));
+              String langKey = locale.substring(0, locale.indexOf('_'));
               user.setLangKey(langKey);
             }
         }

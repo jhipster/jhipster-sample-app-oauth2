@@ -13,7 +13,7 @@ export class HomeComponent implements OnInit {
     constructor(private accountService: AccountService, private loginService: LoginService) {}
 
     ngOnInit() {
-        this.accountService.identity().then(account => {
+        this.accountService.identity().then((account: Account) => {
             this.account = account;
         });
     }
