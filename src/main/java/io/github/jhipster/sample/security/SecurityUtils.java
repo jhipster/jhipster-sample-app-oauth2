@@ -3,7 +3,9 @@ package io.github.jhipster.sample.security;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -26,6 +28,11 @@ public final class SecurityUtils {
                 if (authentication.getPrincipal() instanceof UserDetails) {
                     UserDetails springSecurityUser = (UserDetails) authentication.getPrincipal();
                     return springSecurityUser.getUsername();
+                } else if (authentication.getPrincipal() instanceof DefaultOidcUser) {
+                    Map<String, Object> attributes = ((DefaultOidcUser) authentication.getPrincipal()).getAttributes();
+                    if (attributes.containsKey("preferred_username")) {
+                        return (String) attributes.get("preferred_username");
+                    }
                 } else if (authentication.getPrincipal() instanceof String) {
                     return (String) authentication.getPrincipal();
                 }
