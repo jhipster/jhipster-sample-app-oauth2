@@ -46,7 +46,7 @@ public class UserServiceIT {
 
     private static final String DEFAULT_IMAGEURL = "http://placehold.it/50x50";
 
-    private static final String DEFAULT_LANGKEY = "en";
+    private static final String DEFAULT_LANGKEY = "dummy";
 
     @Autowired
     private UserRepository userRepository;
@@ -92,7 +92,6 @@ public class UserServiceIT {
             .isTrue();
     }
 
-
     @Test
     @Transactional
     public void testDefaultUserDetails() {
@@ -123,13 +122,13 @@ public class UserServiceIT {
     @Test
     @Transactional
     public void testUserDetailsWithLangKey() {
-        userDetails.put("langKey", "fr");
+        userDetails.put("langKey", "DEFAULT_LANGKEY");
         userDetails.put("locale", "en-US");
 
         OAuth2AuthenticationToken authentication = createMockOAuth2AuthenticationToken(userDetails);
         UserDTO userDTO = userService.getUserFromAuthentication(authentication);
 
-        assertThat(userDTO.getLangKey()).isEqualTo("fr");
+        assertThat(userDTO.getLangKey()).isEqualTo("DEFAULT_LANGKEY");
     }
 
     @Test

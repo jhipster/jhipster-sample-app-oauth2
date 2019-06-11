@@ -29,7 +29,7 @@
             <column name="activated" type="boolean" valueBoolean="false">
                 <constraints nullable="false" />
             </column>
-            <column name="lang_key" type="varchar(6)"/>
+            <column name="lang_key" type="varchar(10)"/>
             <column name="created_by" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>

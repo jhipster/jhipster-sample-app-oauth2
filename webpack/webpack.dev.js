@@ -20,7 +20,15 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
         contentBase: './target/classes/static/',
         proxy: [{
             context: [
-                '/'
+                '/api',
+                '/services',
+                '/management',
+                '/swagger-resources',
+                '/v2/api-docs',
+                '/h2-console',
+                '/oauth2',
+                '/login',
+                '/auth'
             ],
             target: `http${options.tls ? 's' : ''}://localhost:8080`,
             secure: false,
@@ -30,7 +38,8 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
         watchOptions: {
             ignored: /node_modules/
         },
-        https: options.tls
+        https: options.tls,
+        historyApiFallback: true
     },
     entry: {
         polyfills: './src/main/webapp/app/polyfills',

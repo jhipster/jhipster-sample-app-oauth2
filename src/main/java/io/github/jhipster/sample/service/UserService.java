@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -136,24 +137,6 @@ public class UserService {
         return authorityRepository.findAll().stream().map(Authority::getName).collect(Collectors.toList());
     }
 
-    /**
-     * Returns the user from an OAuth 2.0 login.
-     * Synchronizes the user in the local repository.
-     *
-     * @param authToken OAuth2 authentication.
-     * @return the user from the authentication.
-     */
-    public UserDTO getUserFromAuthentication(OAuth2AuthenticationToken authToken) {
-        Map<String, Object> attributes = authToken.getPrincipal().getAttributes();
-        User user = getUser(attributes);
-        user.setAuthorities(authToken.getAuthorities().stream().map(authority -> {
-                Authority auth = new Authority();
-                auth.setName((authority).getAuthority());
-                return auth;
-            }).collect(Collectors.toSet()));
-        return new UserDTO(syncUserWithIdP(attributes, user));
-    }
-
     private User syncUserWithIdP(Map<String, Object> details, User user) {
         // save authorities in to sync user roles/groups between IdP and JHipster's local database
         Collection<String> dbAuthorities = getAuthorities();
@@ -191,6 +174,26 @@ public class UserService {
             this.clearUserCaches(user);
         }
         return user;
+    }
+    /**
+     * Returns the user from an OAuth 2.0 login.
+     * Synchronizes the user in the local repository.
+     *
+     * @param authToken OAuth2 authentication.
+     * @return the user from the authentication.
+     */
+    public UserDTO getUserFromAuthentication(OAuth2AuthenticationToken authToken) {
+        Map<String, Object> attributes = authToken.getPrincipal().getAttributes();
+        User user = getUser(attributes);
+        user.setAuthorities(authToken.getAuthorities().stream()
+            .map(GrantedAuthority::getAuthority)
+            .map(authority -> {
+                Authority auth = new Authority();
+                auth.setName(authority);
+                return auth;
+            })
+            .collect(Collectors.toSet()));
+        return new UserDTO(syncUserWithIdP(attributes, user));
     }
 
     private static User getUser(Map<String, Object> details) {
