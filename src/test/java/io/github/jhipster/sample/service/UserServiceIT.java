@@ -139,7 +139,7 @@ public class UserServiceIT {
         OAuth2AuthenticationToken authentication = createMockOAuth2AuthenticationToken(userDetails);
         UserDTO userDTO = userService.getUserFromAuthentication(authentication);
 
-        assertThat(userDTO.getLangKey()).isEqualTo("it-it");
+        assertThat(userDTO.getLangKey()).isEqualTo("it");
     }
 
     @Test

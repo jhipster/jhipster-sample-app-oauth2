@@ -13,8 +13,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -175,15 +177,23 @@ public class UserService {
         }
         return user;
     }
+
     /**
-     * Returns the user from an OAuth 2.0 login.
+     * Returns the user from an OAuth 2.0 login or resource server with JWT.
      * Synchronizes the user in the local repository.
      *
-     * @param authToken OAuth2 authentication.
+     * @param authToken the authentication token.
      * @return the user from the authentication.
      */
-    public UserDTO getUserFromAuthentication(OAuth2AuthenticationToken authToken) {
-        Map<String, Object> attributes = authToken.getPrincipal().getAttributes();
+    public UserDTO getUserFromAuthentication(AbstractAuthenticationToken authToken) {
+        Map<String, Object> attributes;
+        if (authToken instanceof OAuth2AuthenticationToken) {
+            attributes = ((OAuth2AuthenticationToken) authToken).getPrincipal().getAttributes();
+        } else if (authToken instanceof JwtAuthenticationToken) {
+            attributes = ((JwtAuthenticationToken) authToken).getTokenAttributes();
+        } else {
+            throw new IllegalArgumentException("AuthenticationToken is not OAuth2 or JWT!");
+        }
         User user = getUser(attributes);
         user.setAuthorities(authToken.getAuthorities().stream()
             .map(GrantedAuthority::getAuthority)
@@ -198,10 +208,16 @@ public class UserService {
 
     private static User getUser(Map<String, Object> details) {
         User user = new User();
-        user.setId((String) details.get("sub"));
+        // handle resource server JWT, where sub claim is email and uid is ID
+        if (details.get("uid") != null) {
+            user.setId((String) details.get("uid"));
+            user.setLogin((String) details.get("sub"));
+        } else {
+            user.setId((String) details.get("sub"));
+        }
         if (details.get("preferred_username") != null) {
             user.setLogin(((String) details.get("preferred_username")).toLowerCase());
-        } else {
+        } else if (user.getLogin() == null) {
             user.setLogin(user.getId());
         }
         if (details.get("given_name") != null) {
@@ -215,19 +231,18 @@ public class UserService {
         }
         if (details.get("email") != null) {
             user.setEmail(((String) details.get("email")).toLowerCase());
+        } else {
+            user.setEmail((String) details.get("sub"));
         }
         if (details.get("langKey") != null) {
             user.setLangKey((String) details.get("langKey"));
         } else if (details.get("locale") != null) {
-            // For the locale issue, we suggest you adjust the format based on the OAuth server.
-            // Here we can't cater for all the use-cases, see:
-            // https://github.com/jhipster/generator-jhipster/issues/7866
-            // for the en_US or en_** issue.
-            // Since JHipter only has one "en" language, we will handle it here,
-            // for other languages, please handle it accordingly.
+            // trim off country code if it exists
             String locale = (String) details.get("locale");
-            if (locale.startsWith("en_") || locale.startsWith("en-")) {
-                locale = "en";
+            if (locale.contains("_")) {
+                locale = locale.substring(0, locale.indexOf("_"));
+            } else if (locale.contains("-")) {
+                locale = locale.substring(0, locale.indexOf("-"));
             }
             user.setLangKey(locale.toLowerCase());
         } else {
