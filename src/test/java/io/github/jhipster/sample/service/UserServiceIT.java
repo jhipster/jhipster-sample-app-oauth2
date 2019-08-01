@@ -122,13 +122,13 @@ public class UserServiceIT {
     @Test
     @Transactional
     public void testUserDetailsWithLangKey() {
-        userDetails.put("langKey", "DEFAULT_LANGKEY");
+        userDetails.put("langKey", DEFAULT_LANGKEY);
         userDetails.put("locale", "en-US");
 
         OAuth2AuthenticationToken authentication = createMockOAuth2AuthenticationToken(userDetails);
         UserDTO userDTO = userService.getUserFromAuthentication(authentication);
 
-        assertThat(userDTO.getLangKey()).isEqualTo("DEFAULT_LANGKEY");
+        assertThat(userDTO.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
     }
 
     @Test

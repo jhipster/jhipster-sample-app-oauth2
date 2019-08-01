@@ -92,7 +92,6 @@ jhipster:
     allow-credentials: true
     max-age: 1800
   mail: # specific JHipster mail property, for standard properties see MailProperties
-    from: jhipsterOauth2SampleApplication@localhost
     base-url: http://127.0.0.1:8080
   metrics:
     logs: # Reports metrics in the logs

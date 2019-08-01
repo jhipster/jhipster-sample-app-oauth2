@@ -13,7 +13,6 @@ public class ManagedUserVM extends UserDTO {
 
     @Override
     public String toString() {
-        return "ManagedUserVM{" +
-            "} " + super.toString();
+        return "ManagedUserVM{" + super.toString() + "} ";
     }
 }

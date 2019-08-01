@@ -11,7 +11,7 @@ const LAYOUT_ROUTES = [navbarRoute, ...errorRoute];
       [
         {
           path: 'admin',
-          loadChildren: './admin/admin.module#JhipsterOauth2SampleApplicationAdminModule'
+          loadChildren: () => import('./admin/admin.module').then(m => m.JhipsterOauth2SampleApplicationAdminModule)
         },
         ...LAYOUT_ROUTES
       ],
