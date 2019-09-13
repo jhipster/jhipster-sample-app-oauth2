@@ -1,16 +1,19 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { JhipsterOauth2SampleApplicationSharedCommonModule, HasAnyAuthorityDirective } from './';
+import { NgModule } from '@angular/core';
+import { JhipsterOauth2SampleApplicationSharedLibsModule } from './shared-libs.module';
+import { FindLanguageFromKeyPipe } from './language/find-language-from-key.pipe';
+import { JhiAlertComponent } from './alert/alert.component';
+import { JhiAlertErrorComponent } from './alert/alert-error.component';
+import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
 
 @NgModule({
-  imports: [JhipsterOauth2SampleApplicationSharedCommonModule],
-  declarations: [HasAnyAuthorityDirective],
-  exports: [JhipsterOauth2SampleApplicationSharedCommonModule, HasAnyAuthorityDirective],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  imports: [JhipsterOauth2SampleApplicationSharedLibsModule],
+  declarations: [FindLanguageFromKeyPipe, JhiAlertComponent, JhiAlertErrorComponent, HasAnyAuthorityDirective],
+  exports: [
+    JhipsterOauth2SampleApplicationSharedLibsModule,
+    FindLanguageFromKeyPipe,
+    JhiAlertComponent,
+    JhiAlertErrorComponent,
+    HasAnyAuthorityDirective
+  ]
 })
-export class JhipsterOauth2SampleApplicationSharedModule {
-  static forRoot() {
-    return {
-      ngModule: JhipsterOauth2SampleApplicationSharedModule
-    };
-  }
-}
+export class JhipsterOauth2SampleApplicationSharedModule {}

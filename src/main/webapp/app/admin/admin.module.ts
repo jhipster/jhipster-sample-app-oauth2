@@ -1,20 +1,16 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { JhiLanguageService } from 'ng-jhipster';
-import { JhiLanguageHelper } from 'app/core';
-import { JhipsterOauth2SampleApplicationSharedModule } from 'app/shared';
+import { JhipsterOauth2SampleApplicationSharedModule } from 'app/shared/shared.module';
 /* jhipster-needle-add-admin-module-import - JHipster will add admin modules imports here */
 
-import {
-  adminState,
-  AuditsComponent,
-  LogsComponent,
-  JhiMetricsMonitoringComponent,
-  JhiHealthModalComponent,
-  JhiHealthCheckComponent,
-  JhiConfigurationComponent,
-  JhiDocsComponent
-} from './';
+import { adminState } from './admin.route';
+import { AuditsComponent } from './audits/audits.component';
+import { LogsComponent } from './logs/logs.component';
+import { JhiMetricsMonitoringComponent } from './metrics/metrics.component';
+import { JhiHealthModalComponent } from './health/health-modal.component';
+import { JhiHealthCheckComponent } from './health/health.component';
+import { JhiConfigurationComponent } from './configuration/configuration.component';
+import { JhiDocsComponent } from './docs/docs.component';
 
 @NgModule({
   imports: [
@@ -31,16 +27,6 @@ import {
     JhiDocsComponent,
     JhiMetricsMonitoringComponent
   ],
-  providers: [{ provide: JhiLanguageService, useClass: JhiLanguageService }],
-  entryComponents: [JhiHealthModalComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  entryComponents: [JhiHealthModalComponent]
 })
-export class JhipsterOauth2SampleApplicationAdminModule {
-  constructor(private languageService: JhiLanguageService, private languageHelper: JhiLanguageHelper) {
-    this.languageHelper.language.subscribe((languageKey: string) => {
-      if (languageKey) {
-        this.languageService.changeLanguage(languageKey);
-      }
-    });
-  }
-}
+export class JhipsterOauth2SampleApplicationAdminModule {}

@@ -1,8 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NavigationCancel, Router } from '@angular/router';
 
-import { AccountService, StateStorageService } from 'app/core';
-import { JhiMainComponent } from 'app/layouts';
+import { AccountService } from 'app/core/auth/account.service';
+import { StateStorageService } from 'app/core/auth/state-storage.service';
+import { JhiMainComponent } from 'app/layouts/main/main.component';
 import { MockStateStorageService } from '../../../helpers/mock-state-storage.service';
 import { JhipsterOauth2SampleApplicationTestModule } from '../../../test.module';
 

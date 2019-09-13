@@ -3,7 +3,10 @@ import { Router, ActivatedRouteSnapshot, NavigationEnd, NavigationError } from '
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { JhiLanguageHelper, Account, AccountService, StateStorageService } from 'app/core';
+import { JhiLanguageHelper } from 'app/core/language/language.helper';
+import { Account } from 'app/core/user/account.model';
+import { AccountService } from 'app/core/auth/account.service';
+import { StateStorageService } from 'app/core/auth/state-storage.service';
 
 @Component({
   selector: 'jhi-main',

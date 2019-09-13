@@ -24,8 +24,6 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     String USERS_BY_EMAIL_CACHE = "usersByEmail";
 
-
-
     Optional<User> findOneByEmailIgnoreCase(String email);
 
     Optional<User> findOneByLogin(String login);
