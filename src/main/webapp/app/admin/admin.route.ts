@@ -20,4 +20,5 @@ export const adminState: Routes = [
     canActivate: [UserRouteAccessService],
     children: ADMIN_ROUTES
   }
+  /* jhipster-needle-add-admin-route - JHipster will add admin routes here */
 ];
