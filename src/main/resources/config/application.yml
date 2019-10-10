@@ -153,6 +153,11 @@ jhipster:
     contact-email:
     license:
     license-url:
+  security:
+    oauth2:
+      audience:
+        - account
+        - api://default
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class

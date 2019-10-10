@@ -1,11 +1,7 @@
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import './vendor';
-import { AuthExpiredInterceptor } from './blocks/interceptor/auth-expired.interceptor';
-import { ErrorHandlerInterceptor } from './blocks/interceptor/errorhandler.interceptor';
-import { NotificationInterceptor } from './blocks/interceptor/notification.interceptor';
 import { JhipsterOauth2SampleApplicationSharedModule } from 'app/shared/shared.module';
 import { JhipsterOauth2SampleApplicationCoreModule } from 'app/core/core.module';
 import { JhipsterOauth2SampleApplicationAppRoutingModule } from './app-routing.module';
@@ -30,23 +26,6 @@ import { ErrorComponent } from './layouts/error/error.component';
     JhipsterOauth2SampleApplicationAppRoutingModule
   ],
   declarations: [JhiMainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, ActiveMenuDirective, FooterComponent],
-  providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthExpiredInterceptor,
-      multi: true
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: ErrorHandlerInterceptor,
-      multi: true
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: NotificationInterceptor,
-      multi: true
-    }
-  ],
   bootstrap: [JhiMainComponent]
 })
 export class JhipsterOauth2SampleApplicationAppModule {}

@@ -1,5 +1,6 @@
 package io.github.jhipster.sample.security;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -8,12 +9,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 
-import java.util.ArrayList;
+import java.util.*;
 import java.util.stream.Collectors;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * Utility class for Spring Security.
@@ -55,21 +53,9 @@ public final class SecurityUtils {
      * @return true if the user is authenticated, false otherwise.
      */
     public static boolean isAuthenticated() {
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        return Optional.ofNullable(securityContext.getAuthentication())
-            .map(authentication -> {
-                List<GrantedAuthority> authorities = new ArrayList<>();
-                if (authentication instanceof JwtAuthenticationToken) {
-                    authorities.addAll(
-                        extractAuthorityFromClaims(((JwtAuthenticationToken) authentication).getToken()
-                            .getClaims()));
-                } else {
-                    authorities.addAll(authentication.getAuthorities());
-                }
-                return authorities.stream()
-                    .noneMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(AuthoritiesConstants.ANONYMOUS));
-            })
-            .orElse(false);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication != null &&
+            getAuthorities(authentication).noneMatch(AuthoritiesConstants.ANONYMOUS::equals);
     }
 
     /**
@@ -81,22 +67,19 @@ public final class SecurityUtils {
      * @return true if the current user has the authority, false otherwise.
      */
     public static boolean isCurrentUserInRole(String authority) {
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        return Optional.ofNullable(securityContext.getAuthentication())
-            .map(authentication -> {
-                List<GrantedAuthority> authorities = new ArrayList<>();
-                if (authentication instanceof JwtAuthenticationToken) {
-                    authorities.addAll(
-                        extractAuthorityFromClaims(((JwtAuthenticationToken) authentication).getToken()
-                            .getClaims()));
-                } else {
-                    authorities.addAll(authentication.getAuthorities());
-                }
-                return authorities.stream()
-                    .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(authority));
-            })
-            .orElse(false);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication != null &&
+            getAuthorities(authentication).anyMatch(authority::equals);
     }
+
+    private static Stream<String> getAuthorities(Authentication authentication) {
+        Collection<? extends GrantedAuthority> authorities = authentication instanceof JwtAuthenticationToken ?
+            extractAuthorityFromClaims(((JwtAuthenticationToken) authentication).getToken().getClaims())
+            : authentication.getAuthorities();
+        return authorities.stream()
+            .map(GrantedAuthority::getAuthority);
+    }
+
     public static List<GrantedAuthority> extractAuthorityFromClaims(Map<String, Object> claims) {
         return mapRolesToGrantedAuthorities(
             getRolesFromClaims(claims));
@@ -111,6 +94,7 @@ public final class SecurityUtils {
     private static List<GrantedAuthority> mapRolesToGrantedAuthorities(Collection<String> roles) {
         return roles.stream()
             .filter(role -> role.startsWith("ROLE_"))
-            .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+            .map(SimpleGrantedAuthority::new)
+            .collect(Collectors.toList());
     }
 }

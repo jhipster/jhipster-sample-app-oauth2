@@ -1,6 +1,5 @@
 package io.github.jhipster.sample.service.mapper;
 
-
 import io.github.jhipster.sample.JhipsterOauth2SampleApplicationApp;
 import io.github.jhipster.sample.config.TestSecurityConfiguration;
 import io.github.jhipster.sample.domain.User;
