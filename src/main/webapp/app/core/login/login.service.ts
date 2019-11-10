@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Location } from '@angular/common';
-import { flatMap } from 'rxjs/operators';
-import { AccountService } from 'app/core/auth/account.service';
 import { AuthServerProvider } from 'app/core/auth/auth-session.service';
 
 @Injectable({ providedIn: 'root' })
 export class LoginService {
-  constructor(private accountService: AccountService, private location: Location, private authServerProvider: AuthServerProvider) {}
+  constructor(private location: Location, private authServerProvider: AuthServerProvider) {}
 
   login() {
     // If you have configured multiple OIDC providers, then, you can update this URL to /login.
