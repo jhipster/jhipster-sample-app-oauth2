@@ -4,7 +4,7 @@ import { JhiLanguageService } from 'ng-jhipster';
 import { SessionStorageService } from 'ngx-webstorage';
 
 import { VERSION } from 'app/app.constants';
-import { JhiLanguageHelper } from 'app/core/language/language.helper';
+import { LANGUAGES } from 'app/core/language/language.constants';
 import { AccountService } from 'app/core/auth/account.service';
 import { LoginService } from 'app/core/login/login.service';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
@@ -15,62 +15,58 @@ import { ProfileService } from 'app/layouts/profiles/profile.service';
   styleUrls: ['navbar.scss']
 })
 export class NavbarComponent implements OnInit {
-  inProduction: boolean;
-  isNavbarCollapsed: boolean;
-  languages: any[];
-  swaggerEnabled: boolean;
+  inProduction?: boolean;
+  isNavbarCollapsed = true;
+  languages = LANGUAGES;
+  swaggerEnabled?: boolean;
   version: string;
 
   constructor(
     private loginService: LoginService,
     private languageService: JhiLanguageService,
-    private languageHelper: JhiLanguageHelper,
     private sessionStorage: SessionStorageService,
     private accountService: AccountService,
     private profileService: ProfileService,
     private router: Router
   ) {
     this.version = VERSION ? (VERSION.toLowerCase().startsWith('v') ? VERSION : 'v' + VERSION) : '';
-    this.isNavbarCollapsed = true;
   }
 
-  ngOnInit() {
-    this.languages = this.languageHelper.getAll();
-
+  ngOnInit(): void {
     this.profileService.getProfileInfo().subscribe(profileInfo => {
       this.inProduction = profileInfo.inProduction;
       this.swaggerEnabled = profileInfo.swaggerEnabled;
     });
   }
 
-  changeLanguage(languageKey: string) {
+  changeLanguage(languageKey: string): void {
     this.sessionStorage.store('locale', languageKey);
     this.languageService.changeLanguage(languageKey);
   }
 
-  collapseNavbar() {
+  collapseNavbar(): void {
     this.isNavbarCollapsed = true;
   }
 
-  isAuthenticated() {
+  isAuthenticated(): boolean {
     return this.accountService.isAuthenticated();
   }
 
-  login() {
+  login(): void {
     this.loginService.login();
   }
 
-  logout() {
+  logout(): void {
     this.collapseNavbar();
     this.loginService.logout();
     this.router.navigate(['']);
   }
 
-  toggleNavbar() {
+  toggleNavbar(): void {
     this.isNavbarCollapsed = !this.isNavbarCollapsed;
   }
 
-  getImageUrl() {
-    return this.isAuthenticated() ? this.accountService.getImageUrl() : null;
+  getImageUrl(): string {
+    return this.isAuthenticated() ? this.accountService.getImageUrl() : '';
   }
 }

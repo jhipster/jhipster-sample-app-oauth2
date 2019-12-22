@@ -10,21 +10,19 @@ import { Account } from 'app/core/user/account.model';
   styleUrls: ['home.scss']
 })
 export class HomeComponent implements OnInit {
-  account: Account;
+  account: Account | null = null;
 
   constructor(private accountService: AccountService, private loginService: LoginService) {}
 
-  ngOnInit() {
-    this.accountService.identity().subscribe((account: Account) => {
-      this.account = account;
-    });
+  ngOnInit(): void {
+    this.accountService.identity().subscribe(account => (this.account = account));
   }
 
-  isAuthenticated() {
+  isAuthenticated(): boolean {
     return this.accountService.isAuthenticated();
   }
 
-  login() {
+  login(): void {
     this.loginService.login();
   }
 }

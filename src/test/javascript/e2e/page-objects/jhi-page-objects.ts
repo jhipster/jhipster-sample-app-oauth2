@@ -4,7 +4,7 @@ import { element, by, ElementFinder, browser } from 'protractor';
 export class NavBarPage {
   entityMenu = element(by.id('entity-menu'));
   accountMenu = element(by.id('account-menu'));
-  adminMenu: ElementFinder;
+  adminMenu!: ElementFinder;
   signIn = element(by.id('login'));
   register = element(by.css('[routerLink="account/register"]'));
   signOut = element(by.id('logout'));
@@ -17,68 +17,68 @@ export class NavBarPage {
     }
   }
 
-  async clickOnEntityMenu() {
+  async clickOnEntityMenu(): Promise<void> {
     await this.entityMenu.click();
   }
 
-  async clickOnAccountMenu() {
+  async clickOnAccountMenu(): Promise<void> {
     await this.accountMenu.click();
   }
 
-  async clickOnAdminMenu() {
+  async clickOnAdminMenu(): Promise<void> {
     await this.adminMenu.click();
   }
 
-  async clickOnSignIn() {
+  async clickOnSignIn(): Promise<void> {
     await this.signIn.click();
   }
 
-  async clickOnRegister() {
+  async clickOnRegister(): Promise<void> {
     await this.signIn.click();
   }
 
-  async clickOnSignOut() {
+  async clickOnSignOut(): Promise<void> {
     await this.signOut.click();
   }
 
-  async clickOnPasswordMenu() {
+  async clickOnPasswordMenu(): Promise<void> {
     await this.passwordMenu.click();
   }
 
-  async clickOnSettingsMenu() {
+  async clickOnSettingsMenu(): Promise<void> {
     await this.settingsMenu.click();
   }
 
-  async clickOnEntity(entityName: string) {
+  async clickOnEntity(entityName: string): Promise<void> {
     await element(by.css('[routerLink="' + entityName + '"]')).click();
   }
 
-  async clickOnAdmin(entityName: string) {
+  async clickOnAdmin(entityName: string): Promise<void> {
     await element(by.css('[routerLink="admin/' + entityName + '"]')).click();
   }
 
-  async getSignInPage() {
+  async getSignInPage(): Promise<SignInPage> {
     await this.clickOnAccountMenu();
     await this.clickOnSignIn();
     return new SignInPage();
   }
 
-  async goToEntity(entityName: string) {
+  async goToEntity(entityName: string): Promise<void> {
     await this.clickOnEntityMenu();
     await this.clickOnEntity(entityName);
   }
 
-  async goToSignInPage() {
+  async goToSignInPage(): Promise<void> {
     await this.clickOnAccountMenu();
     await this.clickOnSignIn();
   }
 
-  async goToPasswordMenu() {
+  async goToPasswordMenu(): Promise<void> {
     await this.clickOnAccountMenu();
     await this.clickOnPasswordMenu();
   }
 
-  async autoSignOut() {
+  async autoSignOut(): Promise<void> {
     await this.clickOnAccountMenu();
     await this.clickOnSignOut();
   }
@@ -89,31 +89,31 @@ export class SignInPage {
   password = element(by.name('password'));
   loginButton = element(by.css('input[type=submit]'));
 
-  async setUserName(username) {
+  async setUserName(username: string): Promise<void> {
     await this.username.sendKeys(username);
   }
 
-  async getUserName() {
+  async getUserName(): Promise<string> {
     return this.username.getAttribute('value');
   }
 
-  async clearUserName() {
+  async clearUserName(): Promise<void> {
     await this.username.clear();
   }
 
-  async setPassword(password) {
+  async setPassword(password: string): Promise<void> {
     await this.password.sendKeys(password);
   }
 
-  async getPassword() {
+  async getPassword(): Promise<string> {
     return this.password.getAttribute('value');
   }
 
-  async clearPassword() {
+  async clearPassword(): Promise<void> {
     await this.password.clear();
   }
 
-  async loginWithOAuth(username: string, password: string) {
+  async loginWithOAuth(username: string, password: string): Promise<void> {
     // Entering non angular site, tell webdriver to switch to synchronous mode.
     await browser.waitForAngularEnabled(false);
 
@@ -130,7 +130,7 @@ export class SignInPage {
     }
   }
 
-  async login() {
+  async login(): Promise<void> {
     await this.loginButton.click();
   }
 }
