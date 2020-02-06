@@ -5,16 +5,20 @@ import io.github.jhipster.sample.security.*;
 import io.github.jhipster.config.JHipsterProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import io.github.jhipster.sample.security.oauth2.AudienceValidator;
 import io.github.jhipster.sample.security.SecurityUtils;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
 import org.springframework.security.oauth2.jwt.*;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
@@ -28,6 +32,7 @@ import org.springframework.web.filter.CorsFilter;
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @Import(SecurityProblemSupport.class)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
@@ -37,13 +42,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private String issuerUri;
 
     private final JHipsterProperties jHipsterProperties;
-    private final JwtAuthorityExtractor jwtAuthorityExtractor;
     private final SecurityProblemSupport problemSupport;
 
-    public SecurityConfiguration(CorsFilter corsFilter, JwtAuthorityExtractor jwtAuthorityExtractor, JHipsterProperties jHipsterProperties, SecurityProblemSupport problemSupport) {
+    public SecurityConfiguration(CorsFilter corsFilter, JHipsterProperties jHipsterProperties, SecurityProblemSupport problemSupport) {
         this.corsFilter = corsFilter;
         this.problemSupport = problemSupport;
-        this.jwtAuthorityExtractor = jwtAuthorityExtractor;
         this.jHipsterProperties = jHipsterProperties;
     }
 
@@ -93,13 +96,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .and()
             .oauth2ResourceServer()
                 .jwt()
-                .jwtAuthenticationConverter(jwtAuthorityExtractor)
+                .jwtAuthenticationConverter(grantedAuthoritiesExtractor())
                 .and()
             .and()
                 .oauth2Client();
         // @formatter:on
     }
 
+    Converter<Jwt, AbstractAuthenticationToken> grantedAuthoritiesExtractor() {
+        JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
+        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(new JwtAuthorityExtractor());
+        return jwtAuthenticationConverter;
+    }
     /**
      * Map authorities from "groups" or "roles" claim in ID Token.
      *
@@ -112,8 +120,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             Set<GrantedAuthority> mappedAuthorities = new HashSet<>();
 
             authorities.forEach(authority -> {
-                OidcUserAuthority oidcUserAuthority = (OidcUserAuthority) authority;
-                mappedAuthorities.addAll(SecurityUtils.extractAuthorityFromClaims(oidcUserAuthority.getUserInfo().getClaims()));
+                // Check for OidcUserAuthority because Spring Security 5.2 returns
+                // each scope as a GrantedAuthority, which we don't care about.
+                if (authority instanceof OidcUserAuthority) {
+                    OidcUserAuthority oidcUserAuthority = (OidcUserAuthority) authority;
+                    mappedAuthorities.addAll(SecurityUtils.extractAuthorityFromClaims(oidcUserAuthority.getUserInfo().getClaims()));
+                }
             });
             return mappedAuthorities;
         };
@@ -121,8 +133,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
     JwtDecoder jwtDecoder() {
-        NimbusJwtDecoderJwkSupport jwtDecoder = (NimbusJwtDecoderJwkSupport)
-            JwtDecoders.fromOidcIssuerLocation(issuerUri);
+        NimbusJwtDecoder jwtDecoder = (NimbusJwtDecoder) JwtDecoders.fromOidcIssuerLocation(issuerUri);
 
         OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(jHipsterProperties.getSecurity().getOauth2().getAudience());
         OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuerUri);

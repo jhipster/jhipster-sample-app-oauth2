@@ -12,7 +12,7 @@ import java.util.List;
 
 public class AudienceValidator implements OAuth2TokenValidator<Jwt> {
     private final Logger log = LoggerFactory.getLogger(AudienceValidator.class);
-    private OAuth2Error error = new OAuth2Error("invalid_token", "The required audience is missing", null);
+    private final OAuth2Error error = new OAuth2Error("invalid_token", "The required audience is missing", null);
 
     private final List<String> allowedAudience;
 
@@ -23,7 +23,7 @@ public class AudienceValidator implements OAuth2TokenValidator<Jwt> {
 
     public OAuth2TokenValidatorResult validate(Jwt jwt) {
         List<String> audience = jwt.getAudience();
-        if(audience.stream().anyMatch(aud -> allowedAudience.contains(aud))) {
+        if (audience.stream().anyMatch(allowedAudience::contains)) {
             return OAuth2TokenValidatorResult.success();
         } else {
             log.warn("Invalid audience: {}", audience);

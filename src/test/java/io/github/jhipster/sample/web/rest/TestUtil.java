@@ -2,17 +2,25 @@ package io.github.jhipster.sample.web.rest;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import io.github.jhipster.sample.security.SecurityUtils;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
 import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.format.support.FormattingConversionService;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.oidc.OidcIdToken;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -30,11 +38,14 @@ public final class TestUtil {
 
     private static final ObjectMapper mapper = createObjectMapper();
 
-    /** MediaType for JSON UTF8 */
-    public static final MediaType APPLICATION_JSON_UTF8 = MediaType.APPLICATION_JSON_UTF8;
+    /**
+     * MediaType for JSON
+     */
+    public static final MediaType APPLICATION_JSON = MediaType.APPLICATION_JSON;
 
     private static ObjectMapper createObjectMapper() {
         ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS, false);
         mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
         mapper.registerModule(new JavaTimeModule());
         return mapper;
@@ -101,6 +112,7 @@ public final class TestUtil {
 
     /**
      * Creates a matcher that matches when the examined string represents the same instant as the reference datetime.
+     *
      * @param date the reference datetime against which the examined string is checked.
      */
     public static ZonedDateTimeMatcher sameInstant(ZonedDateTime date) {
@@ -152,6 +164,18 @@ public final class TestUtil {
         CriteriaQuery<T> all = cq.select(rootEntry);
         TypedQuery<T> allQuery = em.createQuery(all);
         return allQuery.getResultList();
+    }
+
+    final static String ID_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9" +
+        ".eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsIm" +
+        "p0aSI6ImQzNWRmMTRkLTA5ZjYtNDhmZi04YTkzLTdjNmYwMzM5MzE1OSIsImlhdCI6MTU0M" +
+        "Tk3MTU4MywiZXhwIjoxNTQxOTc1MTgzfQ.QaQOarmV8xEUYV7yvWzX3cUE_4W1luMcWCwpr" +
+        "oqqUrg";
+
+    public static OAuth2AuthenticationToken authenticationToken(OidcIdToken idToken) {
+        Collection<GrantedAuthority> authorities = SecurityUtils.extractAuthorityFromClaims(idToken.getClaims());
+        OidcUser user = new DefaultOidcUser(authorities, idToken);
+        return new OAuth2AuthenticationToken(user, authorities, "oidc");
     }
 
     private TestUtil() {}

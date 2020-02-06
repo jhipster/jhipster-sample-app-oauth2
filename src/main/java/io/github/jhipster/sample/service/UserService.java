@@ -61,7 +61,7 @@ public class UserService {
                 user.setFirstName(firstName);
                 user.setLastName(lastName);
                 if (email != null) {
-	                user.setEmail(email.toLowerCase());
+                    user.setEmail(email.toLowerCase());
                 }
                 user.setLangKey(langKey);
                 user.setImageUrl(imageUrl);
@@ -243,9 +243,9 @@ public class UserService {
             // trim off country code if it exists
             String locale = (String) details.get("locale");
             if (locale.contains("_")) {
-                locale = locale.substring(0, locale.indexOf("_"));
+                locale = locale.substring(0, locale.indexOf('_'));
             } else if (locale.contains("-")) {
-                locale = locale.substring(0, locale.indexOf("-"));
+                locale = locale.substring(0, locale.indexOf('-'));
             }
             user.setLangKey(locale.toLowerCase());
         } else {

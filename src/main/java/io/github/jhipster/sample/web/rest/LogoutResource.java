@@ -7,17 +7,16 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
-* REST controller for managing global OIDC logout.
-*/
+ * REST controller for managing global OIDC logout.
+ */
 @RestController
 public class LogoutResource {
-    private ClientRegistration registration;
+    private final ClientRegistration registration;
 
     public LogoutResource(ClientRegistrationRepository registrations) {
         this.registration = registrations.findByRegistrationId("oidc");

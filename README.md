@@ -1,6 +1,6 @@
 # jhipsterOauth2SampleApplication
 
-This application was generated using JHipster 6.6.0, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v6.6.0](https://www.jhipster.tech/documentation-archive/v6.6.0).
+This application was generated using JHipster 6.7.0, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v6.7.0](https://www.jhipster.tech/documentation-archive/v6.7.0).
 
 ## Development
 
@@ -38,7 +38,7 @@ To log in to your app, you'll need to have [Keycloak](https://keycloak.org) up a
 docker-compose -f src/main/docker/keycloak.yml up
 ```
 
-The security settings in `src/main/resources/application.yml` are configured for this image.
+The security settings in `src/main/resources/config/application.yml` are configured for this image.
 
 ```yaml
 spring:
@@ -59,7 +59,7 @@ spring:
 
 If you'd like to use Okta instead of Keycloak, you'll need to change a few things. First, you'll need to create a free developer account at <https://developer.okta.com/signup/>. After doing so, you'll get your own Okta domain, that has a name like `https://dev-123456.okta.com`.
 
-Modify `src/main/resources/application.yml` to use your Okta settings.
+Modify `src/main/resources/config/application.yml` to use your Okta settings.
 
 ```yaml
 spring:
@@ -235,13 +235,13 @@ For more information refer to [Using Docker and Docker-Compose][], this page als
 To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration][] page for more information.
 
 [jhipster homepage and latest documentation]: https://www.jhipster.tech
-[jhipster 6.6.0 archive]: https://www.jhipster.tech/documentation-archive/v6.6.0
-[using jhipster in development]: https://www.jhipster.tech/documentation-archive/v6.6.0/development/
-[using docker and docker-compose]: https://www.jhipster.tech/documentation-archive/v6.6.0/docker-compose
-[using jhipster in production]: https://www.jhipster.tech/documentation-archive/v6.6.0/production/
-[running tests page]: https://www.jhipster.tech/documentation-archive/v6.6.0/running-tests/
-[code quality page]: https://www.jhipster.tech/documentation-archive/v6.6.0/code-quality/
-[setting up continuous integration]: https://www.jhipster.tech/documentation-archive/v6.6.0/setting-up-ci/
+[jhipster 6.7.0 archive]: https://www.jhipster.tech/documentation-archive/v6.7.0
+[using jhipster in development]: https://www.jhipster.tech/documentation-archive/v6.7.0/development/
+[using docker and docker-compose]: https://www.jhipster.tech/documentation-archive/v6.7.0/docker-compose
+[using jhipster in production]: https://www.jhipster.tech/documentation-archive/v6.7.0/production/
+[running tests page]: https://www.jhipster.tech/documentation-archive/v6.7.0/running-tests/
+[code quality page]: https://www.jhipster.tech/documentation-archive/v6.7.0/code-quality/
+[setting up continuous integration]: https://www.jhipster.tech/documentation-archive/v6.7.0/setting-up-ci/
 [node.js]: https://nodejs.org/
 [yarn]: https://yarnpkg.org/
 [webpack]: https://webpack.github.io/
