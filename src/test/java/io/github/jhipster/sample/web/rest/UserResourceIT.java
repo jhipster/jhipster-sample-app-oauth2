@@ -6,37 +6,37 @@ import io.github.jhipster.sample.domain.Authority;
 import io.github.jhipster.sample.domain.User;
 import io.github.jhipster.sample.repository.UserRepository;
 import io.github.jhipster.sample.security.AuthoritiesConstants;
-
-import io.github.jhipster.sample.service.UserService;
 import io.github.jhipster.sample.service.dto.UserDTO;
 import io.github.jhipster.sample.service.mapper.UserMapper;
-import io.github.jhipster.sample.web.rest.errors.ExceptionTranslator;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cache.CacheManager;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.time.Instant;
 import java.util.*;
+import java.util.function.Consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests for the {@link UserResource} REST controller.
  */
+@AutoConfigureMockMvc
+@WithMockUser(authorities = AuthoritiesConstants.ADMIN)
 @SpringBootTest(classes = {JhipsterOauth2SampleApplicationApp.class, TestSecurityConfiguration.class})
 public class UserResourceIT {
 
@@ -58,19 +58,7 @@ public class UserResourceIT {
     private UserRepository userRepository;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
     private UserMapper userMapper;
-
-    @Autowired
-    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
-
-    @Autowired
-    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
-
-    @Autowired
-    private ExceptionTranslator exceptionTranslator;
 
     @Autowired
     private EntityManager em;
@@ -78,6 +66,7 @@ public class UserResourceIT {
     @Autowired
     private CacheManager cacheManager;
 
+    @Autowired
     private MockMvc restUserMockMvc;
 
     private User user;
@@ -86,13 +75,6 @@ public class UserResourceIT {
     public void setup() {
         cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).clear();
         cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).clear();
-        UserResource userResource = new UserResource(userService);
-
-        this.restUserMockMvc = MockMvcBuilders.standaloneSetup(userResource)
-            .setCustomArgumentResolvers(pageableArgumentResolver)
-            .setControllerAdvice(exceptionTranslator)
-            .setMessageConverters(jacksonMessageConverter)
-            .build();
     }
 
     /**
@@ -279,5 +261,9 @@ public class UserResourceIT {
         authorityB.setName(AuthoritiesConstants.USER);
         assertThat(authorityA).isEqualTo(authorityB);
         assertThat(authorityA.hashCode()).isEqualTo(authorityB.hashCode());
+    }
+
+    private void assertPersistedUsers(Consumer<List<User>> userAssertion) {
+        userAssertion.accept(userRepository.findAll());
     }
 }
