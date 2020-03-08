@@ -38,6 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser(value = TEST_USER_LOGIN)
 @SpringBootTest(classes = {JhipsterOauth2SampleApplicationApp.class, TestSecurityConfiguration.class})
 public class AccountResourceIT {
+
     static final String TEST_USER_LOGIN = "test";
 
     @Autowired

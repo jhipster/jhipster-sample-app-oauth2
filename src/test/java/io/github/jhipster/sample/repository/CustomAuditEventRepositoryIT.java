@@ -1,6 +1,7 @@
 package io.github.jhipster.sample.repository;
 
 import io.github.jhipster.sample.JhipsterOauth2SampleApplicationApp;
+
 import io.github.jhipster.sample.config.Constants;
 import io.github.jhipster.sample.config.TestSecurityConfiguration;
 import io.github.jhipster.sample.config.audit.AuditEventConverter;

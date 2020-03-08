@@ -1,3 +1,4 @@
+import './polyfills';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { ProdConfig } from './blocks/config/prod.config';
 import { JhipsterOauth2SampleApplicationAppModule } from './app.module';
