@@ -8,6 +8,6 @@ import { metricsRoute } from './metrics.route';
 
 @NgModule({
   imports: [JhipsterOauth2SampleApplicationSharedModule, RouterModule.forChild([metricsRoute])],
-  declarations: [MetricsComponent]
+  declarations: [MetricsComponent],
 })
 export class MetricsModule {}

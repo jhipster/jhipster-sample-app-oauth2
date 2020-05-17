@@ -13,7 +13,7 @@ import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
     FindLanguageFromKeyPipe,
     AlertComponent,
     AlertErrorComponent,
-    HasAnyAuthorityDirective
-  ]
+    HasAnyAuthorityDirective,
+  ],
 })
 export class JhipsterOauth2SampleApplicationSharedModule {}

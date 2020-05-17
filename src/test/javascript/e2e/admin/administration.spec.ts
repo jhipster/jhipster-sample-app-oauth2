@@ -7,12 +7,14 @@ const expect = chai.expect;
 describe('administration', () => {
   let navBarPage: NavBarPage;
   let signInPage: SignInPage;
+  const username = process.env.E2E_USERNAME || 'admin';
+  const password = process.env.E2E_PASSWORD || 'admin';
 
   before(async () => {
     await browser.get('/');
     navBarPage = new NavBarPage(true);
     signInPage = await navBarPage.getSignInPage();
-    await signInPage.loginWithOAuth('admin', 'admin');
+    await signInPage.loginWithOAuth(username, password);
     await browser.wait(ec.visibilityOf(navBarPage.adminMenu), 5000);
   });
 

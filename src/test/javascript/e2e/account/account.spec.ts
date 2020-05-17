@@ -7,6 +7,8 @@ const expect = chai.expect;
 describe('account', () => {
   let navBarPage: NavBarPage;
   let signInPage: SignInPage;
+  const username = process.env.E2E_USERNAME || 'admin';
+  const password = process.env.E2E_PASSWORD || 'admin';
 
   before(async () => {
     await browser.get('/');
@@ -18,7 +20,7 @@ describe('account', () => {
     const value1 = await element(by.css('h1')).getAttribute('jhiTranslate');
     expect(value1).to.eq(expect1);
     signInPage = await navBarPage.getSignInPage();
-    await signInPage.loginWithOAuth('admin', 'foo');
+    await signInPage.loginWithOAuth(username, 'foo');
 
     // Keycloak
     const alert = element(by.css('.alert-error'));
@@ -32,7 +34,7 @@ describe('account', () => {
   });
 
   it('should login successfully with admin account', async () => {
-    await signInPage.loginWithOAuth('', 'admin');
+    await signInPage.loginWithOAuth('', password);
 
     const expect2 = 'home.logged.message';
     await browser.wait(ec.visibilityOf(element(by.id('home-logged-message'))));

@@ -7,7 +7,7 @@ import { Account } from 'app/core/user/account.model';
 @Component({
   selector: 'jhi-home',
   templateUrl: './home.component.html',
-  styleUrls: ['home.scss']
+  styleUrls: ['home.scss'],
 })
 export class HomeComponent implements OnInit {
   account: Account | null = null;
