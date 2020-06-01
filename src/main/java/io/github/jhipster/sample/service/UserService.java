@@ -137,7 +137,7 @@ public class UserService {
      * @param authToken the authentication token.
      * @return the user from the authentication.
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public UserDTO getUserFromAuthentication(AbstractAuthenticationToken authToken) {
         Map<String, Object> attributes;
         if (authToken instanceof OAuth2AuthenticationToken) {
