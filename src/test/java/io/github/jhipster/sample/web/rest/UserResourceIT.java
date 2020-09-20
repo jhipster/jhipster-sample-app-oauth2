@@ -122,6 +122,7 @@ public class UserResourceIT {
             .andExpect(jsonPath("$.[*].langKey").value(hasItem(DEFAULT_LANGKEY)));
     }
 
+
     @Test
     @Transactional
     public void getUser() throws Exception {

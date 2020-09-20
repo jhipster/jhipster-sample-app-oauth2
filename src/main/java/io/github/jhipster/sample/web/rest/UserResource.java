@@ -70,10 +70,12 @@ public class UserResource {
      */
     @GetMapping("/users")
     public ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable) {
+
         final Page<UserDTO> page = userService.getAllManagedUsers(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
+
 
     /**
      * Gets a list of all roles.
