@@ -1,0 +1,23 @@
+version: '2'
+services:
+  jhipsteroauth2sampleapplication-app:
+    image: jhipsteroauth2sampleapplication
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=prod,swagger
+      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - SPRING_DATASOURCE_URL=jdbc:mysql://jhipsteroauth2sampleapplication-mysql:3306/jhipsteroauth2sampleapplication?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/auth/realms/jhipster
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=web_app
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=web_app
+      - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
+    ports:
+      - 8080:8080
+  jhipsteroauth2sampleapplication-mysql:
+    extends:
+      file: mysql.yml
+      service: jhipsteroauth2sampleapplication-mysql
+  keycloak:
+    extends:
+      file: keycloak.yml
+      service: keycloak
