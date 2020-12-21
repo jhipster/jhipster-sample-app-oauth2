@@ -7,8 +7,8 @@ const expect = chai.expect;
 describe('account', () => {
   let navBarPage: NavBarPage;
   let signInPage: SignInPage;
-  const username = process.env.E2E_USERNAME || 'admin';
-  const password = process.env.E2E_PASSWORD || 'admin';
+  const username = process.env.E2E_USERNAME ?? 'admin';
+  const password = process.env.E2E_PASSWORD ?? 'admin';
 
   before(async () => {
     await browser.get('/');
@@ -29,7 +29,7 @@ describe('account', () => {
     } else {
       // Okta
       const error = element(by.css('.infobox-error'));
-      expect(await error.getText()).to.eq('Sign in failed!');
+      expect(await error.getText()).to.eq('Unable to sign in');
     }
   });
 

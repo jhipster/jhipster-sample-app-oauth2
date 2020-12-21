@@ -1,12 +1,26 @@
 package io.github.jhipster.sample.web.rest;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.github.jhipster.sample.security.SecurityUtils;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeParseException;
+import java.util.Collection;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
+import org.hamcrest.TypeSafeMatcher;
 import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
 import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.format.support.FormattingConversionService;
@@ -15,20 +29,6 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
-
-import java.io.IOException;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeParseException;
-import java.util.Collection;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Utility class for testing REST controllers.
@@ -91,11 +91,9 @@ public final class TestUtil {
                 }
                 return true;
             } catch (DateTimeParseException e) {
-                mismatchDescription.appendText("was ").appendValue(item)
-                    .appendText(", which could not be parsed as a ZonedDateTime");
+                mismatchDescription.appendText("was ").appendValue(item).appendText(", which could not be parsed as a ZonedDateTime");
                 return false;
             }
-
         }
 
         @Override
@@ -114,13 +112,64 @@ public final class TestUtil {
     }
 
     /**
+     * A matcher that tests that the examined number represents the same value - it can be Long, Double, etc - as the reference BigDecimal.
+     */
+    public static class NumberMatcher extends TypeSafeMatcher<Number> {
+
+        final BigDecimal value;
+
+        public NumberMatcher(BigDecimal value) {
+            this.value = value;
+        }
+
+        @Override
+        public void describeTo(Description description) {
+            description.appendText("a numeric value is ").appendValue(value);
+        }
+
+        @Override
+        protected boolean matchesSafely(Number item) {
+            BigDecimal bigDecimal = asDecimal(item);
+            return bigDecimal != null && value.compareTo(bigDecimal) == 0;
+        }
+
+        private static BigDecimal asDecimal(Number item) {
+            if (item == null) {
+                return null;
+            }
+            if (item instanceof BigDecimal) {
+                return (BigDecimal) item;
+            } else if (item instanceof Long) {
+                return BigDecimal.valueOf((Long) item);
+            } else if (item instanceof Integer) {
+                return BigDecimal.valueOf((Integer) item);
+            } else if (item instanceof Double) {
+                return BigDecimal.valueOf((Double) item);
+            } else if (item instanceof Float) {
+                return BigDecimal.valueOf((Float) item);
+            } else {
+                return BigDecimal.valueOf(item.doubleValue());
+            }
+        }
+    }
+
+    /**
+     * Creates a matcher that matches when the examined number represents the same value as the reference BigDecimal.
+     *
+     * @param number the reference BigDecimal against which the examined number is checked.
+     */
+    public static NumberMatcher sameNumber(BigDecimal number) {
+        return new NumberMatcher(number);
+    }
+
+    /**
      * Verifies the equals/hashcode contract on the domain object.
      */
     public static <T> void equalsVerifier(Class<T> clazz) throws Exception {
         T domainObject1 = clazz.getConstructor().newInstance();
         assertThat(domainObject1.toString()).isNotNull();
         assertThat(domainObject1).isEqualTo(domainObject1);
-        assertThat(domainObject1.hashCode()).isEqualTo(domainObject1.hashCode());
+        assertThat(domainObject1).hasSameHashCodeAs(domainObject1);
         // Test with an instance of another class
         Object testOtherObject = new Object();
         assertThat(domainObject1).isNotEqualTo(testOtherObject);
@@ -129,7 +178,7 @@ public final class TestUtil {
         T domainObject2 = clazz.getConstructor().newInstance();
         assertThat(domainObject1).isNotEqualTo(domainObject2);
         // HashCodes are equals because the objects are not persisted yet
-        assertThat(domainObject1.hashCode()).isEqualTo(domainObject2.hashCode());
+        assertThat(domainObject1).hasSameHashCodeAs(domainObject2);
     }
 
     /**
@@ -137,7 +186,7 @@ public final class TestUtil {
      * @return the {@link FormattingConversionService}.
      */
     public static FormattingConversionService createFormattingConversionService() {
-        DefaultFormattingConversionService dfcs = new DefaultFormattingConversionService ();
+        DefaultFormattingConversionService dfcs = new DefaultFormattingConversionService();
         DateTimeFormatterRegistrar registrar = new DateTimeFormatterRegistrar();
         registrar.setUseIsoFormat(true);
         registrar.registerFormatters(dfcs);
@@ -160,7 +209,8 @@ public final class TestUtil {
         return allQuery.getResultList();
     }
 
-    final static String ID_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9" +
+    static final String ID_TOKEN =
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9" +
         ".eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsIm" +
         "p0aSI6ImQzNWRmMTRkLTA5ZjYtNDhmZi04YTkzLTdjNmYwMzM5MzE1OSIsImlhdCI6MTU0M" +
         "Tk3MTU4MywiZXhwIjoxNTQxOTc1MTgzfQ.QaQOarmV8xEUYV7yvWzX3cUE_4W1luMcWCwpr" +

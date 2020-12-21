@@ -1,11 +1,11 @@
 package io.github.jhipster.sample.web.rest.vm;
 
-import io.github.jhipster.sample.service.dto.UserDTO;
+import io.github.jhipster.sample.service.dto.AdminUserDTO;
 
 /**
- * View Model extending the UserDTO, which is meant to be used in the user management UI.
+ * View Model extending the AdminUserDTO, which is meant to be used in the user management UI.
  */
-public class ManagedUserVM extends UserDTO {
+public class ManagedUserVM extends AdminUserDTO {
 
     public ManagedUserVM() {
         // Empty constructor needed for Jackson.

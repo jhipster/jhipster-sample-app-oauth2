@@ -7,16 +7,12 @@ import { RouterModule } from '@angular/router';
     /* jhipster-needle-add-admin-module - JHipster will add admin modules here */
     RouterModule.forChild([
       {
-        path: 'audits',
-        loadChildren: () => import('./audits/audits.module').then(m => m.AuditsModule),
+        path: 'docs',
+        loadChildren: () => import('./docs/docs.module').then(m => m.DocsModule),
       },
       {
         path: 'configuration',
         loadChildren: () => import('./configuration/configuration.module').then(m => m.ConfigurationModule),
-      },
-      {
-        path: 'docs',
-        loadChildren: () => import('./docs/docs.module').then(m => m.DocsModule),
       },
       {
         path: 'health',

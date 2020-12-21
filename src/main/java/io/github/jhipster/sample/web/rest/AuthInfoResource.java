@@ -14,9 +14,9 @@ public class AuthInfoResource {
 
     @Value("${spring.security.oauth2.client.provider.oidc.issuer-uri:}")
     private String issuer;
+
     @Value("${spring.security.oauth2.client.registration.oidc.client-id:}")
     private String clientId;
-
 
     @GetMapping("/auth-info")
     public AuthInfoVM getAuthInfo() {
@@ -24,6 +24,7 @@ public class AuthInfoResource {
     }
 
     class AuthInfoVM {
+
         private String issuer;
         private String clientId;
 
