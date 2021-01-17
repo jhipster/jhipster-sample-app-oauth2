@@ -6,7 +6,6 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.2.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-        <property name="autoIncrement" value="true"/>
 
     <!--
         JHipster core tables.
@@ -86,13 +85,13 @@
                   file="config/liquibase/data/user_authority.csv"
                   separator=";"
                   tableName="jhi_user_authority">
-            <column name="user_id" type="numeric"/>
+            <column name="user_id" type="string"/>
         </loadData>
     </changeSet>
 
     <changeSet author="jhipster" id="00000000000002" context="test">
         <createTable tableName="jhi_date_time_wrapper">
-            <column autoIncrement="${autoIncrement}" name="id" type="BIGINT">
+            <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="jhi_date_time_wrapperPK"/>
             </column>
             <column name="instant" type="timestamp"/>

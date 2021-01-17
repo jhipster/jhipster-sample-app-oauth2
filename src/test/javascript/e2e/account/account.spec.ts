@@ -29,11 +29,13 @@ describe('account', () => {
     } else {
       // Okta
       const error = element(by.css('.infobox-error'));
+      await browser.wait(ec.presenceOf(error), 5000);
       expect(await error.getText()).to.eq('Unable to sign in');
     }
   });
 
   it('should login successfully with admin account', async () => {
+    await signInPage.clearPassword();
     await signInPage.loginWithOAuth('', password);
 
     const expect2 = 'home.logged.message';

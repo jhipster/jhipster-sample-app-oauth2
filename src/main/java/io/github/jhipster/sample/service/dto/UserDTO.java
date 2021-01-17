@@ -8,6 +8,7 @@ import io.github.jhipster.sample.domain.User;
 public class UserDTO {
 
     private String id;
+
     private String login;
 
     public UserDTO() {

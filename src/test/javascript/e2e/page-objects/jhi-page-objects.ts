@@ -1,4 +1,4 @@
-import { element, by, ElementFinder, browser } from 'protractor';
+import { element, by, ElementFinder, browser, ExpectedConditions as ec } from 'protractor';
 
 /* eslint @typescript-eslint/no-use-before-define: 0 */
 export class NavBarPage {
@@ -116,6 +116,7 @@ export class SignInPage {
   async loginWithOAuth(username: string, password: string): Promise<void> {
     // Entering non angular site, tell webdriver to switch to synchronous mode.
     await browser.waitForAngularEnabled(false);
+    await browser.wait(ec.presenceOf(this.username), 5000);
 
     if (await this.username.isPresent()) {
       await this.username.sendKeys(username);

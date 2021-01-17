@@ -25,7 +25,5 @@ public interface UserRepository extends JpaRepository<User, String> {
     @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
     Optional<User> findOneWithAuthoritiesByLogin(String login);
 
-    Page<User> findAll(Pageable pageable);
-
     Page<User> findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);
 }
