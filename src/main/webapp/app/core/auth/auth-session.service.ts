@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { SERVER_API_URL } from 'app/app.constants';
+import { ApplicationConfigService } from '../config/application-config.service';
 import { Logout } from 'app/login/logout.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthServerProvider {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private applicationConfigService: ApplicationConfigService) {}
 
   logout(): Observable<Logout> {
-    return this.http.post<Logout>(SERVER_API_URL + 'api/logout', {});
+    return this.http.post<Logout>(this.applicationConfigService.getEndpointFor('api/logout'), {});
   }
 }

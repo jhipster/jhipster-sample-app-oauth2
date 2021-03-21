@@ -169,6 +169,7 @@ public class UserService {
 
     private static User getUser(Map<String, Object> details) {
         User user = new User();
+        Boolean activated = Boolean.TRUE;
         // handle resource server JWT, where sub claim is email and uid is ID
         if (details.get("uid") != null) {
             user.setId((String) details.get("uid"));
@@ -188,7 +189,7 @@ public class UserService {
             user.setLastName((String) details.get("family_name"));
         }
         if (details.get("email_verified") != null) {
-            user.setActivated((Boolean) details.get("email_verified"));
+            activated = (Boolean) details.get("email_verified");
         }
         if (details.get("email") != null) {
             user.setEmail(((String) details.get("email")).toLowerCase());
@@ -213,7 +214,7 @@ public class UserService {
         if (details.get("picture") != null) {
             user.setImageUrl((String) details.get("picture"));
         }
-        user.setActivated(true);
+        user.setActivated(activated);
         return user;
     }
 

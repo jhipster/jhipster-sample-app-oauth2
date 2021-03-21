@@ -5,6 +5,8 @@ import static org.springframework.security.oauth2.core.oidc.endpoint.OidcParamet
 
 import java.time.Instant;
 import java.util.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,6 +22,12 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
  * Test class for the {@link SecurityUtils} utility class.
  */
 class SecurityUtilsUnitTest {
+
+    @BeforeEach
+    @AfterEach
+    void cleanup() {
+        SecurityContextHolder.clearContext();
+    }
 
     @Test
     void testGetCurrentUserLogin() {
@@ -41,8 +49,8 @@ class SecurityUtilsUnitTest {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.USER));
         OidcUser user = new DefaultOidcUser(authorities, idToken);
-        OAuth2AuthenticationToken bla = new OAuth2AuthenticationToken(user, authorities, "oidc");
-        securityContext.setAuthentication(bla);
+        OAuth2AuthenticationToken auth2AuthenticationToken = new OAuth2AuthenticationToken(user, authorities, "oidc");
+        securityContext.setAuthentication(auth2AuthenticationToken);
         SecurityContextHolder.setContext(securityContext);
 
         Optional<String> login = SecurityUtils.getCurrentUserLogin();
@@ -71,14 +79,14 @@ class SecurityUtilsUnitTest {
     }
 
     @Test
-    void testIsCurrentUserInRole() {
+    void testHasCurrentUserThisAuthority() {
         SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.USER));
         securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("user", "user", authorities));
         SecurityContextHolder.setContext(securityContext);
 
-        assertThat(SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.USER)).isTrue();
-        assertThat(SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN)).isFalse();
+        assertThat(SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.USER)).isTrue();
+        assertThat(SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)).isFalse();
     }
 }

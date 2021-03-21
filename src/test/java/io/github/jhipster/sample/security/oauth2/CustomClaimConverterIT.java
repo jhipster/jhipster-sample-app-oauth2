@@ -1,6 +1,7 @@
 package io.github.jhipster.sample.security.oauth2;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
@@ -11,32 +12,31 @@ import io.github.jhipster.sample.IntegrationTest;
 import io.github.jhipster.sample.JhipsterOauth2SampleApplicationApp;
 import io.github.jhipster.sample.config.TestSecurityConfiguration;
 import io.github.jhipster.sample.security.AuthoritiesConstants;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 @IntegrationTest
-@ExtendWith(MockitoExtension.class)
-public class CustomClaimConverterIT {
+class CustomClaimConverterIT {
 
     private static final String USERNAME = "admin";
     private static final String NAME = "John";
     private static final String FAMILY_NAME = "Doe";
 
-    @Mock
+    private final ObjectMapper mapper = new ObjectMapper();
+
+    @MockBean
     private RestTemplate restTemplate;
 
     @Autowired
@@ -47,13 +47,9 @@ public class CustomClaimConverterIT {
     @BeforeEach
     public void initTest() {
         customClaimConverter = new CustomClaimConverter(clientRegistrationRepository.findByRegistrationId("oidc"), restTemplate);
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectNode user = mapper.createObjectNode();
-        user.put("preferred_username", USERNAME);
-        user.put("given_name", NAME);
-        user.put("family_name", FAMILY_NAME);
-        user.putArray("groups").add(AuthoritiesConstants.ADMIN).add(AuthoritiesConstants.USER);
-        ResponseEntity<ObjectNode> userInfo = ResponseEntity.ok(user);
+    }
+
+    private void mockHttpGetUserInfo(ObjectNode userInfo) {
         when(
             restTemplate.exchange(
                 eq("https://api.jhipster.org/user"),
@@ -62,19 +58,47 @@ public class CustomClaimConverterIT {
                 ArgumentMatchers.<Class<ObjectNode>>any()
             )
         )
-            .thenReturn(userInfo);
+            .thenReturn(ResponseEntity.ok(userInfo));
     }
 
     @Test
-    @Transactional
-    public void testConvert() {
+    void testConvert() {
+        // GIVEN
         Map<String, Object> claims = new HashMap<>();
         claims.put("sub", "123");
+        // AND
+        ObjectNode user = mapper.createObjectNode();
+        user.put("preferred_username", USERNAME);
+        user.put("given_name", NAME);
+        user.put("family_name", FAMILY_NAME);
+        user.putArray("groups").add(AuthoritiesConstants.ADMIN).add(AuthoritiesConstants.USER);
+        mockHttpGetUserInfo(user);
+
+        // WHEN
         Map<String, Object> convertedClaims = customClaimConverter.convert(claims);
 
-        assertThat(convertedClaims.get("preferred_username")).isEqualTo(USERNAME);
-        assertThat(convertedClaims.get("given_name")).isEqualTo(NAME);
-        assertThat(convertedClaims.get("family_name")).isEqualTo(FAMILY_NAME);
-        assertThat(convertedClaims.get("groups")).isEqualTo(List.of(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER));
+        // THEN
+        assertThat(convertedClaims)
+            .containsEntry("sub", "123")
+            .containsEntry("preferred_username", USERNAME)
+            .containsEntry("given_name", NAME)
+            .containsEntry("family_name", FAMILY_NAME)
+            .containsEntry("groups", Arrays.asList(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER));
+    }
+
+    @Test
+    void testConvert_withoutGroups() {
+        // GIVEN
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("sub", "123");
+        // AND
+        ObjectNode user = mapper.createObjectNode();
+        user.put("preferred_username", USERNAME);
+        user.put("given_name", NAME);
+        user.put("family_name", FAMILY_NAME);
+        mockHttpGetUserInfo(user);
+
+        // WHEN
+        assertThatCode(() -> customClaimConverter.convert(claims)).doesNotThrowAnyException();
     }
 }

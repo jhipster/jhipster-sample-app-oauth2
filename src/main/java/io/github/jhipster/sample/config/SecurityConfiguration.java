@@ -61,7 +61,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/i18n/**")
             .antMatchers("/content/**")
             .antMatchers("/h2-console/**")
-            .antMatchers("/swagger-ui/index.html")
+            .antMatchers("/swagger-ui/**")
             .antMatchers("/test/**");
     }
 
@@ -140,7 +140,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    JwtDecoder jwtDecoder() {
+    JwtDecoder jwtDecoder(ClientRegistrationRepository clientRegistrationRepository, RestTemplateBuilder restTemplateBuilder) {
         NimbusJwtDecoder jwtDecoder = (NimbusJwtDecoder) JwtDecoders.fromOidcIssuerLocation(issuerUri);
 
         OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(jHipsterProperties.getSecurity().getOauth2().getAudience());
@@ -148,6 +148,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         OAuth2TokenValidator<Jwt> withAudience = new DelegatingOAuth2TokenValidator<>(withIssuer, audienceValidator);
 
         jwtDecoder.setJwtValidator(withAudience);
+        jwtDecoder.setClaimSetConverter(
+            new CustomClaimConverter(clientRegistrationRepository.findByRegistrationId("oidc"), restTemplateBuilder.build())
+        );
 
         return jwtDecoder;
     }

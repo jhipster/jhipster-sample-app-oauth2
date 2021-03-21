@@ -48,11 +48,8 @@ public class CustomClaimConverter implements Converter<Map<String, Object>, Map<
             String token = bearerTokenResolver.resolve(
                 ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest()
             );
-            HttpHeaders headers = new HttpHeaders() {
-                {
-                    set("Authorization", "Bearer " + token);
-                }
-            };
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", buildBearer(token));
 
             // Retrieve user infos from OAuth provider if not already loaded
             ObjectNode user = users.computeIfAbsent(
@@ -73,13 +70,19 @@ public class CustomClaimConverter implements Converter<Map<String, Object>, Map<
                 convertedClaims.put("preferred_username", user.get("preferred_username").asText());
                 convertedClaims.put("given_name", user.get("given_name").asText());
                 convertedClaims.put("family_name", user.get("family_name").asText());
-                List<String> groups = StreamSupport
-                    .stream(user.get("groups").spliterator(), false)
-                    .map(JsonNode::asText)
-                    .collect(Collectors.toList());
-                convertedClaims.put("groups", groups);
+                if (user.has("groups")) {
+                    List<String> groups = StreamSupport
+                        .stream(user.get("groups").spliterator(), false)
+                        .map(JsonNode::asText)
+                        .collect(Collectors.toList());
+                    convertedClaims.put("groups", groups);
+                }
             }
         }
         return convertedClaims;
+    }
+
+    private String buildBearer(String token) {
+        return "Bearer " + token;
     }
 }
