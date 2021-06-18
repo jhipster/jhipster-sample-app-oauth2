@@ -6,6 +6,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { of } from 'rxjs';
 
 import { AccountService } from 'app/core/auth/account.service';
+import { Account } from 'app/core/auth/account.model';
 import { LoginService } from 'app/login/login.service';
 
 import { HomeComponent } from './home.component';
@@ -16,6 +17,16 @@ describe('Component Tests', () => {
     let fixture: ComponentFixture<HomeComponent>;
     let mockAccountService: AccountService;
     let mockLoginService: LoginService;
+    const account: Account = {
+      activated: true,
+      authorities: [],
+      email: '',
+      firstName: null,
+      langKey: '',
+      lastName: null,
+      login: 'login',
+      imageUrl: null,
+    };
 
     beforeEach(
       waitForAsync(() => {
@@ -37,20 +48,27 @@ describe('Component Tests', () => {
       mockLoginService = TestBed.inject(LoginService);
     });
 
-    it('Should call accountService.isAuthenticated when it checks authentication', () => {
-      // WHEN
-      comp.isAuthenticated();
+    describe('ngOnInit', () => {
+      it('Should synchronize account variable with current account', () => {
+        // GIVEN
+        mockAccountService.identity = jest.fn(() => of(account));
 
-      // THEN
-      expect(mockAccountService.isAuthenticated).toHaveBeenCalled();
+        // WHEN
+        comp.ngOnInit();
+
+        // THEN
+        expect(comp.account).toEqual(account);
+      });
     });
 
-    it('Should call loginService.login on login', () => {
-      // WHEN
-      comp.login();
+    describe('login', () => {
+      it('Should call loginService.login on login', () => {
+        // WHEN
+        comp.login();
 
-      // THEN
-      expect(mockLoginService.login).toHaveBeenCalled();
+        // THEN
+        expect(mockLoginService.login).toHaveBeenCalled();
+      });
     });
   });
 });

@@ -78,7 +78,7 @@ describe('Service Tests', () => {
         });
 
         it('should add only unique User to an array', () => {
-          const userArray: IUser[] = [{ id: 'ABC' }, { id: 'CBA' }, { id: 'RSS' }];
+          const userArray: IUser[] = [{ id: 'ABC' }, { id: 'CBA' }, { id: '4e721970-f867-4627-93d7-265264b9bbfd' }];
           const userCollection: IUser[] = [{ id: 'CBA' }];
           expectedResult = service.addUserToCollectionIfMissing(userCollection, ...userArray);
           expect(expectedResult).toHaveLength(3);
@@ -98,6 +98,12 @@ describe('Service Tests', () => {
           expectedResult = service.addUserToCollectionIfMissing([], null, user, undefined);
           expect(expectedResult).toHaveLength(1);
           expect(expectedResult).toContain(user);
+        });
+
+        it('should return initial array if no users is added', () => {
+          const userCollection: IUser[] = [{ id: 'CBA' }];
+          expectedResult = service.addUserToCollectionIfMissing(userCollection, null, undefined);
+          expect(expectedResult).toEqual(userCollection);
         });
       });
     });

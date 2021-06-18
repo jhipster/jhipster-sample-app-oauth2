@@ -52,4 +52,16 @@ public class AccountResource {
             throw new AccountResourceException("User could not be found");
         }
     }
+
+    /**
+     * {@code GET  /authenticate} : check if the user is authenticated, and return its login.
+     *
+     * @param request the HTTP request.
+     * @return the login if the user is authenticated.
+     */
+    @GetMapping("/authenticate")
+    public String isAuthenticated(HttpServletRequest request) {
+        log.debug("REST request to check if the current user is authenticated");
+        return request.getRemoteUser();
+    }
 }

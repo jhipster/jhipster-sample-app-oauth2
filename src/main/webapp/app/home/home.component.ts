@@ -18,10 +18,6 @@ export class HomeComponent implements OnInit {
     this.accountService.identity().subscribe(account => (this.account = account));
   }
 
-  isAuthenticated(): boolean {
-    return this.accountService.isAuthenticated();
-  }
-
   login(): void {
     this.loginService.login();
   }

@@ -66,6 +66,7 @@
                                  referencedColumnNames="id"
                                  referencedTableName="jhi_user"/>
 
+            
         <loadData
                   file="config/liquibase/data/user.csv"
                   separator=";"
@@ -73,6 +74,7 @@
             <column name="activated" type="boolean"/>
             <column name="created_date" type="timestamp"/>
         </loadData>
+           
         <dropDefaultValue tableName="jhi_user" columnName="created_date" columnDataType="${datetimeType}"/>
         <loadData
                   file="config/liquibase/data/authority.csv"
