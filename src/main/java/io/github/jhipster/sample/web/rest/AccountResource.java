@@ -2,7 +2,6 @@ package io.github.jhipster.sample.web.rest;
 
 import io.github.jhipster.sample.service.UserService;
 import io.github.jhipster.sample.service.dto.AdminUserDTO;
-import io.github.jhipster.sample.service.dto.UserDTO;
 import java.security.Principal;
 import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;

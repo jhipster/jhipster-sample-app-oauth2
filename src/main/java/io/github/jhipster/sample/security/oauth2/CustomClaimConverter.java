@@ -2,6 +2,7 @@ package io.github.jhipster.sample.security.oauth2;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import io.github.jhipster.sample.security.SecurityUtils;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -68,8 +69,12 @@ public class CustomClaimConverter implements Converter<Map<String, Object>, Map<
             // Add custom claims
             if (user != null) {
                 convertedClaims.put("preferred_username", user.get("preferred_username").asText());
-                convertedClaims.put("given_name", user.get("given_name").asText());
-                convertedClaims.put("family_name", user.get("family_name").asText());
+                if (user.has("given_name")) {
+                    convertedClaims.put("given_name", user.get("given_name").asText());
+                }
+                if (user.has("family_name")) {
+                    convertedClaims.put("family_name", user.get("family_name").asText());
+                }
                 if (user.has("groups")) {
                     List<String> groups = StreamSupport
                         .stream(user.get("groups").spliterator(), false)
@@ -77,6 +82,14 @@ public class CustomClaimConverter implements Converter<Map<String, Object>, Map<
                         .collect(Collectors.toList());
                     convertedClaims.put("groups", groups);
                 }
+            }
+
+            if (user.has(SecurityUtils.CLAIMS_NAMESPACE + "roles")) {
+                List<String> roles = StreamSupport
+                    .stream(user.get(SecurityUtils.CLAIMS_NAMESPACE + "roles").spliterator(), false)
+                    .map(JsonNode::asText)
+                    .collect(Collectors.toList());
+                convertedClaims.put("roles", roles);
             }
         }
         return convertedClaims;

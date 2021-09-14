@@ -17,6 +17,8 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
  */
 public final class SecurityUtils {
 
+    public static final String CLAIMS_NAMESPACE = "https://www.jhipster.tech/";
+
     private SecurityUtils() {}
 
     /**
@@ -59,14 +61,36 @@ public final class SecurityUtils {
     }
 
     /**
+     * Checks if the current user has any of the authorities.
+     *
+     * @param authorities the authorities to check.
+     * @return true if the current user has any of the authorities, false otherwise.
+     */
+    public static boolean hasCurrentUserAnyOfAuthorities(String... authorities) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return (
+            authentication != null && getAuthorities(authentication).anyMatch(authority -> Arrays.asList(authorities).contains(authority))
+        );
+    }
+
+    /**
+     * Checks if the current user has none of the authorities.
+     *
+     * @param authorities the authorities to check.
+     * @return true if the current user has none of the authorities, false otherwise.
+     */
+    public static boolean hasCurrentUserNoneOfAuthorities(String... authorities) {
+        return !hasCurrentUserAnyOfAuthorities(authorities);
+    }
+
+    /**
      * Checks if the current user has a specific authority.
      *
      * @param authority the authority to check.
      * @return true if the current user has the authority, false otherwise.
      */
     public static boolean hasCurrentUserThisAuthority(String authority) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return authentication != null && getAuthorities(authentication).anyMatch(authority::equals);
+        return hasCurrentUserAnyOfAuthorities(authority);
     }
 
     private static Stream<String> getAuthorities(Authentication authentication) {
@@ -82,7 +106,10 @@ public final class SecurityUtils {
 
     @SuppressWarnings("unchecked")
     private static Collection<String> getRolesFromClaims(Map<String, Object> claims) {
-        return (Collection<String>) claims.getOrDefault("groups", claims.getOrDefault("roles", new ArrayList<>()));
+        return (Collection<String>) claims.getOrDefault(
+            "groups",
+            claims.getOrDefault("roles", claims.getOrDefault(CLAIMS_NAMESPACE + "roles", new ArrayList<>()))
+        );
     }
 
     private static List<GrantedAuthority> mapRolesToGrantedAuthorities(Collection<String> roles) {

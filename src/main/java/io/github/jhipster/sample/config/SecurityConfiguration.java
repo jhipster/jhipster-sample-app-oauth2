@@ -127,16 +127,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return authorities -> {
             Set<GrantedAuthority> mappedAuthorities = new HashSet<>();
 
-            authorities.forEach(
-                authority -> {
-                    // Check for OidcUserAuthority because Spring Security 5.2 returns
-                    // each scope as a GrantedAuthority, which we don't care about.
-                    if (authority instanceof OidcUserAuthority) {
-                        OidcUserAuthority oidcUserAuthority = (OidcUserAuthority) authority;
-                        mappedAuthorities.addAll(SecurityUtils.extractAuthorityFromClaims(oidcUserAuthority.getUserInfo().getClaims()));
-                    }
+            authorities.forEach(authority -> {
+                // Check for OidcUserAuthority because Spring Security 5.2 returns
+                // each scope as a GrantedAuthority, which we don't care about.
+                if (authority instanceof OidcUserAuthority) {
+                    OidcUserAuthority oidcUserAuthority = (OidcUserAuthority) authority;
+                    mappedAuthorities.addAll(SecurityUtils.extractAuthorityFromClaims(oidcUserAuthority.getUserInfo().getClaims()));
                 }
-            );
+            });
             return mappedAuthorities;
         };
     }

@@ -57,19 +57,17 @@ public class UserService {
         SecurityUtils
             .getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
-            .ifPresent(
-                user -> {
-                    user.setFirstName(firstName);
-                    user.setLastName(lastName);
-                    if (email != null) {
-                        user.setEmail(email.toLowerCase());
-                    }
-                    user.setLangKey(langKey);
-                    user.setImageUrl(imageUrl);
-                    this.clearUserCaches(user);
-                    log.debug("Changed Information for User: {}", user);
+            .ifPresent(user -> {
+                user.setFirstName(firstName);
+                user.setLastName(lastName);
+                if (email != null) {
+                    user.setEmail(email.toLowerCase());
                 }
-            );
+                user.setLangKey(langKey);
+                user.setImageUrl(imageUrl);
+                this.clearUserCaches(user);
+                log.debug("Changed Information for User: {}", user);
+            });
     }
 
     @Transactional(readOnly = true)
@@ -155,15 +153,14 @@ public class UserService {
                 .getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority)
-                .map(
-                    authority -> {
-                        Authority auth = new Authority();
-                        auth.setName(authority);
-                        return auth;
-                    }
-                )
+                .map(authority -> {
+                    Authority auth = new Authority();
+                    auth.setName(authority);
+                    return auth;
+                })
                 .collect(Collectors.toSet())
         );
+
         return new AdminUserDTO(syncUserWithIdP(attributes, user));
     }
 
@@ -184,6 +181,8 @@ public class UserService {
         }
         if (details.get("given_name") != null) {
             user.setFirstName((String) details.get("given_name"));
+        } else if (details.get("name") != null) {
+            user.setFirstName((String) details.get("name"));
         }
         if (details.get("family_name") != null) {
             user.setLastName((String) details.get("family_name"));
