@@ -170,8 +170,8 @@ jhipster:
   api-docs:
     default-include-pattern: ${server.servlet.context-path:}/api/.*
     management-include-pattern: ${server.servlet.context-path:}/management/.*
-    title: jhipsterOauth2SampleApplication API
-    description: jhipsterOauth2SampleApplication API documentation
+    title: Jhipster Oauth 2 Sample Application API
+    description: Jhipster Oauth 2 Sample Application API documentation
     version: 0.0.1
     terms-of-service-url:
     contact-name:
