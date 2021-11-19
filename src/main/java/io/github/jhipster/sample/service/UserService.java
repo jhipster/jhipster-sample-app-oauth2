@@ -167,15 +167,20 @@ public class UserService {
     private static User getUser(Map<String, Object> details) {
         User user = new User();
         Boolean activated = Boolean.TRUE;
+        String sub = String.valueOf(details.get("sub"));
+        String username = null;
+        if (details.get("preferred_username") != null) {
+            username = ((String) details.get("preferred_username")).toLowerCase();
+        }
         // handle resource server JWT, where sub claim is email and uid is ID
         if (details.get("uid") != null) {
             user.setId((String) details.get("uid"));
-            user.setLogin((String) details.get("sub"));
+            user.setLogin(sub);
         } else {
-            user.setId((String) details.get("sub"));
+            user.setId(sub);
         }
-        if (details.get("preferred_username") != null) {
-            user.setLogin(((String) details.get("preferred_username")).toLowerCase());
+        if (username != null) {
+            user.setLogin(username);
         } else if (user.getLogin() == null) {
             user.setLogin(user.getId());
         }
@@ -192,8 +197,11 @@ public class UserService {
         }
         if (details.get("email") != null) {
             user.setEmail(((String) details.get("email")).toLowerCase());
+        } else if (sub.contains("|") && (username != null && username.contains("@"))) {
+            // special handling for Auth0
+            user.setEmail(username);
         } else {
-            user.setEmail((String) details.get("sub"));
+            user.setEmail(sub);
         }
         if (details.get("langKey") != null) {
             user.setLangKey((String) details.get("langKey"));

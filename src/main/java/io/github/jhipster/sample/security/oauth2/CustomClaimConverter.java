@@ -3,6 +3,7 @@ package io.github.jhipster.sample.security.oauth2;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.github.jhipster.sample.security.SecurityUtils;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -44,7 +45,10 @@ public class CustomClaimConverter implements Converter<Map<String, Object>, Map<
 
     public Map<String, Object> convert(Map<String, Object> claims) {
         Map<String, Object> convertedClaims = this.delegate.convert(claims);
-        if (RequestContextHolder.getRequestAttributes() != null) {
+        if (
+            RequestContextHolder.getRequestAttributes() != null &&
+            ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()) != null
+        ) {
             // Retrieve and set the token
             String token = bearerTokenResolver.resolve(
                 ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest()
@@ -75,6 +79,17 @@ public class CustomClaimConverter implements Converter<Map<String, Object>, Map<
                 if (user.has("family_name")) {
                     convertedClaims.put("family_name", user.get("family_name").asText());
                 }
+                if (user.has("email")) {
+                    convertedClaims.put("email", user.get("email").asText());
+                }
+                // Allow full name in a name claim - happens with Auth0
+                if (user.has("name")) {
+                    String[] name = user.get("name").asText().split("\\s+");
+                    if (name.length > 0) {
+                        convertedClaims.put("given_name", name[0]);
+                        convertedClaims.put("family_name", String.join(" ", Arrays.copyOfRange(name, 1, name.length)));
+                    }
+                }
                 if (user.has("groups")) {
                     List<String> groups = StreamSupport
                         .stream(user.get("groups").spliterator(), false)
@@ -82,14 +97,13 @@ public class CustomClaimConverter implements Converter<Map<String, Object>, Map<
                         .collect(Collectors.toList());
                     convertedClaims.put("groups", groups);
                 }
-            }
-
-            if (user.has(SecurityUtils.CLAIMS_NAMESPACE + "roles")) {
-                List<String> roles = StreamSupport
-                    .stream(user.get(SecurityUtils.CLAIMS_NAMESPACE + "roles").spliterator(), false)
-                    .map(JsonNode::asText)
-                    .collect(Collectors.toList());
-                convertedClaims.put("roles", roles);
+                if (user.has(SecurityUtils.CLAIMS_NAMESPACE + "roles")) {
+                    List<String> roles = StreamSupport
+                        .stream(user.get(SecurityUtils.CLAIMS_NAMESPACE + "roles").spliterator(), false)
+                        .map(JsonNode::asText)
+                        .collect(Collectors.toList());
+                    convertedClaims.put("roles", roles);
+                }
             }
         }
         return convertedClaims;
