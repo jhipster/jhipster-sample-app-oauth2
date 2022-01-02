@@ -68,7 +68,7 @@ public class UserResource {
      */
     @GetMapping("/users")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<List<AdminUserDTO>> getAllUsers(Pageable pageable) {
+    public ResponseEntity<List<AdminUserDTO>> getAllUsers(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get all User for an admin");
 
         final Page<AdminUserDTO> page = userService.getAllManagedUsers(pageable);

@@ -5,9 +5,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.github.jhipster.sample.security.SecurityUtils;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import org.springframework.core.convert.converter.Converter;
@@ -36,7 +36,7 @@ public class CustomClaimConverter implements Converter<Map<String, Object>, Map<
 
     private final ClientRegistration registration;
 
-    private final Map<String, ObjectNode> users = new HashMap<>();
+    private final Map<String, ObjectNode> users = new ConcurrentHashMap<>();
 
     public CustomClaimConverter(ClientRegistration registration, RestTemplate restTemplate) {
         this.registration = registration;
