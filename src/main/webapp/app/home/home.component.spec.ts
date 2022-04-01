@@ -26,16 +26,14 @@ describe('Home Component', () => {
     imageUrl: null,
   };
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [HomeComponent],
-        providers: [AccountService, LoginService],
-      })
-        .overrideTemplate(HomeComponent, '')
-        .compileComponents();
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [HomeComponent],
+      providers: [AccountService, LoginService],
     })
-  );
+      .overrideTemplate(HomeComponent, '')
+      .compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(HomeComponent);

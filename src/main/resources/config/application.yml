@@ -134,7 +134,6 @@ spring:
     basename: i18n/messages
   main:
     allow-bean-definition-overriding: true
-    allow-circular-references: true
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
@@ -164,7 +163,7 @@ spring:
           oidc:
             client-id: web_app
             client-secret: web_app
-            scope: openid,profile,email
+            scope: openid, profile, email, offline_access # last one for refresh tokens
 
 server:
   servlet:
