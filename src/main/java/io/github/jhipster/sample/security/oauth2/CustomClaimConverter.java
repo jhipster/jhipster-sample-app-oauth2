@@ -20,6 +20,7 @@ import org.springframework.security.oauth2.jwt.MappedJwtClaimSetConverter;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenResolver;
 import org.springframework.security.oauth2.server.resource.web.DefaultBearerTokenResolver;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -36,6 +37,7 @@ public class CustomClaimConverter implements Converter<Map<String, Object>, Map<
 
     private final ClientRegistration registration;
 
+    // todo: optimize for scale https://github.com/jhipster/generator-jhipster/issues/18868
     private final Map<String, ObjectNode> users = new ConcurrentHashMap<>();
 
     public CustomClaimConverter(ClientRegistration registration, RestTemplate restTemplate) {
@@ -44,19 +46,19 @@ public class CustomClaimConverter implements Converter<Map<String, Object>, Map<
     }
 
     public Map<String, Object> convert(Map<String, Object> claims) {
+        // Only look up user information if identity claims are missing
+        if (claims.containsKey("given_name") && claims.containsKey("family_name")) {
+            return claims;
+        }
         Map<String, Object> convertedClaims = this.delegate.convert(claims);
-        if (
-            RequestContextHolder.getRequestAttributes() != null &&
-            ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()) != null
-        ) {
+        RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
+        if (attributes instanceof ServletRequestAttributes) {
             // Retrieve and set the token
-            String token = bearerTokenResolver.resolve(
-                ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest()
-            );
+            String token = bearerTokenResolver.resolve(((ServletRequestAttributes) attributes).getRequest());
             HttpHeaders headers = new HttpHeaders();
             headers.set("Authorization", buildBearer(token));
 
-            // Retrieve user infos from OAuth provider if not already loaded
+            // Retrieve user info from OAuth provider if not already loaded
             ObjectNode user = users.computeIfAbsent(
                 claims.get("sub").toString(),
                 s -> {

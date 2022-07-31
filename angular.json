@@ -98,7 +98,6 @@
       }
     }
   },
-  "defaultProject": "jhipster-oauth-2-sample-application",
   "cli": {
     "cache": {
       "enabled": true,
