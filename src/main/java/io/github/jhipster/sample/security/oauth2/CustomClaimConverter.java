@@ -2,12 +2,14 @@ package io.github.jhipster.sample.security.oauth2;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import io.github.jhipster.sample.security.SecurityUtils;
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import org.springframework.core.convert.converter.Converter;
@@ -37,8 +39,14 @@ public class CustomClaimConverter implements Converter<Map<String, Object>, Map<
 
     private final ClientRegistration registration;
 
-    // todo: optimize for scale https://github.com/jhipster/generator-jhipster/issues/18868
-    private final Map<String, ObjectNode> users = new ConcurrentHashMap<>();
+    // See https://github.com/jhipster/generator-jhipster/issues/18868
+    // We don't use a distributed cache or the user selected cache implementation here on purpose
+    private final Cache<String, ObjectNode> users = Caffeine
+        .newBuilder()
+        .maximumSize(10_000)
+        .expireAfterWrite(Duration.ofHours(1))
+        .recordStats()
+        .build();
 
     public CustomClaimConverter(ClientRegistration registration, RestTemplate restTemplate) {
         this.registration = registration;
@@ -46,11 +54,11 @@ public class CustomClaimConverter implements Converter<Map<String, Object>, Map<
     }
 
     public Map<String, Object> convert(Map<String, Object> claims) {
+        Map<String, Object> convertedClaims = this.delegate.convert(claims);
         // Only look up user information if identity claims are missing
         if (claims.containsKey("given_name") && claims.containsKey("family_name")) {
-            return claims;
+            return convertedClaims;
         }
-        Map<String, Object> convertedClaims = this.delegate.convert(claims);
         RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
         if (attributes instanceof ServletRequestAttributes) {
             // Retrieve and set the token
@@ -59,7 +67,7 @@ public class CustomClaimConverter implements Converter<Map<String, Object>, Map<
             headers.set("Authorization", buildBearer(token));
 
             // Retrieve user info from OAuth provider if not already loaded
-            ObjectNode user = users.computeIfAbsent(
+            ObjectNode user = users.get(
                 claims.get("sub").toString(),
                 s -> {
                     ResponseEntity<ObjectNode> userInfo = restTemplate.exchange(
