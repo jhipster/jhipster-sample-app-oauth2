@@ -8,7 +8,7 @@ import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
 import { LoginService } from 'app/login/login.service';
 
-import { HomeComponent } from './home.component';
+import HomeComponent from './home.component';
 
 describe('Home Component', () => {
   let comp: HomeComponent;
@@ -28,7 +28,7 @@ describe('Home Component', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [HomeComponent],
+      imports: [HomeComponent],
       providers: [AccountService, LoginService],
     })
       .overrideTemplate(HomeComponent, '')
