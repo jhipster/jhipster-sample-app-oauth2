@@ -1,6 +1,5 @@
 package io.github.jhipster.sample;
 
-import io.github.jhipster.sample.JhipsterOauth2SampleApplicationApp;
 import io.github.jhipster.sample.config.AsyncSyncConfiguration;
 import io.github.jhipster.sample.config.EmbeddedSQL;
 import io.github.jhipster.sample.config.TestSecurityConfiguration;

@@ -122,8 +122,8 @@ Cypress.Commands.add('oauthLogout', () => {
             'X-XSRF-TOKEN': csrfCookie?.value,
             origin: loc$.origin,
           },
-        })
-      )
+        }),
+      ),
     )
     .then(res => {
       expect(res.status).to.eq(200);
