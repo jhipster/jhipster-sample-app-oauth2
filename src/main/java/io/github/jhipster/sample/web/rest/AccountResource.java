@@ -2,8 +2,8 @@ package io.github.jhipster.sample.web.rest;
 
 import io.github.jhipster.sample.service.UserService;
 import io.github.jhipster.sample.service.dto.AdminUserDTO;
-import jakarta.servlet.http.HttpServletRequest;
 import java.security.Principal;
+import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AbstractAuthenticationToken;

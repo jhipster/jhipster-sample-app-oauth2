@@ -1,12 +1,11 @@
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
-name: jhipsteroauth2sampleapplication
+version: '3.8'
 services:
   keycloak:
-    image: quay.io/keycloak/keycloak:21.1.2
+    image: quay.io/keycloak/keycloak:19.0.1
     command: ['start-dev --import-realm']
     volumes:
       - ./realm-config:/opt/keycloak/data/import
-      - ./realm-config/keycloak-health-check.sh:/opt/keycloak/health-check.sh
     environment:
       - KC_DB=dev-file
       - KEYCLOAK_ADMIN=admin
@@ -14,15 +13,8 @@ services:
       - KC_FEATURES=scripts
       - KC_HTTP_PORT=9080
       - KC_HTTPS_PORT=9443
-      - KC_HEALTH_ENABLED=true
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:
       - 127.0.0.1:9080:9080
       - 127.0.0.1:9443:9443
-    healthcheck:
-      test: 'bash /opt/keycloak/health-check.sh'
-      interval: 5s
-      timeout: 5s
-      retries: 20
-      start_period: 10s

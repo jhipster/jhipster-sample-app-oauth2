@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.HttpEntity;
@@ -100,14 +101,17 @@ public class CustomClaimConverter implements Converter<Map<String, Object>, Map<
                     }
                 }
                 if (user.has("groups")) {
-                    List<String> groups = StreamSupport.stream(user.get("groups").spliterator(), false).map(JsonNode::asText).toList();
+                    List<String> groups = StreamSupport
+                        .stream(user.get("groups").spliterator(), false)
+                        .map(JsonNode::asText)
+                        .collect(Collectors.toList());
                     convertedClaims.put("groups", groups);
                 }
                 if (user.has(SecurityUtils.CLAIMS_NAMESPACE + "roles")) {
                     List<String> roles = StreamSupport
                         .stream(user.get(SecurityUtils.CLAIMS_NAMESPACE + "roles").spliterator(), false)
                         .map(JsonNode::asText)
-                        .toList();
+                        .collect(Collectors.toList());
                     convertedClaims.put("roles", roles);
                 }
             }
