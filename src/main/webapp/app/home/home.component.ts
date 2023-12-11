@@ -10,7 +10,7 @@ import { Account } from 'app/core/auth/account.model';
   standalone: true,
   selector: 'jhi-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
+  styleUrl: './home.component.scss',
   imports: [SharedModule, RouterModule],
 })
 export default class HomeComponent implements OnInit {
