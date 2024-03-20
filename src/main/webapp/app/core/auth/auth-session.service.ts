@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
@@ -7,10 +7,8 @@ import { ApplicationConfigService } from '../config/application-config.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthServerProvider {
-  constructor(
-    private http: HttpClient,
-    private applicationConfigService: ApplicationConfigService,
-  ) {}
+  private http = inject(HttpClient);
+  private applicationConfigService = inject(ApplicationConfigService);
 
   logout(): Observable<Logout> {
     return this.http.post<Logout>(this.applicationConfigService.getEndpointFor('api/logout'), {});

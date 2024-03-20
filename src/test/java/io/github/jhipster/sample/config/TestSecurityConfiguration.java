@@ -37,8 +37,7 @@ public class TestSecurityConfiguration {
         Map<String, Object> metadata = new HashMap<>();
         metadata.put("end_session_endpoint", "https://jhipster.org/logout");
 
-        return ClientRegistration
-            .withRegistrationId("oidc")
+        return ClientRegistration.withRegistrationId("oidc")
             .issuerUri("{baseUrl}")
             .redirectUri("{baseUrl}/{action}/oauth2/code/{registrationId}")
             .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)

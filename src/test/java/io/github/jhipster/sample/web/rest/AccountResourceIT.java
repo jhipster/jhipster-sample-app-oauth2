@@ -38,8 +38,7 @@ class AccountResourceIT {
     @Test
     @Transactional
     void testGetExistingAccount() throws Exception {
-        TestSecurityContextHolder
-            .getContext()
+        TestSecurityContextHolder.getContext()
             .setAuthentication(registerAuthenticationToken(authorizedClientService, clientRegistration, testAuthenticationToken()));
 
         restAccountMockMvc

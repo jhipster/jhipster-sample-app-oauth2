@@ -53,7 +53,7 @@ describe('Home Component', () => {
       comp.ngOnInit();
 
       // THEN
-      expect(comp.account).toEqual(account);
+      expect(comp.account()).toEqual(account);
     });
   });
 

@@ -53,8 +53,7 @@ class LogoutResourceIT {
         claims.put("groups", Collections.singletonList(AuthoritiesConstants.USER));
         claims.put("sub", 123);
 
-        SecurityContextHolder
-            .getContext()
+        SecurityContextHolder.getContext()
             .setAuthentication(registerAuthenticationToken(authorizedClientService, clientRegistration, authenticationToken(claims)));
         SecurityContextHolderAwareRequestFilter authInjector = new SecurityContextHolderAwareRequestFilter();
         authInjector.afterPropertiesSet();

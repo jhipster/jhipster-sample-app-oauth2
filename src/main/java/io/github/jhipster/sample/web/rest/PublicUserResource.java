@@ -40,13 +40,4 @@ public class PublicUserResource {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
-
-    /**
-     * Gets a list of all roles.
-     * @return a string list of all roles.
-     */
-    @GetMapping("/authorities")
-    public List<String> getAuthorities() {
-        return userService.getAuthorities();
-    }
 }

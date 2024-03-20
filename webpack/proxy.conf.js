@@ -1,5 +1,5 @@
 function setupProxy({ tls }) {
-  const serverResources = ['/api', '/services', '/management', '/v3/api-docs', '/h2-console', '/oauth2', '/login', '/auth', '/health'];
+  const serverResources = ['/api', '/services', '/management', '/v3/api-docs', '/h2-console', '/auth', '/oauth2', '/login', '/health'];
   const conf = [
     {
       context: serverResources,
