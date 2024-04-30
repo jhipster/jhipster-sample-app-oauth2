@@ -2,7 +2,7 @@
 name: jhipsteroauth2sampleapplication
 services:
   keycloak:
-    image: quay.io/keycloak/keycloak:24.0.2
+    image: quay.io/keycloak/keycloak:24.0.3
     command: 'start-dev --import-realm'
     volumes:
       - ./realm-config:/opt/keycloak/data/import
