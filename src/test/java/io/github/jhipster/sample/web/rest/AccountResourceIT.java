@@ -7,7 +7,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.github.jhipster.sample.IntegrationTest;
+import io.github.jhipster.sample.repository.UserRepository;
 import io.github.jhipster.sample.security.AuthoritiesConstants;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -27,6 +29,9 @@ import org.springframework.transaction.annotation.Transactional;
 class AccountResourceIT {
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private MockMvc restAccountMockMvc;
 
     @Autowired
@@ -34,6 +39,12 @@ class AccountResourceIT {
 
     @Autowired
     ClientRegistration clientRegistration;
+
+    @AfterEach
+    public void cleanup() {
+        // Remove syncUserWithIdp users
+        userRepository.deleteAll();
+    }
 
     @Test
     @Transactional
