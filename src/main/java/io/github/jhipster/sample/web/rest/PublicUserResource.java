@@ -18,7 +18,7 @@ import tech.jhipster.web.util.PaginationUtil;
 @RequestMapping("/api")
 public class PublicUserResource {
 
-    private final Logger log = LoggerFactory.getLogger(PublicUserResource.class);
+    private static final Logger log = LoggerFactory.getLogger(PublicUserResource.class);
 
     private final UserService userService;
 
