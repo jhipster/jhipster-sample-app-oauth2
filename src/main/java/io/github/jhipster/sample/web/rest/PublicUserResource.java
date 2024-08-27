@@ -18,7 +18,7 @@ import tech.jhipster.web.util.PaginationUtil;
 @RequestMapping("/api")
 public class PublicUserResource {
 
-    private static final Logger log = LoggerFactory.getLogger(PublicUserResource.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PublicUserResource.class);
 
     private final UserService userService;
 
@@ -34,7 +34,7 @@ public class PublicUserResource {
      */
     @GetMapping("/users")
     public ResponseEntity<List<UserDTO>> getAllPublicUsers(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
-        log.debug("REST request to get all public User names");
+        LOG.debug("REST request to get all public User names");
 
         final Page<UserDTO> page = userService.getAllPublicUsers(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);

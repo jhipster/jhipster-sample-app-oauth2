@@ -30,7 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class UserService {
 
-    private static final Logger log = LoggerFactory.getLogger(UserService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
 
@@ -66,7 +66,7 @@ public class UserService {
                 user.setImageUrl(imageUrl);
                 userRepository.save(user);
                 this.clearUserCaches(user);
-                log.debug("Changed Information for User: {}", user);
+                LOG.debug("Changed Information for User: {}", user);
             });
     }
 
@@ -100,7 +100,7 @@ public class UserService {
         Collection<String> userAuthorities = user.getAuthorities().stream().map(Authority::getName).toList();
         for (String authority : userAuthorities) {
             if (!dbAuthorities.contains(authority)) {
-                log.debug("Saving authority '{}' in local database", authority);
+                LOG.debug("Saving authority '{}' in local database", authority);
                 Authority authorityToSave = new Authority();
                 authorityToSave.setName(authority);
                 authorityRepository.save(authorityToSave);
@@ -119,16 +119,16 @@ public class UserService {
                     idpModifiedDate = Instant.ofEpochSecond((Integer) details.get("updated_at"));
                 }
                 if (idpModifiedDate.isAfter(dbModifiedDate)) {
-                    log.debug("Updating user '{}' in local database", user.getLogin());
+                    LOG.debug("Updating user '{}' in local database", user.getLogin());
                     updateUser(user.getFirstName(), user.getLastName(), user.getEmail(), user.getLangKey(), user.getImageUrl());
                 }
                 // no last updated info, blindly update
             } else {
-                log.debug("Updating user '{}' in local database", user.getLogin());
+                LOG.debug("Updating user '{}' in local database", user.getLogin());
                 updateUser(user.getFirstName(), user.getLastName(), user.getEmail(), user.getLangKey(), user.getImageUrl());
             }
         } else {
-            log.debug("Saving user '{}' in local database", user.getLogin());
+            LOG.debug("Saving user '{}' in local database", user.getLogin());
             userRepository.save(user);
             this.clearUserCaches(user);
         }

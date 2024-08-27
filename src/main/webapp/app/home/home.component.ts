@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import SharedModule from 'app/shared/shared.module';

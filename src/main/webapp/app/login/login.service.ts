@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Location } from '@angular/common';
 
 import { AuthServerProvider } from 'app/core/auth/auth-session.service';

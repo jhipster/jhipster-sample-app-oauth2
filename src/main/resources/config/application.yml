@@ -87,6 +87,8 @@ management:
       repository:
         autotime:
           enabled: true
+    tags:
+      application: ${spring.application.name}
 
 spring:
   application:
@@ -148,9 +150,6 @@ spring:
             client-id: web_app
             client-secret: web_app
             scope: openid, profile, email, offline_access # last one for refresh tokens
-      resourceserver:
-        jwt:
-          principal-claim-name: preferred_username
   task:
     execution:
       thread-name-prefix: jhipster-oauth-2-sample-application-task-

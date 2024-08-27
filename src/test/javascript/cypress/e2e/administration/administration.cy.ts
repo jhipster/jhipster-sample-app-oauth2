@@ -1,10 +1,10 @@
 import {
-  metricsPageHeadingSelector,
+  configurationPageHeadingSelector,
   healthPageHeadingSelector,
   logsPageHeadingSelector,
-  configurationPageHeadingSelector,
-  swaggerPageSelector,
+  metricsPageHeadingSelector,
   swaggerFrameSelector,
+  swaggerPageSelector,
 } from '../../support/commands';
 
 describe('/admin', () => {

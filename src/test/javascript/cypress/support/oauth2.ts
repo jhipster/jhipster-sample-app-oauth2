@@ -1,5 +1,4 @@
-// eslint-disable-next-line spaced-comment
-/// <reference types="cypress" />
+/* eslint-disable @typescript-eslint/no-namespace */
 
 Cypress.Commands.add('getOauth2Data', () => {
   cy.request({
@@ -7,7 +6,7 @@ Cypress.Commands.add('getOauth2Data', () => {
     followRedirect: false,
   }).then(response => {
     const data = {
-      url: response.headers['location'],
+      url: response.headers.location,
     };
     cy.wrap(data).as('oauth2Data');
   });
@@ -41,8 +40,8 @@ Cypress.Commands.add('keycloakLogin', (oauth2Data, username: string, password: s
         followRedirect: false,
         form: true,
         body: {
-          username: username,
-          password: password,
+          username,
+          password,
         },
       });
     })
@@ -71,10 +70,10 @@ Cypress.Commands.add('auth0Login', (oauth2Data, username: string, password: stri
         followRedirect: true,
         form: true,
         body: {
-          state: state,
+          state,
           action: 'default',
-          username: username,
-          password: password,
+          username,
+          password,
         },
       });
     })
@@ -140,6 +139,7 @@ Cypress.Commands.add('oauthLogout', () => {
 
 declare global {
   namespace Cypress {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     interface Chainable<Subject> {
       getOauth2Data(): Cypress.Chainable;
       oauthLogin(oauth2Data, username: string, password: string): Cypress.Chainable;

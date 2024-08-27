@@ -2,10 +2,10 @@ package io.github.jhipster.sample.web.rest;
 
 import io.github.jhipster.sample.service.UserService;
 import io.github.jhipster.sample.service.dto.AdminUserDTO;
-import jakarta.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +27,7 @@ public class AccountResource {
         }
     }
 
-    private static final Logger log = LoggerFactory.getLogger(AccountResource.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AccountResource.class);
 
     private final UserService userService;
 
@@ -43,7 +43,6 @@ public class AccountResource {
      * @throws AccountResourceException {@code 500 (Internal Server Error)} if the user couldn't be returned.
      */
     @GetMapping("/account")
-    @SuppressWarnings("unchecked")
     public AdminUserDTO getAccount(Principal principal) {
         if (principal instanceof AbstractAuthenticationToken) {
             return userService.getUserFromAuthentication((AbstractAuthenticationToken) principal);
@@ -55,12 +54,12 @@ public class AccountResource {
     /**
      * {@code GET  /authenticate} : check if the user is authenticated, and return its login.
      *
-     * @param request the HTTP request.
+     * @param principal the authentication principal.
      * @return the login if the user is authenticated.
      */
-    @GetMapping("/authenticate")
-    public String isAuthenticated(HttpServletRequest request) {
-        log.debug("REST request to check if the current user is authenticated");
-        return request.getRemoteUser();
+    @GetMapping(value = "/authenticate", produces = MediaType.TEXT_PLAIN_VALUE)
+    public String isAuthenticated(Principal principal) {
+        LOG.debug("REST request to check if the current user is authenticated");
+        return principal == null ? null : principal.getName();
     }
 }
