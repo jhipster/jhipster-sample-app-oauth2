@@ -5,6 +5,9 @@ services:
     extends:
       file: ./mysql.yml
       service: mysql
+    profiles:
+      - ''
+      - prod
   keycloak:
     extends:
       file: ./keycloak.yml
