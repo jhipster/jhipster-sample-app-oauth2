@@ -7,8 +7,8 @@ import { ApplicationConfigService } from '../config/application-config.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthServerProvider {
-  private http = inject(HttpClient);
-  private applicationConfigService = inject(ApplicationConfigService);
+  private readonly http = inject(HttpClient);
+  private readonly applicationConfigService = inject(ApplicationConfigService);
 
   logout(): Observable<Logout> {
     return this.http.post<Logout>(this.applicationConfigService.getEndpointFor('api/logout'), {});

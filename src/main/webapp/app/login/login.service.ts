@@ -6,8 +6,8 @@ import { Logout } from './logout.model';
 
 @Injectable({ providedIn: 'root' })
 export class LoginService {
-  private location = inject(Location);
-  private authServerProvider = inject(AuthServerProvider);
+  private readonly location = inject(Location);
+  private readonly authServerProvider = inject(AuthServerProvider);
 
   login(): void {
     // If you have configured multiple OIDC providers, then, you can update this URL to /login.
