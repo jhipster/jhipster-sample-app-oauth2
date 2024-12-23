@@ -12,7 +12,6 @@ import io.github.jhipster.sample.security.AuthoritiesConstants;
 import io.github.jhipster.sample.service.mapper.UserMapper;
 import jakarta.persistence.EntityManager;
 import java.util.*;
-import java.util.Objects;
 import java.util.function.Consumer;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.AfterEach;
@@ -76,9 +75,9 @@ class UserResourceIT {
     public static User createEntity() {
         User persistUser = new User();
         persistUser.setId(UUID.randomUUID().toString());
-        persistUser.setLogin(DEFAULT_LOGIN + RandomStringUtils.randomAlphabetic(5));
+        persistUser.setLogin(DEFAULT_LOGIN + RandomStringUtils.insecure().nextAlphabetic(5));
         persistUser.setActivated(true);
-        persistUser.setEmail(RandomStringUtils.randomAlphabetic(5) + DEFAULT_EMAIL);
+        persistUser.setEmail(RandomStringUtils.insecure().nextAlphabetic(5) + DEFAULT_EMAIL);
         persistUser.setFirstName(DEFAULT_FIRSTNAME);
         persistUser.setLastName(DEFAULT_LASTNAME);
         persistUser.setImageUrl(DEFAULT_IMAGEURL);
@@ -103,13 +102,13 @@ class UserResourceIT {
 
     @AfterEach
     public void cleanupAndCheck() {
+        userRepository.deleteAll();
         cacheManager
             .getCacheNames()
             .stream()
             .map(cacheName -> this.cacheManager.getCache(cacheName))
             .filter(Objects::nonNull)
-            .forEach(Cache::clear);
-        userRepository.deleteAll();
+            .forEach(Cache::invalidate);
     }
 
     @Test

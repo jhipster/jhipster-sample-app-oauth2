@@ -46,7 +46,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 import tech.jhipster.config.JHipsterConstants;
 import tech.jhipster.config.JHipsterProperties;
-import tech.jhipster.web.filter.CookieCsrfFilter;
 
 @Configuration
 @EnableMethodSecurity(securedEnabled = true)
@@ -74,13 +73,12 @@ public class SecurityConfiguration {
                     .csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler())
             )
             .addFilterAfter(new SpaWebFilter(), BasicAuthenticationFilter.class)
-            .addFilterAfter(new CookieCsrfFilter(), BasicAuthenticationFilter.class)
             .headers(headers ->
                 headers
                     .contentSecurityPolicy(csp -> csp.policyDirectives(jHipsterProperties.getSecurity().getContentSecurityPolicy()))
                     .frameOptions(FrameOptionsConfig::sameOrigin)
                     .referrerPolicy(referrer -> referrer.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN))
-                    .permissionsPolicy(permissions ->
+                    .permissionsPolicyHeader(permissions ->
                         permissions.policy(
                             "camera=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), sync-xhr=()"
                         )
@@ -185,15 +183,16 @@ public class SecurityConfiguration {
     }
 
     /**
-     * Custom CSRF handler to provide BREACH protection.
+     * Custom CSRF handler to provide BREACH protection for Single-Page Applications (SPA).
      *
      * @see <a href="https://docs.spring.io/spring-security/reference/servlet/exploits/csrf.html#csrf-integration-javascript-spa">Spring Security Documentation - Integrating with CSRF Protection</a>
      * @see <a href="https://github.com/jhipster/generator-jhipster/pull/25907">JHipster - use customized SpaCsrfTokenRequestHandler to handle CSRF token</a>
      * @see <a href="https://stackoverflow.com/q/74447118/65681">CSRF protection not working with Spring Security 6</a>
      */
-    static final class SpaCsrfTokenRequestHandler extends CsrfTokenRequestAttributeHandler {
+    static final class SpaCsrfTokenRequestHandler implements CsrfTokenRequestHandler {
 
-        private final CsrfTokenRequestHandler delegate = new XorCsrfTokenRequestAttributeHandler();
+        private final CsrfTokenRequestHandler plain = new CsrfTokenRequestAttributeHandler();
+        private final CsrfTokenRequestHandler xor = new XorCsrfTokenRequestAttributeHandler();
 
         @Override
         public void handle(HttpServletRequest request, HttpServletResponse response, Supplier<CsrfToken> csrfToken) {
@@ -201,7 +200,10 @@ public class SecurityConfiguration {
              * Always use XorCsrfTokenRequestAttributeHandler to provide BREACH protection of
              * the CsrfToken when it is rendered in the response body.
              */
-            this.delegate.handle(request, response, csrfToken);
+            this.xor.handle(request, response, csrfToken);
+
+            // Render the token value to a cookie by causing the deferred token to be loaded.
+            csrfToken.get();
         }
 
         @Override
@@ -213,7 +215,7 @@ public class SecurityConfiguration {
              * raw CsrfToken.
              */
             if (StringUtils.hasText(request.getHeader(csrfToken.getHeaderName()))) {
-                return super.resolveCsrfTokenValue(request, csrfToken);
+                return this.plain.resolveCsrfTokenValue(request, csrfToken);
             }
             /*
              * In all other cases (e.g. if the request contains a request parameter), use
@@ -221,7 +223,7 @@ public class SecurityConfiguration {
              * when a server-side rendered form includes the _csrf request parameter as a
              * hidden input.
              */
-            return this.delegate.resolveCsrfTokenValue(request, csrfToken);
+            return this.xor.resolveCsrfTokenValue(request, csrfToken);
         }
     }
 }
