@@ -96,12 +96,12 @@ class UserResourceIT {
     }
 
     @BeforeEach
-    public void initTest() {
+    void initTest() {
         user = initTestUser();
     }
 
     @AfterEach
-    public void cleanupAndCheck() {
+    void cleanupAndCheck() {
         userRepository.deleteAll();
         cacheManager
             .getCacheNames()

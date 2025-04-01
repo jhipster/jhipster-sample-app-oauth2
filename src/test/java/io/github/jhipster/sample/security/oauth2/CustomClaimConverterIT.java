@@ -46,7 +46,7 @@ class CustomClaimConverterIT {
     private CustomClaimConverter customClaimConverter;
 
     @BeforeEach
-    public void initTest() {
+    void initTest() {
         customClaimConverter = new CustomClaimConverter(clientRegistrationRepository.findByRegistrationId("oidc"), restTemplate);
     }
 

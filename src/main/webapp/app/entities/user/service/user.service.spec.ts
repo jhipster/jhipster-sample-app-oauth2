@@ -109,7 +109,7 @@ describe('User Service', () => {
     });
 
     describe('compareUser', () => {
-      it('Should return true if both entities are null', () => {
+      it('should return true if both entities are null', () => {
         const entity1 = null;
         const entity2 = null;
 
@@ -118,7 +118,7 @@ describe('User Service', () => {
         expect(compareResult).toEqual(true);
       });
 
-      it('Should return false if one entity is null', () => {
+      it('should return false if one entity is null', () => {
         const entity1 = { id: '1344246c-16a7-46d1-bb61-2043f965c8d5' };
         const entity2 = null;
 
@@ -129,7 +129,7 @@ describe('User Service', () => {
         expect(compareResult2).toEqual(false);
       });
 
-      it('Should return false if primaryKey differs', () => {
+      it('should return false if primaryKey differs', () => {
         const entity1 = { id: '1344246c-16a7-46d1-bb61-2043f965c8d5' };
         const entity2 = { id: '1e61df13-b2d3-459d-875e-5607a4ccdbdb' };
 
@@ -140,7 +140,7 @@ describe('User Service', () => {
         expect(compareResult2).toEqual(false);
       });
 
-      it('Should return false if primaryKey matches', () => {
+      it('should return false if primaryKey matches', () => {
         const entity1 = { id: '1344246c-16a7-46d1-bb61-2043f965c8d5' };
         const entity2 = { id: '1344246c-16a7-46d1-bb61-2043f965c8d5' };
 
