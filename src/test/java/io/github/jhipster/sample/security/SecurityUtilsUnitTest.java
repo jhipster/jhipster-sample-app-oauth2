@@ -5,6 +5,7 @@ import static org.springframework.security.oauth2.core.oidc.endpoint.OidcParamet
 
 import java.time.Instant;
 import java.util.*;
+import java.util.Collections;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -100,8 +101,7 @@ class SecurityUtilsUnitTest {
     @Test
     void testAnonymousIsNotAuthenticated() {
         SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-        Collection<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.ANONYMOUS));
+        var authorities = Collections.singletonList(new SimpleGrantedAuthority(AuthoritiesConstants.ANONYMOUS));
         securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("anonymous", "anonymous", authorities));
         SecurityContextHolder.setContext(securityContext);
         boolean isAuthenticated = SecurityUtils.isAuthenticated();
@@ -111,9 +111,8 @@ class SecurityUtilsUnitTest {
     @Test
     void testHasCurrentUserThisAuthority() {
         SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-        Collection<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.USER));
-        securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("user", "user", authorities));
+        var authorities = Collections.singletonList(new SimpleGrantedAuthority(AuthoritiesConstants.USER));
+        securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("anonymous", "anonymous", authorities));
         SecurityContextHolder.setContext(securityContext);
 
         assertThat(SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.USER)).isTrue();
@@ -123,9 +122,8 @@ class SecurityUtilsUnitTest {
     @Test
     void testHasCurrentUserAnyOfAuthorities() {
         SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-        Collection<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.USER));
-        securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("user", "user", authorities));
+        var authorities = Collections.singletonList(new SimpleGrantedAuthority(AuthoritiesConstants.USER));
+        securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("anonymous", "anonymous", authorities));
         SecurityContextHolder.setContext(securityContext);
 
         assertThat(SecurityUtils.hasCurrentUserAnyOfAuthorities(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)).isTrue();
@@ -135,9 +133,8 @@ class SecurityUtilsUnitTest {
     @Test
     void testHasCurrentUserNoneOfAuthorities() {
         SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-        Collection<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.USER));
-        securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("user", "user", authorities));
+        var authorities = Collections.singletonList(new SimpleGrantedAuthority(AuthoritiesConstants.USER));
+        securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("anonymous", "anonymous", authorities));
         SecurityContextHolder.setContext(securityContext);
 
         assertThat(SecurityUtils.hasCurrentUserNoneOfAuthorities(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)).isFalse();

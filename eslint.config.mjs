@@ -122,12 +122,10 @@ export default tseslint.config(
   {
     files: ['**/*.html'],
     extends: [...angular.configs.templateRecommended, ...angular.configs.templateAccessibility],
-    rules: {},
-  },
-  {
-    // Html templates require some work
-    ignores: ['**/*.html'],
-    extends: [prettier],
+    rules: {
+      '@angular-eslint/template/click-events-have-key-events': 'off',
+      '@angular-eslint/template/interactive-supports-focus': 'off',
+    },
   },
   {
     files: ['src/test/javascript/cypress/**/*.ts'],
@@ -147,5 +145,9 @@ export default tseslint.config(
     },
   },
   // jhipster-needle-eslint-add-config - JHipster will add additional config here
-  prettier,
+  {
+    // Html templates require some work
+    ignores: ['**/*.html'],
+    extends: [prettier],
+  },
 );
