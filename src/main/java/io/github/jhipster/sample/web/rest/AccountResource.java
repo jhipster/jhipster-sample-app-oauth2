@@ -2,6 +2,7 @@ package io.github.jhipster.sample.web.rest;
 
 import io.github.jhipster.sample.service.UserService;
 import io.github.jhipster.sample.service.dto.AdminUserDTO;
+import java.io.Serial;
 import java.security.Principal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,7 @@ public class AccountResource {
 
     private static class AccountResourceException extends RuntimeException {
 
+        @Serial
         private static final long serialVersionUID = 1L;
 
         private AccountResourceException(String message) {

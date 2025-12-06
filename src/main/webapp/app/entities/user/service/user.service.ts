@@ -1,10 +1,11 @@
-import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+
 import { Observable } from 'rxjs';
 
-import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
+import { isPresent } from 'app/core/util/operators';
 import { IUser } from '../user.model';
 
 export type EntityResponseType = HttpResponse<IUser>;
@@ -18,7 +19,7 @@ export class UserService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/users');
 
   find(id: string): Observable<EntityResponseType> {
-    return this.http.get<IUser>(`${this.resourceUrl}/${id}`, { observe: 'response' });
+    return this.http.get<IUser>(`${this.resourceUrl}/${encodeURIComponent(id)}`, { observe: 'response' });
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {

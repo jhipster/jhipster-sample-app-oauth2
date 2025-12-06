@@ -30,7 +30,7 @@ export class ParseLinks {
         const url: string = section[0].replace(/<(.*)>/, '$1').trim(); // NOSONAR
         const queryString: Record<string, string> = {};
 
-        url.replace(/([^?=&]+)(=([^&]*))?/g, (_$0: string, $1: string | undefined, _$2: string | undefined, $3: string | undefined) => {
+        url.replaceAll(/([^?=&]+)(=([^&]*))?/g, (_$0: string, $1: string | undefined, _$2: string | undefined, $3: string | undefined) => {
           if ($1 !== undefined && $3 !== undefined) {
             queryString[$1] = decodeURIComponent($3);
           }
@@ -51,7 +51,7 @@ export class ParseLinks {
     const links: Record<string, number> = {};
     for (const [name, queryParams] of Object.entries(sections)) {
       if (queryParams?.page !== undefined) {
-        links[name] = parseInt(queryParams.page, 10);
+        links[name] = Number.parseInt(queryParams.page, 10);
       }
     }
     return links;

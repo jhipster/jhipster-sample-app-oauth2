@@ -1,4 +1,4 @@
-export class AlertError {
+export class AlertErrorModel {
   constructor(
     public message: string,
     public key?: string,

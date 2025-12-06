@@ -49,8 +49,9 @@ class AccountResourceIT {
     @Test
     @Transactional
     void testGetExistingAccount() throws Exception {
-        TestSecurityContextHolder.getContext()
-            .setAuthentication(registerAuthenticationToken(authorizedClientService, clientRegistration, testAuthenticationToken()));
+        TestSecurityContextHolder.getContext().setAuthentication(
+            registerAuthenticationToken(authorizedClientService, clientRegistration, testAuthenticationToken())
+        );
 
         restAccountMockMvc
             .perform(get("/api/account").accept(MediaType.APPLICATION_JSON))

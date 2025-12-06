@@ -1,6 +1,6 @@
-import { Buffer } from 'buffer';
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+
 import { Observable, Observer } from 'rxjs';
 
 export type FileLoadErrorType = 'not.image' | 'could.not.extract';
@@ -29,19 +29,19 @@ export class DataUtils {
    * Method to open file
    */
   openFile(data: string, contentType: string | null | undefined): void {
-    contentType = contentType ?? '';
+    contentType ??= '';
 
-    const byteCharacters = Buffer.from(data, 'base64').toString('binary');
+    const byteCharacters = atob(data);
     const byteNumbers = new Array(byteCharacters.length);
     for (let i = 0; i < byteCharacters.length; i++) {
-      byteNumbers[i] = byteCharacters.charCodeAt(i);
+      byteNumbers[i] = byteCharacters.codePointAt(i);
     }
     const byteArray = new Uint8Array(byteNumbers);
     const blob = new Blob([byteArray], {
       type: contentType,
     });
-    const fileURL = window.URL.createObjectURL(blob);
-    const win = window.open(fileURL);
+    const fileURL = globalThis.URL.createObjectURL(blob);
+    const win = globalThis.open(fileURL);
     win!.onload = function () {
       URL.revokeObjectURL(fileURL);
     };

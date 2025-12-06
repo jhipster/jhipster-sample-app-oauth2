@@ -1,4 +1,4 @@
-import { TestBed, inject } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { EventManager, EventWithContent } from './event-manager.service';
 
@@ -15,38 +15,37 @@ describe('Event Manager tests', () => {
 
   describe('EventManager', () => {
     let receivedEvent: EventWithContent<unknown> | string | null;
+    let eventManager: EventManager;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
         providers: [EventManager],
       });
+      eventManager = TestBed.inject(EventManager);
       receivedEvent = null;
     });
 
-    it('should not fail when nosubscriber and broadcasting', inject([EventManager], (eventManager: EventManager) => {
+    it('should not fail when nosubscriber and broadcasting', () => {
       expect(eventManager.observer).toBeUndefined();
       eventManager.broadcast({ name: 'modifier', content: 'modified something' });
-    }));
+    });
 
-    it('should create an observable and callback when broadcasted EventWithContent', inject(
-      [EventManager],
-      (eventManager: EventManager) => {
-        // GIVEN
-        eventManager.subscribe('modifier', (event: EventWithContent<unknown> | string) => (receivedEvent = event));
+    it('should create an observable and callback when broadcasted EventWithContent', () => {
+      // GIVEN
+      eventManager.subscribe('modifier', (event: EventWithContent<unknown> | string) => (receivedEvent = event));
 
-        // WHEN
-        eventManager.broadcast({ name: 'unrelatedModifier', content: 'unrelated modification' });
-        // THEN
-        expect(receivedEvent).toBeNull();
+      // WHEN
+      eventManager.broadcast({ name: 'unrelatedModifier', content: 'unrelated modification' });
+      // THEN
+      expect(receivedEvent).toBeNull();
 
-        // WHEN
-        eventManager.broadcast({ name: 'modifier', content: 'modified something' });
-        // THEN
-        expect(receivedEvent).toEqual({ name: 'modifier', content: 'modified something' });
-      },
-    ));
+      // WHEN
+      eventManager.broadcast({ name: 'modifier', content: 'modified something' });
+      // THEN
+      expect(receivedEvent).toEqual({ name: 'modifier', content: 'modified something' });
+    });
 
-    it('should create an observable and callback when broadcasted string', inject([EventManager], (eventManager: EventManager) => {
+    it('should create an observable and callback when broadcasted string', () => {
       // GIVEN
       eventManager.subscribe('modifier', (event: EventWithContent<unknown> | string) => (receivedEvent = event));
 
@@ -59,9 +58,9 @@ describe('Event Manager tests', () => {
       eventManager.broadcast('modifier');
       // THEN
       expect(receivedEvent).toEqual('modifier');
-    }));
+    });
 
-    it('should subscribe to multiple events', inject([EventManager], (eventManager: EventManager) => {
+    it('should subscribe to multiple events', () => {
       // GIVEN
       eventManager.subscribe(['modifier', 'modifier2'], (event: EventWithContent<unknown> | string) => (receivedEvent = event));
 
@@ -79,6 +78,6 @@ describe('Event Manager tests', () => {
       eventManager.broadcast('modifier2');
       // THEN
       expect(receivedEvent).toEqual('modifier2');
-    }));
+    });
   });
 });

@@ -21,5 +21,4 @@ import org.springframework.boot.test.context.SpringBootTest;
     }
 )
 @EmbeddedSQL
-public @interface IntegrationTest {
-}
+public @interface IntegrationTest {}

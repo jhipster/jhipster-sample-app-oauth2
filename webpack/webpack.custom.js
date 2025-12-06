@@ -1,12 +1,13 @@
 const path = require('path');
-const webpack = require('webpack');
-const { merge } = require('webpack-merge');
+
+const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { hashElement } = require('folder-hash');
 const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
-const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
+const webpack = require('webpack');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const { merge } = require('webpack-merge');
 const WebpackNotifierPlugin = require('webpack-notifier');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const environment = require('./environment');
 const proxyConfig = require('./proxy.conf');

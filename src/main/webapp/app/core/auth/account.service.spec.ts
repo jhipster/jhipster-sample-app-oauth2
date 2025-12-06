@@ -1,14 +1,12 @@
-jest.mock('app/core/auth/state-storage.service');
-
-import { Router } from '@angular/router';
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { InterpolatableTranslationObject, TranslateModule, TranslateService } from '@ngx-translate/core';
-import { of } from 'rxjs';
+import { Router } from '@angular/router';
 
-import { Account } from 'app/core/auth/account.model';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+
 import { Authority } from 'app/config/authority.constants';
+import { Account } from 'app/core/auth/account.model';
 import { StateStorageService } from 'app/core/auth/state-storage.service';
 
 import { AccountService } from './account.service';
@@ -38,17 +36,27 @@ describe('Account Service', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [TranslateModule.forRoot()],
-      providers: [provideHttpClient(), provideHttpClientTesting(), StateStorageService],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        {
+          provide: StateStorageService,
+          useValue: {
+            clearUrl: jest.fn(),
+            getUrl: jest.fn(),
+          },
+        },
+      ],
     });
 
     service = TestBed.inject(AccountService);
     httpMock = TestBed.inject(HttpTestingController);
     mockStorageService = TestBed.inject(StateStorageService);
     mockRouter = TestBed.inject(Router);
-    jest.spyOn(mockRouter, 'navigateByUrl').mockImplementation(() => Promise.resolve(true));
+    jest.spyOn(mockRouter, 'navigateByUrl');
 
     mockTranslateService = TestBed.inject(TranslateService);
-    jest.spyOn(mockTranslateService, 'use').mockImplementation(() => of({} as InterpolatableTranslationObject));
+    jest.spyOn(mockTranslateService, 'use');
   });
 
   afterEach(() => {

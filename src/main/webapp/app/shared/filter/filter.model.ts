@@ -1,4 +1,5 @@
 import { ParamMap } from '@angular/router';
+
 import { Subject } from 'rxjs';
 
 export interface IFilterOptions {
@@ -97,14 +98,13 @@ export class FilterOptions implements IFilterOptions {
     this._filterOptions = [];
 
     const filterRegex = /filter\[(.+)\]/;
-    params.keys
-      .filter(paramKey => filterRegex.test(paramKey))
-      .forEach(matchingParam => {
-        const matches = filterRegex.exec(matchingParam);
-        if (matches && matches.length > 1) {
-          this.getFilterOptionByName(matches[1], true).addValue(...params.getAll(matchingParam));
-        }
-      });
+    const matchingParams = params.keys.filter(paramKey => filterRegex.test(paramKey));
+    for (const matchingParam of matchingParams) {
+      const matches = filterRegex.exec(matchingParam);
+      if (matches && matches.length > 1) {
+        this.getFilterOptionByName(matches[1], true).addValue(...params.getAll(matchingParam));
+      }
+    }
 
     if (oldFilters.equals(this)) {
       return false;

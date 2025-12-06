@@ -1,9 +1,9 @@
-import { TestBed } from '@angular/core/testing';
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
 
-import { MetricsService } from './metrics.service';
 import { ThreadDump, ThreadState } from './metrics.model';
+import { MetricsService } from './metrics.service';
 
 describe('Logs Service', () => {
   let service: MetricsService;

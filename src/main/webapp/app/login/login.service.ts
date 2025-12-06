@@ -1,7 +1,8 @@
-import { Injectable, inject } from '@angular/core';
 import { Location } from '@angular/common';
+import { Injectable, inject } from '@angular/core';
 
 import { AuthServerProvider } from 'app/core/auth/auth-session.service';
+
 import { Logout } from './logout.model';
 
 @Injectable({ providedIn: 'root' })
