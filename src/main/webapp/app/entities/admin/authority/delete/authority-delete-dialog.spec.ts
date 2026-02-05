@@ -1,4 +1,5 @@
-import { HttpResponse, provideHttpClient } from '@angular/common/http';
+import { beforeEach, describe, expect, it, vitest } from 'vitest';
+import { HttpResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -16,7 +17,7 @@ describe('Authority Management Delete Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideHttpClient(), NgbActiveModal],
+      providers: [NgbActiveModal],
     });
     fixture = TestBed.createComponent(AuthorityDeleteDialog);
     comp = fixture.componentInstance;
@@ -27,8 +28,8 @@ describe('Authority Management Delete Component', () => {
   describe('confirmDelete', () => {
     it('should call delete service on confirmDelete', () => {
       // GIVEN
-      jest.spyOn(service, 'delete').mockReturnValue(of(new HttpResponse({ body: {} })));
-      jest.spyOn(mockActiveModal, 'close');
+      vitest.spyOn(service, 'delete').mockReturnValue(of(new HttpResponse({ body: {} })));
+      vitest.spyOn(mockActiveModal, 'close');
 
       // WHEN
       comp.confirmDelete('ABC');
@@ -40,9 +41,9 @@ describe('Authority Management Delete Component', () => {
 
     it('should not call delete service on clear', () => {
       // GIVEN
-      jest.spyOn(service, 'delete');
-      jest.spyOn(mockActiveModal, 'close');
-      jest.spyOn(mockActiveModal, 'dismiss');
+      vitest.spyOn(service, 'delete');
+      vitest.spyOn(mockActiveModal, 'close');
+      vitest.spyOn(mockActiveModal, 'dismiss');
 
       // WHEN
       comp.cancel();

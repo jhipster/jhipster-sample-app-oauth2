@@ -1,4 +1,4 @@
-import { provideHttpClient } from '@angular/common/http';
+import { beforeEach, describe, expect, it, vitest } from 'vitest';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
@@ -13,10 +13,11 @@ describe('Logs', () => {
   let fixture: ComponentFixture<Logs>;
   let service: LogsService;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [provideHttpClient(), provideHttpClientTesting(), LogsService],
-    });
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [Logs],
+      providers: [provideHttpClientTesting(), LogsService],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -35,7 +36,7 @@ describe('Logs', () => {
     it('should call load all on init', () => {
       // GIVEN
       const log = new Log('main', 'WARN');
-      jest.spyOn(service, 'findAll').mockReturnValue(
+      vitest.spyOn(service, 'findAll').mockReturnValue(
         of({
           loggers: {
             main: {
@@ -58,8 +59,8 @@ describe('Logs', () => {
     it('should change log level correctly', () => {
       // GIVEN
       const log = new Log('main', 'ERROR');
-      jest.spyOn(service, 'changeLevel').mockReturnValue(of({}));
-      jest.spyOn(service, 'findAll').mockReturnValue(
+      vitest.spyOn(service, 'changeLevel').mockReturnValue(of({}));
+      vitest.spyOn(service, 'findAll').mockReturnValue(
         of({
           loggers: {
             main: {

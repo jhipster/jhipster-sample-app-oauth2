@@ -1,4 +1,5 @@
-import { HttpHeaders, HttpResponse, provideHttpClient } from '@angular/common/http';
+import { MockInstance, beforeEach, describe, expect, it, vitest } from 'vitest';
+import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
@@ -18,13 +19,12 @@ describe('Authority Management Component', () => {
   let comp: Authority;
   let fixture: ComponentFixture<Authority>;
   let service: AuthorityService;
-  let routerNavigateSpy: jest.SpyInstance<Promise<boolean>>;
+  let routerNavigateSpy: MockInstance;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [TranslateModule.forRoot()],
       providers: [
-        provideHttpClient(),
         provideHttpClientTesting(),
         {
           provide: ActivatedRoute,
@@ -55,9 +55,9 @@ describe('Authority Management Component', () => {
     fixture = TestBed.createComponent(Authority);
     comp = fixture.componentInstance;
     service = TestBed.inject(AuthorityService);
-    routerNavigateSpy = jest.spyOn(comp.router, 'navigate');
+    routerNavigateSpy = vitest.spyOn(comp.router, 'navigate');
 
-    jest
+    vitest
       .spyOn(service, 'query')
       .mockReturnValueOnce(
         of(
@@ -96,7 +96,7 @@ describe('Authority Management Component', () => {
   describe('trackName', () => {
     it('should forward to authorityService', () => {
       const entity = { name: '572a7ecc-bf76-43f4-8026-46b42fba586d' };
-      jest.spyOn(service, 'getAuthorityIdentifier');
+      vitest.spyOn(service, 'getAuthorityIdentifier');
       const name = comp.trackName(entity);
       expect(service.getAuthorityIdentifier).toHaveBeenCalledWith(entity);
       expect(name).toBe(entity.name);
@@ -135,12 +135,12 @@ describe('Authority Management Component', () => {
       // NgbModal is not a singleton using TestBed.inject.
       // ngbModal = TestBed.inject(NgbModal);
       ngbModal = (comp as any).modalService;
-      jest.spyOn(ngbModal, 'open').mockReturnValue(deleteModalMock);
+      vitest.spyOn(ngbModal, 'open').mockReturnValue(deleteModalMock);
     });
 
     it('on confirm should call load', inject([], () => {
       // GIVEN
-      jest.spyOn(comp, 'load');
+      vitest.spyOn(comp, 'load');
 
       // WHEN
       comp.delete(sampleWithRequiredData);
@@ -153,7 +153,7 @@ describe('Authority Management Component', () => {
 
     it('on dismiss should call load', inject([], () => {
       // GIVEN
-      jest.spyOn(comp, 'load');
+      vitest.spyOn(comp, 'load');
 
       // WHEN
       comp.delete(sampleWithRequiredData);

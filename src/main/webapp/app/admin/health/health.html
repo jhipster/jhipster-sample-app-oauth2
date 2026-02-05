@@ -16,7 +16,7 @@
           <th scope="col" class="text-center" jhiTranslate="health.details.details">Details</th>
         </tr>
       </thead>
-      @if (health) {
+      @if (health(); as health) {
         <tbody>
           @for (componentHealth of health.components | keyvalue; track componentHealth.key) {
             <tr>
@@ -24,6 +24,7 @@
                 {{
                   {
                     diskSpace: 'Disk space',
+                    ssl: 'SSL',
                     mail: 'Email',
                     livenessState: 'Liveness state',
                     readinessState: 'Readiness state',
@@ -35,7 +36,7 @@
               <td class="text-center">
                 <span
                   class="badge"
-                  [ngClass]="getBadgeClass(componentHealth.value!.status)"
+                  [class]="getBadgeClass(componentHealth.value!.status)"
                   [jhiTranslate]="'health.status.' + (componentHealth.value?.status ?? 'UNKNOWN')"
                 >
                   {{

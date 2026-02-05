@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, vitest } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AlertService } from 'app/core/util/alert.service';
@@ -15,8 +16,8 @@ describe('Alert Component', () => {
         {
           provide: AlertService,
           useValue: {
-            clear: jest.fn(),
-            get: jest.fn(),
+            clear: vitest.fn(),
+            get: vitest.fn(),
           },
         },
       ],

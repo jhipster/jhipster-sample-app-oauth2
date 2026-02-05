@@ -1,12 +1,16 @@
+import { DecimalPipe } from '@angular/common';
 import { Component, input } from '@angular/core';
 
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateModule } from '@ngx-translate/core';
+
 import { GarbageCollector } from 'app/admin/metrics/metrics.model';
-import SharedModule from 'app/shared/shared.module';
+import { TranslateDirective } from 'app/shared/language';
 
 @Component({
   selector: 'jhi-metrics-garbagecollector',
   templateUrl: './metrics-garbagecollector.html',
-  imports: [SharedModule],
+  imports: [NgbModule, DecimalPipe, TranslateDirective, TranslateModule],
 })
 export class MetricsGarbageCollector {
   /**

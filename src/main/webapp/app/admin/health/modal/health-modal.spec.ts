@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, vitest } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -96,7 +97,7 @@ describe('HealthModal', () => {
   describe('dismiss', () => {
     it('should call dismiss when dismiss modal is called', () => {
       // GIVEN
-      const spy = jest.spyOn(mockActiveModal, 'dismiss');
+      const spy = vitest.spyOn(mockActiveModal, 'dismiss');
 
       // WHEN
       comp.dismiss();

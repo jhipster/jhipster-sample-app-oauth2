@@ -1,4 +1,5 @@
-import { HttpResponse, provideHttpClient } from '@angular/common/http';
+import { beforeEach, describe, expect, it, vitest } from 'vitest';
+import { HttpResponse } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, ActivatedRouteSnapshot, Router, convertToParamMap } from '@angular/router';
 
@@ -17,7 +18,6 @@ describe('Authority routing resolve service', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        provideHttpClient(),
         {
           provide: ActivatedRoute,
           useValue: {
@@ -29,7 +29,7 @@ describe('Authority routing resolve service', () => {
       ],
     });
     mockRouter = TestBed.inject(Router);
-    jest.spyOn(mockRouter, 'navigate');
+    vitest.spyOn(mockRouter, 'navigate');
     mockActivatedRouteSnapshot = TestBed.inject(ActivatedRoute).snapshot;
     service = TestBed.inject(AuthorityService);
   });
@@ -37,7 +37,7 @@ describe('Authority routing resolve service', () => {
   describe('resolve', () => {
     it('should return IAuthority returned by find', async () => {
       // GIVEN
-      service.find = jest.fn(name => of(new HttpResponse({ body: { name } })));
+      service.find = vitest.fn(name => of(new HttpResponse({ body: { name } })));
       mockActivatedRouteSnapshot.params = { name: 'ABC' };
 
       // WHEN
@@ -57,7 +57,7 @@ describe('Authority routing resolve service', () => {
 
     it('should return null if id is not provided', async () => {
       // GIVEN
-      service.find = jest.fn();
+      service.find = vitest.fn();
       mockActivatedRouteSnapshot.params = {};
 
       // WHEN
@@ -77,7 +77,7 @@ describe('Authority routing resolve service', () => {
 
     it('should route to 404 page if data not found in server', async () => {
       // GIVEN
-      jest.spyOn(service, 'find').mockReturnValue(of(new HttpResponse<IAuthority>({ body: null })));
+      vitest.spyOn(service, 'find').mockReturnValue(of(new HttpResponse<IAuthority>({ body: null })));
       mockActivatedRouteSnapshot.params = { name: 'ABC' };
 
       // WHEN

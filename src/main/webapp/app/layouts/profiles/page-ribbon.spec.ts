@@ -1,4 +1,4 @@
-import { provideHttpClient } from '@angular/common/http';
+import { beforeEach, describe, expect, it, vitest } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { of } from 'rxjs';
@@ -14,12 +14,6 @@ describe('Page Ribbon Component', () => {
   let profileService: ProfileService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [provideHttpClient()],
-    });
-  });
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(PageRibbon);
     comp = fixture.componentInstance;
     profileService = TestBed.inject(ProfileService);
@@ -27,7 +21,7 @@ describe('Page Ribbon Component', () => {
 
   it('should call profileService.getProfileInfo on init', () => {
     // GIVEN
-    jest.spyOn(profileService, 'getProfileInfo').mockReturnValue(of(new ProfileInfo()));
+    vitest.spyOn(profileService, 'getProfileInfo').mockReturnValue(of(new ProfileInfo()));
 
     // WHEN
     comp.ngOnInit();

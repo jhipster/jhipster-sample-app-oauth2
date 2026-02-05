@@ -1,8 +1,10 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject, signal } from '@angular/core';
 
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { TranslateModule } from '@ngx-translate/core';
 import { combineLatest } from 'rxjs';
 
-import SharedModule from 'app/shared/shared.module';
+import { TranslateDirective } from 'app/shared/language';
 
 import { JvmMemory } from './blocks/jvm-memory/jvm-memory';
 import { JvmThreads } from './blocks/jvm-threads/jvm-threads';
@@ -20,7 +22,9 @@ import { MetricsService } from './metrics.service';
   templateUrl: './metrics.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    SharedModule,
+    TranslateDirective,
+    TranslateModule,
+    FontAwesomeModule,
     JvmMemory,
     JvmThreads,
     MetricsCache,

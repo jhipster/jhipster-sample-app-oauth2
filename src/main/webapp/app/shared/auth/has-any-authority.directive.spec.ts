@@ -1,4 +1,4 @@
-import { provideHttpClient } from '@angular/common/http';
+import { beforeEach, describe, expect, it, vitest } from 'vitest';
 import { Component, ElementRef, WritableSignal, signal, viewChild } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
@@ -25,11 +25,10 @@ describe('HasAnyAuthorityDirective tests', () => {
     TestBed.configureTestingModule({
       imports: [TranslateModule.forRoot()],
       providers: [
-        provideHttpClient(),
         {
           provide: AccountService,
           useValue: {
-            isAuthenticated: jest.fn(),
+            isAuthenticated: vitest.fn(),
           },
         },
       ],
@@ -39,13 +38,13 @@ describe('HasAnyAuthorityDirective tests', () => {
   beforeEach(() => {
     mockAccountService = TestBed.inject(AccountService);
     currentAccount = signal<Account | null>({ activated: true, authorities: [] } as any);
-    mockAccountService.trackCurrentAccount = jest.fn(() => currentAccount);
+    mockAccountService.trackCurrentAccount = vitest.fn(() => currentAccount);
   });
 
   describe('set jhiHasAnyAuthority', () => {
     it('should show restricted content to user if user has required role', () => {
       // GIVEN
-      mockAccountService.hasAnyAuthority = jest.fn(() => true);
+      mockAccountService.hasAnyAuthority = vitest.fn(() => true);
       const fixture = TestBed.createComponent(TestHasAnyAuthorityDirective);
       const comp = fixture.componentInstance;
 
@@ -58,7 +57,7 @@ describe('HasAnyAuthorityDirective tests', () => {
 
     it('should not show restricted content to user if user has not required role', () => {
       // GIVEN
-      mockAccountService.hasAnyAuthority = jest.fn(() => false);
+      mockAccountService.hasAnyAuthority = vitest.fn(() => false);
       const fixture = TestBed.createComponent(TestHasAnyAuthorityDirective);
       const comp = fixture.componentInstance;
 
@@ -73,7 +72,7 @@ describe('HasAnyAuthorityDirective tests', () => {
   describe('change authorities', () => {
     it('should show or not show restricted content correctly if user authorities are changing', () => {
       // GIVEN
-      mockAccountService.hasAnyAuthority = jest.fn((): boolean => Boolean(currentAccount()));
+      mockAccountService.hasAnyAuthority = vitest.fn((): boolean => Boolean(currentAccount()));
       const fixture = TestBed.createComponent(TestHasAnyAuthorityDirective);
       const comp = fixture.componentInstance;
 

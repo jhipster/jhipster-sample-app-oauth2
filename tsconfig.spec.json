@@ -4,7 +4,6 @@
   "compilerOptions": {
     "composite": true,
     "outDir": "target/out-tsc/spec",
-    "module": "node20",
-    "types": ["jest", "node"]
+    "types": ["node"]
   }
 }

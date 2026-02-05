@@ -1,7 +1,11 @@
+import { JsonPipe, KeyValuePipe } from '@angular/common';
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import SharedModule from 'app/shared/shared.module';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { TranslateModule } from '@ngx-translate/core';
+
+import { TranslateDirective } from 'app/shared/language';
 import { SortByDirective, SortDirective, SortService, sortStateSignal } from 'app/shared/sort';
 
 import { Bean, PropertySource } from './configuration.model';
@@ -10,7 +14,7 @@ import { ConfigurationService } from './configuration.service';
 @Component({
   selector: 'jhi-configuration',
   templateUrl: './configuration.html',
-  imports: [SharedModule, FormsModule, SortDirective, SortByDirective],
+  imports: [FontAwesomeModule, FormsModule, SortDirective, SortByDirective, KeyValuePipe, JsonPipe, TranslateDirective, TranslateModule],
 })
 export default class Configuration implements OnInit {
   allBeans = signal<Bean[] | undefined>(undefined);

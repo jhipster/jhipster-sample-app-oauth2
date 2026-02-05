@@ -1,7 +1,9 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 
-import { TranslateService } from '@ngx-translate/core';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { environment } from 'environments/environment';
 
 import { LANGUAGES } from 'app/config/language.constants';
@@ -10,7 +12,8 @@ import { StateStorageService } from 'app/core/auth/state-storage.service';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
 import { LoginService } from 'app/login/login.service';
 import HasAnyAuthorityDirective from 'app/shared/auth/has-any-authority.directive';
-import SharedModule from 'app/shared/shared.module';
+import { TranslateDirective } from 'app/shared/language';
+import FindLanguageFromKeyPipe from 'app/shared/language/find-language-from-key.pipe';
 
 import ActiveMenuDirective from './active-menu.directive';
 
@@ -18,7 +21,17 @@ import ActiveMenuDirective from './active-menu.directive';
   selector: 'jhi-navbar',
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
-  imports: [RouterLink, RouterLinkActive, SharedModule, HasAnyAuthorityDirective, ActiveMenuDirective],
+  imports: [
+    RouterLink,
+    RouterLinkActive,
+    FontAwesomeModule,
+    NgbModule,
+    HasAnyAuthorityDirective,
+    ActiveMenuDirective,
+    FindLanguageFromKeyPipe,
+    TranslateDirective,
+    TranslateModule,
+  ],
 })
 export default class Navbar implements OnInit {
   inProduction = signal(true);

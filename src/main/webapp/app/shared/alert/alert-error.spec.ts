@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from 'vitest';
 import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
@@ -5,6 +6,8 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { AlertModel, AlertService } from 'app/core/util/alert.service';
 import { EventManager } from 'app/core/util/event-manager.service';
+import { MESSAGE_ERROR_HEADER_NAME, MESSAGE_PARAM_HEADER_NAME } from 'app/shared/jhipster/constants';
+import { ProblemWithMessageType } from 'app/shared/jhipster/problem-details';
 
 import { AlertError } from './alert-error';
 
@@ -69,7 +72,7 @@ describe('Alert Error Component', () => {
         status: 400,
         statusText: 'Bad Request',
         error: {
-          type: 'https://www.jhipster.tech/problem/problem-with-message',
+          type: ProblemWithMessageType,
           title: 'Bad Request',
           status: 400,
           path: '/api/foos',
@@ -104,7 +107,7 @@ describe('Alert Error Component', () => {
         status: 400,
         statusText: 'Bad Request',
         error: {
-          type: 'https://www.jhipster.tech/problem/problem-with-message',
+          type: ProblemWithMessageType,
           title: 'Method argument not valid',
           status: 400,
           path: '/api/foos',
@@ -122,7 +125,7 @@ describe('Alert Error Component', () => {
       // GIVEN
       const response = new HttpErrorResponse({
         url: 'http://localhost:8080/api/foos',
-        headers: new HttpHeaders().append('app-error', 'Error Message').append('app-params', 'foo'),
+        headers: new HttpHeaders().append(MESSAGE_ERROR_HEADER_NAME, 'header.error').append(MESSAGE_PARAM_HEADER_NAME, 'foo'),
         status: 400,
         statusText: 'Bad Request',
         error: {
@@ -133,7 +136,7 @@ describe('Alert Error Component', () => {
       eventManager.broadcast({ name: 'jhipsterOauth2SampleApplicationApp.httpError', content: response });
       // THEN
       expect(comp.alerts().length).toBe(1);
-      expect(comp.alerts()[0].translationKey).toBe('Error Message');
+      expect(comp.alerts()[0].translationKey).toBe('header.error');
     });
 
     it('should display an alert on status 500 with detail', () => {

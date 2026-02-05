@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'vitest';
+
 import { filterNaN, isPresent } from './operators';
 
 describe('Operators Test', () => {

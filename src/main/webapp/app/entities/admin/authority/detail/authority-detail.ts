@@ -1,12 +1,18 @@
 import { Component, input } from '@angular/core';
 
-import SharedModule from 'app/shared/shared.module';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateModule } from '@ngx-translate/core';
+
+import { Alert } from 'app/shared/alert/alert';
+import { AlertError } from 'app/shared/alert/alert-error';
+import { TranslateDirective } from 'app/shared/language';
 import { IAuthority } from '../authority.model';
 
 @Component({
   selector: 'jhi-authority-detail',
   templateUrl: './authority-detail.html',
-  imports: [SharedModule],
+  imports: [FontAwesomeModule, NgbModule, Alert, AlertError, TranslateDirective, TranslateModule],
 })
 export class AuthorityDetail {
   authority = input<IAuthority | null>(null);

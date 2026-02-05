@@ -1,4 +1,4 @@
-import { Directive, HostListener, contentChild, effect, inject, input } from '@angular/core';
+import { Directive, contentChild, effect, inject, input } from '@angular/core';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { IconDefinition, faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
@@ -7,6 +7,9 @@ import { SortDirective } from './sort.directive';
 
 @Directive({
   selector: '[jhiSortBy]',
+  host: {
+    '(click)': 'onClick()',
+  },
 })
 export class SortByDirective {
   readonly jhiSortBy = input.required<string>();
@@ -32,7 +35,6 @@ export class SortByDirective {
     });
   }
 
-  @HostListener('click')
   onClick(): void {
     if (this.iconComponent()) {
       this.sort.sort(this.jhiSortBy());

@@ -1,5 +1,5 @@
+import { beforeEach, describe, expect, it, vitest } from 'vitest';
 import { DOCUMENT } from '@angular/common';
-import { provideHttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Title } from '@angular/platform-browser';
@@ -27,12 +27,11 @@ describe('Main', () => {
     TestBed.configureTestingModule({
       imports: [TranslateModule.forRoot()],
       providers: [
-        provideHttpClient(),
         Title,
         {
           provide: AccountService,
           useValue: {
-            identity: jest.fn(() => of(null)),
+            identity: vitest.fn(() => of(null)),
           },
         },
         { provide: TitleStrategy, useClass: AppPageTitleStrategy },
@@ -62,9 +61,9 @@ describe('Main', () => {
 
     beforeEach(() => {
       routerState.snapshot.root = { data: {} };
-      jest.spyOn(translateService, 'get').mockImplementation((key: string | string[]) => of(`${key as string} translated`));
-      jest.spyOn(translateService, 'getCurrentLang').mockReturnValue('en');
-      jest.spyOn(titleService, 'setTitle');
+      vitest.spyOn(translateService, 'get').mockImplementation((key: string | string[]) => of(`${key as string} translated`));
+      vitest.spyOn(translateService, 'getCurrentLang').mockReturnValue('en');
+      vitest.spyOn(titleService, 'setTitle');
       comp.ngOnInit();
     });
 

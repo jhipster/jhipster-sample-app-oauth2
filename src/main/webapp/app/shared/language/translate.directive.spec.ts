@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, vitest } from 'vitest';
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
@@ -27,7 +28,7 @@ describe('TranslateDirective Tests', () => {
   });
 
   it('should change HTML', () => {
-    const spy = jest.spyOn(translateService, 'get');
+    const spy = vitest.spyOn(translateService, 'get');
 
     fixture.detectChanges();
 

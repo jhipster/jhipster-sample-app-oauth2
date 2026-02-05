@@ -1,24 +1,20 @@
-import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
+import { inject } from '@angular/core';
 
-import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 
-@Injectable()
-export class ErrorHandlerInterceptor implements HttpInterceptor {
-  private readonly eventManager = inject(EventManager);
+export const errorHandlerInterceptor: HttpInterceptorFn = (req, next) => {
+  const eventManager = inject(EventManager);
 
-  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    return next.handle(request).pipe(
-      tap({
-        error: (err: HttpErrorResponse) => {
-          if (!(err.status === 401 && (err.message === '' || err.url?.includes('api/account')))) {
-            this.eventManager.broadcast(new EventWithContent('jhipsterOauth2SampleApplicationApp.httpError', err));
-          }
-        },
-      }),
-    );
-  }
-}
+  return next(req).pipe(
+    tap({
+      error(err: HttpErrorResponse) {
+        if (!(err.status === 401 && (err.message === '' || err.url?.includes('api/account')))) {
+          eventManager.broadcast(new EventWithContent('jhipsterOauth2SampleApplicationApp.httpError', err));
+        }
+      },
+    }),
+  );
+};

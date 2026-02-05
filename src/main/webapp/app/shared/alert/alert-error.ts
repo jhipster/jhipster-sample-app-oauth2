@@ -1,4 +1,3 @@
-import { NgClass } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, inject, signal } from '@angular/core';
 
@@ -8,13 +7,14 @@ import { Subscription } from 'rxjs';
 
 import { AlertModel, AlertService } from 'app/core/util/alert.service';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
+import { getMessageFromHeaders } from 'app/shared/jhipster/headers';
 
 import { AlertErrorModel } from './alert-error.model';
 
 @Component({
   selector: 'jhi-alert-error',
   templateUrl: './alert-error.html',
-  imports: [NgClass, NgbModule],
+  imports: [NgbModule],
 })
 export class AlertError implements OnDestroy {
   alerts = signal<AlertModel[]>([]);
@@ -87,19 +87,13 @@ export class AlertError implements OnDestroy {
   }
 
   private handleBadRequest(httpErrorResponse: HttpErrorResponse): void {
-    const arr = httpErrorResponse.headers.keys();
-    let errorHeader: string | null = null;
-    let entityKey: string | null = null;
-    for (const entry of arr) {
-      if (entry.toLowerCase().endsWith('app-error')) {
-        errorHeader = httpErrorResponse.headers.get(entry);
-      } else if (entry.toLowerCase().endsWith('app-params')) {
-        entityKey = httpErrorResponse.headers.get(entry);
-      }
-    }
-    if (errorHeader) {
-      const alertData = entityKey ? { entityName: this.translateService.instant(`global.menu.entities.${entityKey}`) } : undefined;
-      this.addErrorAlert(errorHeader, errorHeader, alertData);
+    const headers = Object.fromEntries(httpErrorResponse.headers.keys().map(key => [key, httpErrorResponse.headers.getAll(key)]));
+    const message = getMessageFromHeaders(headers);
+    if (message.errorKey) {
+      const alertData = message.param ? { entityName: this.translateService.instant(`global.menu.entities.${message.param}`) } : undefined;
+      this.addErrorAlert(message.errorKey, message.errorKey, alertData);
+    } else if (message.errorMessage) {
+      this.addErrorAlert(message.errorMessage);
     } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.fieldErrors) {
       this.handleFieldsError(httpErrorResponse);
     } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.message) {

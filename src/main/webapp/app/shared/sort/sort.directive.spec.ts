@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, vitest } from 'vitest';
 import { Component, DebugElement, Type } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
@@ -17,7 +18,7 @@ import { SortDirective } from './sort.directive';
 })
 class TestSortDirective {
   sortState = sortStateSignal({ predicate: 'ID' });
-  transition = jest.fn().mockImplementation((sortState: SortState) => {
+  transition = vitest.fn().mockImplementation((sortState: SortState) => {
     this.sortState.set(sortState);
   });
 }

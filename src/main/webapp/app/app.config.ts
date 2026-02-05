@@ -1,5 +1,5 @@
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { ApplicationConfig, LOCALE_ID, importProvidersFrom, inject, provideZonelessChangeDetection } from '@angular/core';
+import { provideHttpClient, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
+import { ApplicationConfig, LOCALE_ID, importProvidersFrom, inject } from '@angular/core';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import {
   NavigationError,
@@ -14,16 +14,18 @@ import {
 import { ServiceWorkerModule } from '@angular/service-worker';
 
 import { NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
-
-import './config/dayjs';
 import { environment } from 'environments/environment';
 
+import { authExpiredInterceptor } from 'app/core/interceptor/auth-expired.interceptor';
+import { errorHandlerInterceptor } from 'app/core/interceptor/error-handler.interceptor';
+import { notificationInterceptor } from 'app/core/interceptor/notification.interceptor';
+
+import './config/dayjs';
 import { TranslationModule } from 'app/shared/language/translation.module';
 
 import { AppPageTitleStrategy } from './app-page-title-strategy';
 import routes from './app.routes';
 import { NgbDateDayjsAdapter } from './config/datepicker-adapter';
-import { httpInterceptorProviders } from './core/interceptor';
 
 const routerFeatures: RouterFeatures[] = [
   withComponentInputBinding(),
@@ -46,17 +48,18 @@ if (environment.DEBUG_INFO_ENABLED) {
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideZonelessChangeDetection(),
     provideRouter(routes, ...routerFeatures),
     importProvidersFrom(BrowserModule),
     // Set this to true to enable service worker (PWA)
     importProvidersFrom(ServiceWorkerModule.register('ngsw-worker.js', { enabled: false })),
     importProvidersFrom(TranslationModule),
-    provideHttpClient(withInterceptorsFromDi()),
+    provideHttpClient(
+      withInterceptors([authExpiredInterceptor, errorHandlerInterceptor, notificationInterceptor]),
+      withInterceptorsFromDi(),
+    ),
     Title,
     { provide: LOCALE_ID, useValue: 'en' },
     { provide: NgbDateAdapter, useClass: NgbDateDayjsAdapter },
-    httpInterceptorProviders,
     { provide: TitleStrategy, useClass: AppPageTitleStrategy },
   ],
 };

@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, vitest } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TranslateModule } from '@ngx-translate/core';
@@ -32,13 +33,13 @@ describe('Home Component', () => {
         {
           provide: AccountService,
           useValue: {
-            isAuthenticated: jest.fn(),
+            isAuthenticated: vitest.fn(),
           },
         },
         {
           provide: LoginService,
           useValue: {
-            login: jest.fn(),
+            login: vitest.fn(),
           },
         },
       ],
@@ -49,14 +50,14 @@ describe('Home Component', () => {
     fixture = TestBed.createComponent(Home);
     comp = fixture.componentInstance;
     mockAccountService = TestBed.inject(AccountService);
-    mockAccountService.identity = jest.fn(() => of(null));
+    mockAccountService.identity = vitest.fn(() => of(null));
     mockLoginService = TestBed.inject(LoginService);
   });
 
   describe('ngOnInit', () => {
     it('should synchronize account variable with current account', () => {
       // GIVEN
-      mockAccountService.identity = jest.fn(() => of(account));
+      mockAccountService.identity = vitest.fn(() => of(account));
 
       // WHEN
       comp.ngOnInit();

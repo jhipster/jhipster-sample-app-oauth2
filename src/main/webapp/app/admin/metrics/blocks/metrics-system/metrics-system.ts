@@ -1,13 +1,15 @@
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
 import { ProcessMetrics } from 'app/admin/metrics/metrics.model';
-import SharedModule from 'app/shared/shared.module';
 
 @Component({
   selector: 'jhi-metrics-system',
   templateUrl: './metrics-system.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SharedModule],
+  imports: [NgbModule, DecimalPipe, DatePipe],
 })
 export class MetricsSystem {
   /**

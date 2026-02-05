@@ -1,12 +1,12 @@
+import { DecimalPipe, KeyValuePipe } from '@angular/common';
 import { Component, input } from '@angular/core';
 
 import { Services } from 'app/admin/metrics/metrics.model';
-import SharedModule from 'app/shared/shared.module';
 
 @Component({
   selector: 'jhi-metrics-endpoints-requests',
   templateUrl: './metrics-endpoints-requests.html',
-  imports: [SharedModule],
+  imports: [KeyValuePipe, DecimalPipe],
 })
 export class MetricsEndpointsRequests {
   /**

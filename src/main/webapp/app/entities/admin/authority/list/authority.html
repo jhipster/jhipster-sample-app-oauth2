@@ -3,8 +3,8 @@
     <span jhiTranslate="jhipsterOauth2SampleApplicationApp.adminAuthority.home.title">Authorities</span>
 
     <div class="d-flex justify-content-end">
-      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
-        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined" />
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading()">
+        <fa-icon icon="sync" [animation]="isLoading() ? 'spin' : undefined" />
         <span jhiTranslate="jhipsterOauth2SampleApplicationApp.adminAuthority.home.refreshListLabel">Refresh list</span>
       </button>
 

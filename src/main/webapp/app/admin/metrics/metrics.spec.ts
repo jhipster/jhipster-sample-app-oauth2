@@ -1,4 +1,4 @@
-import { provideHttpClient } from '@angular/common/http';
+import { beforeEach, describe, expect, it, vitest } from 'vitest';
 import { ChangeDetectorRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
@@ -18,7 +18,6 @@ describe('Metrics', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [TranslateModule.forRoot()],
-      providers: [provideHttpClient()],
     });
   });
 
@@ -46,9 +45,9 @@ describe('Metrics', () => {
       } as unknown as MetricsModel;
       const threadDump = { threads: [{ threadName: 'thread 1' } as Thread] } as ThreadDump;
 
-      jest.spyOn(service, 'getMetrics').mockReturnValue(of(metrics));
-      jest.spyOn(service, 'threadDump').mockReturnValue(of(threadDump));
-      jest.spyOn(changeDetector.constructor.prototype, 'markForCheck');
+      vitest.spyOn(service, 'getMetrics').mockReturnValue(of(metrics));
+      vitest.spyOn(service, 'threadDump').mockReturnValue(of(threadDump));
+      vitest.spyOn(changeDetector.constructor.prototype, 'markForCheck');
 
       // WHEN
       comp.ngOnInit();

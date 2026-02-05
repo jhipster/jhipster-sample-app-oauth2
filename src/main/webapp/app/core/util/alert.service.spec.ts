@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, vitest } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 
 import { MissingTranslationHandler, TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -25,7 +26,7 @@ describe('Alert Service Test', () => {
     service = TestBed.inject(AlertService);
     translateService = TestBed.inject(TranslateService);
     translateService.setFallbackLang('en');
-    jest.useFakeTimers();
+    vitest.useFakeTimers();
     extAlerts = [];
   });
 
@@ -158,7 +159,7 @@ describe('Alert Service Test', () => {
 
     expect(service.get().length).toBe(1);
 
-    jest.advanceTimersByTime(6000);
+    vitest.advanceTimersByTime(6000);
 
     expect(service.get().length).toBe(0);
   });
