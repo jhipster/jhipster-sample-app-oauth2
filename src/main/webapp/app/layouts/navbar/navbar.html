@@ -13,7 +13,7 @@
       aria-controls="navbarResponsive"
       aria-expanded="false"
       aria-label="Toggle navigation"
-      (click)="toggleNavbar()"
+      (click)="isNavbarCollapsed.update(isNavbarCollapsed => !isNavbarCollapsed)"
     >
       <fa-icon icon="bars" />
     </a>
@@ -34,8 +34,9 @@
             display="dynamic"
             routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: true }"
+            data-cy="entity"
           >
-            <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu" data-cy="entity">
+            <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
               <span>
                 <fa-icon icon="th-list" />
                 <span jhiTranslate="global.menu.entities.main">Entities</span>
@@ -53,8 +54,9 @@
           display="dynamic"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
+          data-cy="adminMenu"
         >
-          <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="admin-menu" data-cy="adminMenu">
+          <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="admin-menu">
             <span>
               <fa-icon icon="users-cog" />
               <span jhiTranslate="global.menu.admin.main">Administration</span>
@@ -145,9 +147,10 @@
           display="dynamic"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
+          data-cy="accountMenu"
         >
           @let accountRef = account();
-          <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="account-menu" data-cy="accountMenu">
+          <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="account-menu">
             @if (!accountRef?.imageUrl) {
               <span>
                 <fa-icon icon="user" />

@@ -26,7 +26,6 @@ export const logoutItemSelector = '[data-cy="logout"]';
 export const entityItemSelector = '[data-cy="entity"]';
 
 // Administration
-export const userManagementPageHeadingSelector = '[data-cy="userManagementPageHeading"]';
 export const swaggerFrameSelector = 'iframe[data-cy="swagger-frame"]';
 export const swaggerPageSelector = '[id="swagger-ui"]';
 export const metricsPageHeadingSelector = '[data-cy="metricsPageHeading"]';
@@ -71,11 +70,30 @@ Cypress.Commands.add('login', (username: string, password: string) => {
   );
 });
 
+export interface Credentials {
+  adminUsername: string;
+  adminPassword: string;
+  username: string;
+  password: string;
+}
+
+Cypress.Commands.add('credentials', () => {
+  return cy.env(['E2E_USERNAME', 'E2E_PASSWORD']).then(({ E2E_USERNAME, E2E_PASSWORD }) => {
+    return {
+      adminUsername: E2E_USERNAME ?? Cypress.expose('adminUsername'),
+      adminPassword: E2E_PASSWORD ?? Cypress.expose('adminPassword'),
+      username: E2E_USERNAME ?? Cypress.expose('username'),
+      password: E2E_PASSWORD ?? Cypress.expose('password'),
+    };
+  });
+});
+
 declare global {
   namespace Cypress {
     interface Chainable {
       authenticatedRequest(data): Cypress.Chainable;
       login(username: string, password: string): Cypress.Chainable;
+      credentials(): Cypress.Chainable<Credentials>;
     }
   }
 }

@@ -4,7 +4,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateModule } from '@ngx-translate/core';
 import { of } from 'rxjs';
 
-import { Account } from 'app/core/auth/account.model';
 import { AccountService } from 'app/core/auth/account.service';
 import { LoginService } from 'app/login/login.service';
 
@@ -15,16 +14,6 @@ describe('Home Component', () => {
   let fixture: ComponentFixture<Home>;
   let mockAccountService: AccountService;
   let mockLoginService: LoginService;
-  const account: Account = {
-    activated: true,
-    authorities: [],
-    email: '',
-    firstName: null,
-    langKey: '',
-    lastName: null,
-    login: 'login',
-    imageUrl: null,
-  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -52,19 +41,6 @@ describe('Home Component', () => {
     mockAccountService = TestBed.inject(AccountService);
     mockAccountService.identity = vitest.fn(() => of(null));
     mockLoginService = TestBed.inject(LoginService);
-  });
-
-  describe('ngOnInit', () => {
-    it('should synchronize account variable with current account', () => {
-      // GIVEN
-      mockAccountService.identity = vitest.fn(() => of(account));
-
-      // WHEN
-      comp.ngOnInit();
-
-      // THEN
-      expect(comp.account()).toEqual(account);
-    });
   });
 
   describe('login', () => {

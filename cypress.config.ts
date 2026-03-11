@@ -10,6 +10,13 @@ export default defineConfig({
   viewportWidth: 1200,
   viewportHeight: 720,
   retries: 2,
+  allowCypressEnv: false,
+  expose: {
+    adminUsername: 'admin',
+    adminPassword: 'admin',
+    username: 'user',
+    password: 'user',
+  },
   e2e: {
     // We've imported your old cypress plugins here.
     // You may want to clean this up later by importing these.
