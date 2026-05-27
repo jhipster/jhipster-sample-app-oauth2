@@ -7,7 +7,6 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import io.github.jhipster.sample.security.SecurityUtils;
 import java.time.Duration;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.StreamSupport;
@@ -32,7 +31,7 @@ public class CustomClaimConverter implements Converter<Map<String, Object>, Map<
 
     private final BearerTokenResolver bearerTokenResolver = new DefaultBearerTokenResolver();
 
-    private final MappedJwtClaimSetConverter delegate = MappedJwtClaimSetConverter.withDefaults(Collections.emptyMap());
+    private final MappedJwtClaimSetConverter delegate = MappedJwtClaimSetConverter.withDefaults(Map.of());
 
     private final RestTemplate restTemplate;
 

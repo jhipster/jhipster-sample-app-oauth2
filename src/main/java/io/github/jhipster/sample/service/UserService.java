@@ -113,8 +113,8 @@ public class UserService {
             if (details.get("updated_at") != null) {
                 Instant dbModifiedDate = existingUser.orElseThrow().getLastModifiedDate();
                 Instant idpModifiedDate;
-                if (details.get("updated_at") instanceof Instant) {
-                    idpModifiedDate = (Instant) details.get("updated_at");
+                if (details.get("updated_at") instanceof Instant instant) {
+                    idpModifiedDate = instant;
                 } else {
                     idpModifiedDate = Instant.ofEpochSecond((Integer) details.get("updated_at"));
                 }

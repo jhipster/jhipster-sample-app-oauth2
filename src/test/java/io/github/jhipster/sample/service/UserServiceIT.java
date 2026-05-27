@@ -9,8 +9,8 @@ import io.github.jhipster.sample.repository.UserRepository;
 import io.github.jhipster.sample.security.AuthoritiesConstants;
 import io.github.jhipster.sample.service.dto.AdminUserDTO;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import org.junit.jupiter.api.AfterEach;
@@ -162,7 +162,7 @@ class UserServiceIT {
     }
 
     private OAuth2AuthenticationToken createMockOAuth2AuthenticationToken(Map<String, Object> userDetails) {
-        Collection<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(AuthoritiesConstants.ANONYMOUS));
+        Collection<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(AuthoritiesConstants.ANONYMOUS));
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
             "anonymous",
             "anonymous",

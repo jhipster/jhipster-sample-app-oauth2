@@ -62,8 +62,7 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) {
-        http
-            .cors(withDefaults())
+        http.cors(withDefaults())
             .csrf(csrf ->
                 csrf
                     .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
@@ -105,9 +104,9 @@ public class SecurityConfiguration {
             .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(authenticationConverter())))
             .oauth2Client(withDefaults());
         if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT))) {
-            http
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))
-                .authorizeHttpRequests(authz -> authz.requestMatchers("/h2-console/**").permitAll());
+            http.csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**")).authorizeHttpRequests(authz ->
+                authz.requestMatchers("/h2-console/**").permitAll()
+            );
         }
         return http.build();
     }
@@ -149,8 +148,7 @@ public class SecurityConfiguration {
             authorities.forEach(authority -> {
                 // Check for OidcUserAuthority because Spring Security 5.2 returns
                 // each scope as a GrantedAuthority, which we don't care about.
-                if (authority instanceof OidcUserAuthority) {
-                    OidcUserAuthority oidcUserAuthority = (OidcUserAuthority) authority;
+                if (authority instanceof OidcUserAuthority oidcUserAuthority) {
                     mappedAuthorities.addAll(SecurityUtils.extractAuthorityFromClaims(oidcUserAuthority.getUserInfo().getClaims()));
                 }
             });

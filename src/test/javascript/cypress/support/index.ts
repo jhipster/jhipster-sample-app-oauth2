@@ -18,3 +18,6 @@ import './navbar';
 import './entity';
 import './management';
 import './oauth2';
+import installLogsCollector from 'cypress-terminal-report/src/installLogsCollector';
+
+installLogsCollector();

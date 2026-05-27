@@ -11,8 +11,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.github.jhipster.sample.IntegrationTest;
 import io.github.jhipster.sample.security.AuthoritiesConstants;
 import io.github.jhipster.sample.security.SecurityUtils;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -83,7 +83,7 @@ class CustomClaimConverterIT {
             .containsEntry("preferred_username", USERNAME)
             .containsEntry("given_name", NAME)
             .containsEntry("family_name", FAMILY_NAME)
-            .containsEntry("groups", Arrays.asList(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER));
+            .containsEntry("groups", List.of(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER));
     }
 
     @Test
@@ -112,7 +112,9 @@ class CustomClaimConverterIT {
         user.put("preferred_username", USERNAME);
         user.put("given_name", NAME);
         user.put("family_name", FAMILY_NAME);
-        user.putArray(SecurityUtils.CLAIMS_NAMESPACE + "roles").add(AuthoritiesConstants.ADMIN).add(AuthoritiesConstants.USER);
+        user.putArray(SecurityUtils.CLAIMS_NAMESPACE + "roles")
+            .add(AuthoritiesConstants.ADMIN)
+            .add(AuthoritiesConstants.USER);
         mockHttpGetUserInfo(user);
 
         // WHEN
@@ -124,7 +126,7 @@ class CustomClaimConverterIT {
             .containsEntry("preferred_username", USERNAME)
             .containsEntry("given_name", NAME)
             .containsEntry("family_name", FAMILY_NAME)
-            .containsEntry("roles", Arrays.asList(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER));
+            .containsEntry("roles", List.of(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER));
     }
 
     @Test
