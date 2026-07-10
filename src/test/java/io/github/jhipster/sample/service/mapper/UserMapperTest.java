@@ -37,10 +37,11 @@ class UserMapperTest {
         user.setFirstName("john");
         user.setLastName("doe");
         user.setImageUrl("image_url");
+        Instant creationTimestamp = Instant.ofEpochMilli(1577001617772L);
         user.setCreatedBy(DEFAULT_LOGIN);
-        user.setCreatedDate(Instant.now());
+        user.setCreatedDate(creationTimestamp);
         user.setLastModifiedBy(DEFAULT_LOGIN);
-        user.setLastModifiedDate(Instant.now());
+        user.setLastModifiedDate(creationTimestamp);
         user.setLangKey("en");
 
         Set<Authority> authorities = new HashSet<>();

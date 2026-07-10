@@ -4,7 +4,6 @@ import static org.springframework.security.config.Customizer.withDefaults;
 import static org.springframework.security.oauth2.core.oidc.StandardClaimNames.PREFERRED_USERNAME;
 
 import io.github.jhipster.sample.security.*;
-import io.github.jhipster.sample.security.SecurityUtils;
 import io.github.jhipster.sample.security.oauth2.AudienceValidator;
 import io.github.jhipster.sample.security.oauth2.CustomClaimConverter;
 import io.github.jhipster.sample.web.filter.SpaWebFilter;

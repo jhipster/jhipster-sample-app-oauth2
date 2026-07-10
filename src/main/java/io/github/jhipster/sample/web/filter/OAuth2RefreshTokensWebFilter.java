@@ -50,7 +50,7 @@ public class OAuth2RefreshTokensWebFilter extends OncePerRequestFilter {
     public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
         throws IOException, ServletException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if ((authentication instanceof OAuth2AuthenticationToken)) {
+        if (authentication instanceof OAuth2AuthenticationToken) {
             try {
                 OAuth2AuthorizedClient authorizedClient = authorizedClient((OAuth2AuthenticationToken) authentication);
                 this.authorizedClientRepository.saveAuthorizedClient(authorizedClient, authentication, request, response);
