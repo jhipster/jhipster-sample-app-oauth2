@@ -6,8 +6,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.github.jhipster.sample.IntegrationTest;
 import io.github.jhipster.sample.security.AuthoritiesConstants;
 import io.github.jhipster.sample.security.SecurityUtils;
@@ -24,6 +22,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.web.client.RestTemplate;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 @IntegrationTest
 class CustomClaimConverterIT {
@@ -178,7 +178,6 @@ class CustomClaimConverterIT {
 
         assertThatCode(() -> {
             Map<String, Object> convertedClaims = customClaimConverter.convert(claims);
-            System.out.println(convertedClaims);
             assertThat(convertedClaims)
                 .containsEntry("preferred_username", USERNAME)
                 .containsEntry("given_name", NAME)

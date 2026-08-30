@@ -5,8 +5,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -36,7 +36,8 @@ public final class SecurityUtils {
     }
 
     private static String extractPrincipal(Authentication authentication) {
-        if (authentication == null) {
+        // AnonymousAuthenticationToken has a String principal that would fall through below
+        if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
             return null;
         } else if (authentication.getPrincipal() instanceof UserDetails springSecurityUser) {
             return springSecurityUser.getUsername();
@@ -118,7 +119,7 @@ public final class SecurityUtils {
         return roles
             .stream()
             .filter(role -> role.startsWith("ROLE_"))
-            .map(SimpleGrantedAuthority::new)
-            .collect(Collectors.toList());
+            .<GrantedAuthority>map(SimpleGrantedAuthority::new)
+            .toList();
     }
 }

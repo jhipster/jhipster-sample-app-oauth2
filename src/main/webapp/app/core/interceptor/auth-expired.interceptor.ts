@@ -4,11 +4,10 @@ import { Router } from '@angular/router';
 
 import { tap } from 'rxjs';
 
-import { StateStorageService } from 'app/core/auth/state-storage.service';
-import { LoginService } from 'app/login/login.service';
+import { AuthServerProvider, StateStorageService } from 'app/core/auth';
 
 export const authExpiredInterceptor: HttpInterceptorFn = (req, next) => {
-  const loginService = inject(LoginService);
+  const authServerProvider = inject(AuthServerProvider);
   const stateStorageService = inject(StateStorageService);
   const router = inject(Router);
 
@@ -17,7 +16,7 @@ export const authExpiredInterceptor: HttpInterceptorFn = (req, next) => {
       error(err: HttpErrorResponse) {
         if (err.status === 401 && err.url && !err.url.includes('api/account')) {
           stateStorageService.storeUrl(router.routerState.snapshot.url);
-          loginService.login();
+          authServerProvider.login();
         }
       },
     }),

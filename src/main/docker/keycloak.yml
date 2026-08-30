@@ -2,7 +2,7 @@
 name: jhipsteroauth2sampleapplication
 services:
   keycloak:
-    image: quay.io/keycloak/keycloak:26.7.0
+    image: quay.io/keycloak/keycloak:26.7.2-1
     command: 'start-dev --import-realm'
     volumes:
       - ./realm-config:/opt/keycloak/data/import
@@ -25,7 +25,7 @@ services:
       test: 'bash /opt/keycloak/health-check.sh'
       interval: 5s
       timeout: 5s
-      # Increased retries due to slow Keycloak startup in GitHub Actions using MacOS
+      # Increased retries due to slow Keycloak startup in GitHub Actions using macOS
       retries: 50
       start_period: 10s
     labels:

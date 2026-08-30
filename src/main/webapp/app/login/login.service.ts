@@ -1,19 +1,13 @@
-import { Location } from '@angular/common';
-import { Injectable, inject } from '@angular/core';
+import { Service, inject } from '@angular/core';
 
-import { AuthServerProvider } from 'app/core/auth/auth-session.service';
+import { AuthServerProvider, Logout } from 'app/core/auth';
 
-import { Logout } from './logout.model';
-
-@Injectable({ providedIn: 'root' })
+@Service()
 export class LoginService {
-  private readonly location = inject(Location);
   private readonly authServerProvider = inject(AuthServerProvider);
 
   login(): void {
-    // If you have configured multiple OIDC providers, then, you can update this URL to /login.
-    // It will show a Spring Security generated login page with links to configured OIDC providers.
-    location.href = `${location.origin}${this.location.prepareExternalUrl('oauth2/authorization/oidc')}`;
+    this.authServerProvider.login();
   }
 
   logout(): void {

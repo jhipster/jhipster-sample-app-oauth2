@@ -2,7 +2,6 @@ package io.github.jhipster.sample;
 
 import io.github.jhipster.sample.config.AsyncSyncConfiguration;
 import io.github.jhipster.sample.config.EmbeddedSQL;
-import io.github.jhipster.sample.config.JacksonConfiguration;
 import io.github.jhipster.sample.config.TestSecurityConfiguration;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -18,7 +17,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest(
     classes = {
         JhipsterOauth2SampleApplicationApp.class,
-        JacksonConfiguration.class,
         AsyncSyncConfiguration.class,
         TestSecurityConfiguration.class,
         io.github.jhipster.sample.config.JacksonHibernateConfiguration.class,
