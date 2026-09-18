@@ -66,6 +66,8 @@ class UserResourceIT {
 
     private User user;
 
+    private Long numberOfUsers;
+
     /**
      * Create a User.
      *
@@ -97,12 +99,15 @@ class UserResourceIT {
 
     @BeforeEach
     void initTest() {
+        numberOfUsers = userRepository.count();
         user = initTestUser();
     }
 
     @AfterEach
     void cleanupAndCheck() {
-        userRepository.deleteAll();
+        userRepository.findOneByLogin(user.getLogin()).ifPresent(userRepository::delete);
+        assertThat(userRepository.count()).isEqualTo(numberOfUsers);
+        numberOfUsers = null;
         cacheManager
             .getCacheNames()
             .stream()

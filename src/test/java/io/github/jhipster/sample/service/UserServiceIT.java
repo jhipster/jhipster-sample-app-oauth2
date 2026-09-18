@@ -36,6 +36,8 @@ class UserServiceIT {
 
     private static final String DEFAULT_LOGIN = "johndoe_service";
 
+    private static final String DEFAULT_USERNAME = "TEST";
+
     private static final String DEFAULT_EMAIL = "johndoe_service@localhost";
 
     private static final String DEFAULT_FIRSTNAME = "john";
@@ -59,8 +61,11 @@ class UserServiceIT {
 
     private Map<String, Object> userDetails;
 
+    private Long numberOfUsers;
+
     @BeforeEach
     void init() {
+        numberOfUsers = userRepository.count();
         user = new User();
         user.setLogin(DEFAULT_LOGIN);
         user.setActivated(true);
@@ -86,7 +91,12 @@ class UserServiceIT {
             .map(cacheName -> this.cacheManager.getCache(cacheName))
             .filter(Objects::nonNull)
             .forEach(Cache::clear);
-        userRepository.deleteAll();
+        // The synced user gets the `sub` or the lower-cased `preferred_username` of the token as login.
+        for (String login : List.of(DEFAULT_LOGIN, DEFAULT_USERNAME.toLowerCase())) {
+            userRepository.findOneByLogin(login).ifPresent(userRepository::delete);
+        }
+        assertThat(userRepository.count()).isEqualTo(numberOfUsers);
+        numberOfUsers = null;
     }
 
     @Test
@@ -108,7 +118,7 @@ class UserServiceIT {
     @Test
     @Transactional
     void testUserDetailsWithUsername() {
-        userDetails.put("preferred_username", "TEST");
+        userDetails.put("preferred_username", DEFAULT_USERNAME);
 
         OAuth2AuthenticationToken authentication = createMockOAuth2AuthenticationToken(userDetails);
         AdminUserDTO userDTO = userService.getUserFromAuthentication(authentication);

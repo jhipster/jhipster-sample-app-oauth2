@@ -42,8 +42,8 @@ class AccountResourceIT {
 
     @AfterEach
     void cleanup() {
-        // Remove syncUserWithIdp users
-        userRepository.deleteAll();
+        // Remove the user synced from the IdP
+        userRepository.findOneByLogin(TEST_USER_LOGIN).ifPresent(userRepository::delete);
     }
 
     @Test
